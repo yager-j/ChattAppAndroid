@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/standard_gap">
+
+    <TextView
+        android:id="@+id/title_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/register_title"
+        android:textSize="30sp"
+        android:gravity="center_horizontal"/>
+
+    <TextView
+        android:id="@+id/title_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="First Name"
+        android:textSize="15sp"
+        android:layout_marginTop="@dimen/small_gap"/>
+
+    <EditText
+        android:id="@+id/input_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/textInputBG"
+        android:maxLines="1"
+        android:inputType="textCapWords"
+        android:scrollHorizontally="true"
+        android:paddingHorizontal="@dimen/small_gap"/>
+
+    <TextView
+        android:id="@+id/title_lastname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Last Name"
+        android:textSize="15sp"
+        android:layout_marginTop="@dimen/small_gap"/>
+
+    <EditText
+        android:id="@+id/input_lastname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/textInputBG"
+        android:maxLines="1"
+        android:inputType="textCapWords"
+        android:scrollHorizontally="true"
+        android:paddingHorizontal="@dimen/small_gap"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/username"
+        android:textSize="15sp"
+        android:layout_marginTop="@dimen/small_gap"/>
+
+    <EditText
+        android:id="@+id/input_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/textInputBG"
+        android:maxLines="1"
+        android:inputType="text"
+        android:scrollHorizontally="true"
+        android:paddingHorizontal="@dimen/small_gap"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/password"
+        android:textSize="15sp"
+        android:layout_marginTop="@dimen/small_gap"/>
+
+    <EditText
+        android:id="@+id/input_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/textInputBG"
+        android:maxLines="1"
+        android:inputType="textPassword"
+        android:scrollHorizontally="true"
+        android:paddingHorizontal="@dimen/small_gap"/>
+
+    <TextView
+        android:id="@+id/title_password_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Confirm Password"
+        android:textSize="15sp"
+        android:layout_marginTop="@dimen/small_gap"/>
+
+    <EditText
+        android:id="@+id/input_password_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/textInputBG"
+        android:maxLines="1"
+        android:inputType="textPassword"
+        android:scrollHorizontally="true"
+        android:paddingHorizontal="@dimen/small_gap"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:paddingHorizontal="@dimen/small_gap"
+        android:layout_marginTop="@dimen/small_gap">
+
+        <Button
+            android:id="@+id/button_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/register"/>
+
+        <View
+            android:layout_width="@dimen/small_gap"
+            android:layout_height="match_parent"/>
+
+        <Button
+            android:id="@+id/button_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login"/>
+
+    </LinearLayout>
+
+</LinearLayout>

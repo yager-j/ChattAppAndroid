@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Oscar/AndroidStudioProjects/ChattAppAndroid/app/src/main/res/layout/activity_login_screen.xml" value="0.32608695652173914" />
         <entry key="..\:/Users/Oscar/AndroidStudioProjects/ChattAppAndroid/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Users/Oscar/AndroidStudioProjects/ChattAppAndroid/app/src/main/res/layout/screen_login.xml" value="0.32608695652173914" />
       </map>
     </option>
   </component>
