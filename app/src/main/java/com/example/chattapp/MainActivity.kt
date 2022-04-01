@@ -4,13 +4,16 @@ import android.content.ContentValues.TAG
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import com.example.chattapp.databinding.ActivityMainBinding
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var binder : ActivityMainBinding
+    private var username = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,10 +26,51 @@ class MainActivity : AppCompatActivity() {
 
             "first" to "Luca",
             "last" to "Salmi",
-            "born" to "1990"
+            "username" to "SonOfChtulu"
+        )
+        val user2 = hashMapOf(
+            "first" to "Heimir",
+            "last" to "Kristmundsson",
+            "username" to "originalJared"
         )
 
-        db.collection("users")
+        val user3 = hashMapOf(
+
+            "first" to "Rita",
+            "last" to "Salmi",
+            "username" to "criminalgirll"
+        )
+        saveToDb(db, user)
+        saveToDb(db, user2)
+        saveToDb(db, user3)
+
+
+        binder.buttonAdd.setOnClickListener {
+
+            username = binder.enterUserName.text.toString()
+
+            db.collection("users3")
+                .whereEqualTo("username", username)
+                .get()
+                .addOnSuccessListener {
+                        if (!it.isEmpty){
+
+                            for (doc in it){
+
+                                Toast.makeText(this, "user : ${doc.data["first"]}", Toast.LENGTH_SHORT).show()
+                            }
+
+                        }
+                }
+                .addOnFailureListener{
+                    Log.v(TAG, "error retrieving")
+                }
+        }
+    }
+
+    fun saveToDb(db: FirebaseFirestore,user: HashMap<String, String>){
+
+        db.collection("users3")
             .add(user)
             .addOnSuccessListener { documentReference ->
                 Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
@@ -35,16 +79,5 @@ class MainActivity : AppCompatActivity() {
                 Log.w(TAG, "Error adding document", e)
             }
 
-
-        db.collection("users")
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    Log.d(TAG, "${document.id} => ${document.data}")
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.w(TAG, "Error getting documents.", exception)
-            }
     }
 }
