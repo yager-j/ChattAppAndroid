@@ -25,10 +25,17 @@ class MainActivity : AppCompatActivity() {
         Realm.setDefaultConfiguration(config)
 
         userDao = UserDao()
+        userDao.db.addChangeListener()
 
         binder.chatsList.layoutManager = LinearLayoutManager(this)
         val adapter = MyAdapter(userDao.getUsers()){ position -> onListItemClick(position) }
         binder.chatsList.adapter = adapter
+
+    }
+
+    private fun onListItemClick(position: Int){
+
+        println(position)
 
     }
 }
