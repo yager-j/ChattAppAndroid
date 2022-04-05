@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'realm-android'
 }
 
 android {
@@ -21,6 +23,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    buildFeatures{
+
+        viewBinding = true
+
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
