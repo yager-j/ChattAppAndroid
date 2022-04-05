@@ -6,7 +6,7 @@ class UserDao {
 
     val db = Realm.getDefaultInstance()
 
-    fun getUsers(): ArrayList<User>{
+    fun getUsers(): ArrayList<User> {
 
         val userList = ArrayList<User>()
 
@@ -16,9 +16,9 @@ class UserDao {
 
     }
 
-    fun addUser(){
+    fun addUser() {
 
-        db.executeTransactionAsync{
+        db.executeTransactionAsync {
 
             val contact = User()
             it.insert(contact)

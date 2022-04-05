@@ -7,7 +7,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class MyAdapter (private val list: ArrayList<User>, private val onItemClicked: (position: Int) -> Unit) :
+class MyAdapter(
+    private val list: ArrayList<User>,
+    private val onItemClicked: (position: Int) -> Unit
+) :
     RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
 

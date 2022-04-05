@@ -39,19 +39,17 @@ class MainActivity : AppCompatActivity() {
             userDao.addUser()
         }
 
-
-
     }
 
-    private fun loadList(){
+    private fun loadList() {
 
         binder.chatsList.layoutManager = LinearLayoutManager(this)
-        val adapter = MyAdapter(userDao.getUsers()){ position -> onListItemClick(position) }
+        val adapter = MyAdapter(userDao.getUsers()) { position -> onListItemClick(position) }
         binder.chatsList.adapter = adapter
 
     }
 
-    private fun onListItemClick(position: Int){
+    private fun onListItemClick(position: Int) {
 
         println(position)
 
