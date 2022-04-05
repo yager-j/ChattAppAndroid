@@ -1,0 +1,42 @@
+package com.example.chattapp
+
+import android.app.Dialog
+import android.content.Context
+import android.view.Window
+import android.widget.Button
+import android.widget.EditText
+
+object DialogMaker {
+
+    fun createChat(context: Context, userDao: UserDao){
+
+        val createChatDialog = Dialog(context)
+        createChatDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        createChatDialog.setContentView(R.layout.create_chat_layout)
+
+        val addBtn = createChatDialog.findViewById<Button>(R.id.add_user_btn)
+        val cancelBtn = createChatDialog.findViewById<Button>(R.id.cancel_button)
+        val textInputField = createChatDialog.findViewById<EditText>(R.id.name_input_field)
+
+        addBtn.setOnClickListener {
+
+            val input = textInputField.text.toString()
+
+            if (input.isEmpty() || input == " "){
+
+                textInputField.error = "user does not exists"
+
+            }else{
+
+                userDao.addUser(input)
+                createChatDialog.dismiss()
+            }
+
+        }
+
+        cancelBtn.setOnClickListener {createChatDialog.dismiss()}
+
+        createChatDialog.show()
+
+    }
+}

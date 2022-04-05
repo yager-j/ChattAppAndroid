@@ -16,14 +16,28 @@ class UserDao {
 
     }
 
-    fun addUser() {
+    fun addUser(name: String) {
 
         db.executeTransactionAsync {
 
-            val contact = User()
+            val contact = User().apply {
+
+                userName = name
+            }
             it.insert(contact)
 
         }
 
     }
+
+    fun deleteUser(userId: String){
+
+        db.executeTransaction {
+
+            val user = db.where(User::class.java).equalTo("id", userId).findFirstAsync()
+            user?.deleteFromRealm()
+
+        }
+    }
+
 }

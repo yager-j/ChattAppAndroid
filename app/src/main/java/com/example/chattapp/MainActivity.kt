@@ -11,6 +11,7 @@ import io.realm.RealmConfiguration
 private lateinit var binder: ActivityMainBinding
 private lateinit var userDao: UserDao
 private lateinit var realmListener: RealmChangeListener<Realm>
+private lateinit var usersList: ArrayList<User>
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         userDao.db.addChangeListener(realmListener)
 
         binder.addUserBtn.setOnClickListener {
-            userDao.addUser()
+            DialogMaker.createChat(this, userDao)
         }
 
     }
@@ -44,14 +45,17 @@ class MainActivity : AppCompatActivity() {
     private fun loadList() {
 
         binder.chatsList.layoutManager = LinearLayoutManager(this)
-        val adapter = MyAdapter(userDao.getUsers()) { position -> onListItemClick(position) }
+        usersList = userDao.getUsers()
+        val adapter = MyAdapter(usersList) { position -> onListItemClick(position) }
         binder.chatsList.adapter = adapter
 
     }
 
     private fun onListItemClick(position: Int) {
 
-        println(position)
+        val id = usersList[position].id
+        println(id)
+        userDao.deleteUser(id)
 
     }
 }
