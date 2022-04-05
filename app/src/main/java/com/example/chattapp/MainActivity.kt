@@ -22,5 +22,7 @@ class MainActivity : AppCompatActivity() {
             .build()
         Realm.setDefaultConfiguration(config)
 
+
+
     }
 }

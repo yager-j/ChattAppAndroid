@@ -14,7 +14,7 @@ class MyAdapter (private val list: ArrayList<User>, private val onItemClicked: (
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.card_view_layout, parent, false)
+            .inflate(R.layout.chat_list_layout, parent, false)
 
 
         return ViewHolder(view, onItemClicked)
@@ -23,10 +23,8 @@ class MyAdapter (private val list: ArrayList<User>, private val onItemClicked: (
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 
-        holder.textView.text = list[position].username
-        if (list[position].profilePic == "null"){
-            holder.profilePic.setImageResource(R.drawable.standard_profile_pic)
-        }
+        holder.textView.text = list[position].userName
+
     }
 
     override fun getItemCount(): Int {
@@ -37,7 +35,6 @@ class MyAdapter (private val list: ArrayList<User>, private val onItemClicked: (
         RecyclerView.ViewHolder(ItemView), View.OnClickListener {
 
         val textView: TextView = itemView.findViewById(R.id.name_text_view)
-        val profilePic: ImageView = itemView.findViewById(R.id.profile_pic)
 
         init {
             ItemView.setOnClickListener(this)
