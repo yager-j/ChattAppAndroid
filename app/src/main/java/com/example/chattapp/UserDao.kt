@@ -16,14 +16,11 @@ class UserDao {
 
     }
 
-    fun addUser(name: String){
+    fun addUser(){
 
         db.executeTransactionAsync{
 
-            val contact = User().apply {
-
-                userName = name
-            }
+            val contact = User()
             it.insert(contact)
 
         }
