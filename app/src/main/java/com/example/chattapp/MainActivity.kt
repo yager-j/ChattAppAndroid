@@ -59,14 +59,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun onListItemClick(position: Int) {
 
-        val id = usersList[position].id
-        userDao.deleteUser(id)
+        Toast.makeText(this, "click detected position $position", Toast.LENGTH_SHORT).show()
 
     }
 
     private fun onListItemLongClick(position: Int){
 
-        Toast.makeText(this, "long click detected position $position", Toast.LENGTH_SHORT).show()
+        val id = usersList[position].id
+        userDao.deleteUser(id)
 
     }
 }
