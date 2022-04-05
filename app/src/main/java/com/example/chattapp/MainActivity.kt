@@ -2,6 +2,7 @@ package com.example.chattapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chattapp.databinding.ActivityMainBinding
 import io.realm.Realm
@@ -19,6 +20,7 @@ class MainActivity : AppCompatActivity() {
         binder = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binder.root)
 
+//creates or initializes the database
         Realm.init(this)
         val config = RealmConfiguration.Builder()
             .name("chatAppDB")
@@ -30,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         userDao = UserDao()
         loadList()
 
+//creates and add a listener to database to update everytime new items are added
         realmListener = RealmChangeListener {
 
             loadList()
@@ -42,11 +45,14 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * loads the user list in the recycler view
+     */
     private fun loadList() {
 
         binder.chatsList.layoutManager = LinearLayoutManager(this)
         usersList = userDao.getUsers()
-        val adapter = MyAdapter(usersList) { position -> onListItemClick(position) }
+        val adapter = MyAdapter((usersList),{position -> onListItemClick(position)},{position -> onListItemLongClick(position)})
         binder.chatsList.adapter = adapter
 
     }
@@ -54,8 +60,13 @@ class MainActivity : AppCompatActivity() {
     private fun onListItemClick(position: Int) {
 
         val id = usersList[position].id
-        println(id)
         userDao.deleteUser(id)
+
+    }
+
+    private fun onListItemLongClick(position: Int){
+
+        Toast.makeText(this, "long click detected position $position", Toast.LENGTH_SHORT).show()
 
     }
 }

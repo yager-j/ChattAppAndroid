@@ -7,7 +7,10 @@ import android.widget.Button
 import android.widget.EditText
 
 object DialogMaker {
-
+    /**
+     * creates and manages the dialog that pops up when clicking on the add user button to check the DB for users with the same
+     * Username or mail that the user is writing
+     */
     fun createChat(context: Context, userDao: UserDao){
 
         val createChatDialog = Dialog(context)

@@ -9,7 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 
 class MyAdapter(
     private val list: ArrayList<User>,
-    private val onItemClicked: (position: Int) -> Unit
+    private val onItemClicked: (position: Int) -> Unit,
+    private val onItemLongClicked: (position: Int) -> Unit
 ) :
     RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
@@ -20,7 +21,7 @@ class MyAdapter(
             .inflate(R.layout.chat_list_layout, parent, false)
 
 
-        return ViewHolder(view, onItemClicked)
+        return ViewHolder(view, onItemClicked, onItemLongClicked)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -34,19 +35,28 @@ class MyAdapter(
         return list.size
     }
 
-    class ViewHolder(ItemView: View, private val onItemClicked: (position: Int) -> Unit) :
-        RecyclerView.ViewHolder(ItemView), View.OnClickListener {
+    class ViewHolder(ItemView: View, private val onItemClicked: (position: Int) -> Unit, private val onItemLongClicked: (position: Int) -> Unit) :
+        RecyclerView.ViewHolder(ItemView), View.OnClickListener, View.OnLongClickListener {
 
         val textView: TextView = itemView.findViewById(R.id.name_text_view)
 
         init {
             ItemView.setOnClickListener(this)
+            ItemView.setOnLongClickListener(this)
         }
 
         override fun onClick(v: View?) {
 
             val position = adapterPosition
             onItemClicked(position)
+        }
+
+        override fun onLongClick(v: View?): Boolean {
+
+            val position = adapterPosition
+            onItemLongClicked(position)
+            return true
+
         }
 
 
