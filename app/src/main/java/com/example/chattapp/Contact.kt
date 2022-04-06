@@ -10,7 +10,10 @@ open class Contact : RealmObject() {
     @PrimaryKey
     var id = UUID.randomUUID().toString()
 
+    @Required
     var name: String = "dummy"
+
+    @Required
     var lastName: String = "user"
 
     @Required
