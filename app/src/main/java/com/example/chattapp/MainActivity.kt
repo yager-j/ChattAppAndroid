@@ -79,6 +79,7 @@ class MainActivity : AppCompatActivity() {
 
         val id = contactsList[position].id
         contactDao.deleteContact(id)
+        firestoreContactDao.deleteContact(id)
 
     }
 }
