@@ -13,6 +13,7 @@ import io.realm.RealmConfiguration
 private lateinit var binder: ActivityMainBinding
 private lateinit var userDao: UserDao
 private lateinit var contactDao: ContactDao
+private lateinit var firestoreContactDao: FirestoreContactDao
 private lateinit var realmListener: RealmChangeListener<Realm>
 private lateinit var contactsList: ArrayList<Contact>
 
@@ -33,6 +34,7 @@ class MainActivity : AppCompatActivity() {
 
         userDao = UserDao()
         contactDao = ContactDao()
+        firestoreContactDao = FirestoreContactDao()
         loadList()
 
 //creates and add a listener to database to update everytime new items are added
@@ -43,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         userDao.db.addChangeListener(realmListener)
 
         binder.addUserBtn.setOnClickListener {
-            DialogMaker.createChat(this, contactDao)
+            DialogMaker.createChat(this, contactDao, firestoreContactDao)
         }
 
         binder.buttonLogin.setOnClickListener{

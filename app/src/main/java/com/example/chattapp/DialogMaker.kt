@@ -11,7 +11,7 @@ object DialogMaker {
      * creates and manages the dialog that pops up when clicking on the add user button to check the DB for users with the same
      * Username or mail that the user is writing
      */
-    fun createChat(context: Context, contactDao: ContactDao){
+    fun createChat(context: Context, contactDao: ContactDao, firestoreContactDao: FirestoreContactDao){
 
         val createChatDialog = Dialog(context)
         createChatDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -30,7 +30,8 @@ object DialogMaker {
                 textInputField.error = "user does not exists"
 
             }else {
-                contactDao.addContact(input)
+
+                firestoreContactDao.findUser(input, contactDao)
                 createChatDialog.dismiss()
             }
 
