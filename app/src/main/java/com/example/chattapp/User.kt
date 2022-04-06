@@ -10,7 +10,11 @@ open class User : RealmObject() {
     @PrimaryKey
     var id = UUID.randomUUID().toString()
 
-    var userName: String = "user $id"
+    var name: String = "dummy"
+    var lastName: String = "user"
+
+    @Required
+    var userName: String = "user:$id"
 
     @Required
     var eMail: String = "user@chatApp.com"

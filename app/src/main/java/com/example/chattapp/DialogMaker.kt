@@ -30,8 +30,7 @@ object DialogMaker {
                 textInputField.error = "user does not exists"
 
             }else{
-
-                userDao.addUser(input)
+                userDao.addContact(input)
                 createChatDialog.dismiss()
             }
 

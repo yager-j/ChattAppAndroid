@@ -1,5 +1,6 @@
 package com.example.chattapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -41,6 +42,12 @@ class MainActivity : AppCompatActivity() {
 
         binder.addUserBtn.setOnClickListener {
             DialogMaker.createChat(this, userDao)
+        }
+
+        binder.buttonLogin.setOnClickListener{
+            val toLogin = Intent(this, LoginScreen::class.java)
+            toLogin.putExtra("loginPressed", true)
+            startActivity(toLogin)
         }
 
     }

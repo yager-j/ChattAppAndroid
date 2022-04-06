@@ -1,6 +1,8 @@
 package com.example.chattapp
 
 import io.realm.Realm
+import java.io.File
+import java.util.*
 
 class UserDao {
 
@@ -16,15 +18,31 @@ class UserDao {
 
     }
 
-    fun addUser(name: String) {
+    fun addContact(username: String) {
 
         db.executeTransactionAsync {
 
             val contact = User().apply {
-
-                userName = name
+                userName = username
             }
             it.insert(contact)
+
+        }
+
+    }
+
+    fun addUser(first: String, last: String, username: String, mail: String, pw: String) {
+
+        db.executeTransactionAsync {
+
+            val newUser = User().apply {
+                name = first
+                lastName = last
+                userName = username
+                eMail = mail
+                password = pw
+            }
+            it.insert(newUser)
 
         }
 
@@ -40,4 +58,25 @@ class UserDao {
         }
     }
 
+    fun checkIfUserExists(username: String): Boolean {
+        var exists = true
+        db.executeTransaction {
+            val user = db.where(User::class.java).equalTo("userName", username).findFirst()
+            if (user == null) {
+                exists = false
+            }
+        }
+        return exists
+    }
+
+    fun checkPassword(user: String, password: String): Boolean {
+        var rightPw = false
+        db.executeTransaction {
+            val user = db.where(User::class.java).equalTo("userName", user).findFirst()
+            if (user?.password == password) {
+                rightPw = true
+            }
+        }
+        return rightPw
+    }
 }

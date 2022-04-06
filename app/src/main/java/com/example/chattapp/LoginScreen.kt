@@ -1,5 +1,6 @@
 package com.example.chattapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -9,7 +10,9 @@ import com.example.chattapp.databinding.ActivityLoginScreenBinding
 
 class LoginScreen : AppCompatActivity() {
 
+    private lateinit var userDao: UserDao
     private lateinit var binder : ActivityLoginScreenBinding
+
     private lateinit var titles : Array<TextView>
     private lateinit var name : EditText
     private lateinit var lastname : EditText
@@ -24,6 +27,8 @@ class LoginScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binder = ActivityLoginScreenBinding.inflate(layoutInflater)
+        setContentView(binder.root)
+        userDao = UserDao()
 
         isLogin = intent.getBooleanExtra("loginPressed", true)
 
@@ -37,8 +42,6 @@ class LoginScreen : AppCompatActivity() {
         if (isLogin){
             loginSelected()
         }
-
-        setContentView(binder.root)
 
         binder.inputName.setOnClickListener{
             name.setBackgroundColor(resources.getColor(R.color.textInputBG))
@@ -70,8 +73,7 @@ class LoginScreen : AppCompatActivity() {
                 checksOut = true
 
                 //checks username
-                //TODO check if username exists in if statement
-                if (username.text.toString() == "") {
+                if (username.text.toString() == "" || !userDao.checkIfUserExists(username.text.toString())) {
                     username.setBackgroundColor(resources.getColor(R.color.textInputBGNotFilled))
                     password.setBackgroundColor(resources.getColor(R.color.textInputBGNotFilled))
                     password.setText("")
@@ -80,8 +82,7 @@ class LoginScreen : AppCompatActivity() {
                     username.setBackgroundColor(resources.getColor(R.color.textInputBG))
 
                     //checks password only if username exists
-                    //TODO check if password matches password registered to username in if statement
-                    if (password.text.toString() == "") {
+                    if (password.text.toString() == "" || !userDao.checkPassword(username.text.toString(), password.text.toString())) {
                         password.setBackgroundColor(resources.getColor(R.color.textInputBGNotFilled))
                         password.setText("")
                         checksOut = false
@@ -92,6 +93,10 @@ class LoginScreen : AppCompatActivity() {
 
                 if (checksOut){
                     //TODO go to "Login" function
+                    //Current user = userId
+                    //Default user = guest?
+                    val toMain = Intent(this, MainActivity::class.java)
+                    startActivity(toMain)
                 }
             }
         }
@@ -120,8 +125,7 @@ class LoginScreen : AppCompatActivity() {
                 }
 
                 //checks username
-                //TODO check is username already exists in if statement
-                if (username.text.toString() == "") {
+                if (username.text.toString() == "" || userDao.checkIfUserExists(username.text.toString())) {
                     username.setBackgroundColor(resources.getColor(R.color.textInputBGNotFilled))
                     checksOut = false
                 } else {
@@ -140,8 +144,10 @@ class LoginScreen : AppCompatActivity() {
                     passwordConfirm.setBackgroundColor(resources.getColor(R.color.textInputBG))
                 }
 
-                if (checksOut){
-                    //TODO go to "Create user" function
+                if (checksOut) {
+                    userDao.addUser(name.text.toString(), lastname.text.toString(), username.text.toString(), "mail@mail", password.text.toString())
+                    val toMain = Intent(this, MainActivity::class.java)
+                    startActivity(toMain)
                 }
             }
         }
