@@ -12,7 +12,7 @@ import io.realm.RealmConfiguration
 private lateinit var binder: ActivityMainBinding
 private lateinit var userDao: UserDao
 private lateinit var realmListener: RealmChangeListener<Realm>
-private lateinit var usersList: ArrayList<User>
+private lateinit var usersList: ArrayList<Contact>
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

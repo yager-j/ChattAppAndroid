@@ -6,11 +6,11 @@ class UserDao {
 
     val db = Realm.getDefaultInstance()
 
-    fun getUsers(): ArrayList<User> {
+    fun getUsers(): ArrayList<Contact> {
 
-        val userList = ArrayList<User>()
+        val userList = ArrayList<Contact>()
 
-        userList.addAll(db.where(User::class.java).findAllAsync())
+        userList.addAll(db.where(Contact::class.java).findAllAsync())
 
         return userList
 
@@ -20,7 +20,7 @@ class UserDao {
 
         db.executeTransactionAsync {
 
-            val contact = User().apply {
+            val contact = Contact().apply {
 
                 userName = name
             }
@@ -34,7 +34,7 @@ class UserDao {
 
         db.executeTransaction {
 
-            val user = db.where(User::class.java).equalTo("id", userId).findFirstAsync()
+            val user = db.where(Contact::class.java).equalTo("id", userId).findFirstAsync()
             user?.deleteFromRealm()
 
         }

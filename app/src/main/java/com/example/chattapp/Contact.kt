@@ -5,7 +5,8 @@ import io.realm.annotations.PrimaryKey
 import io.realm.annotations.Required
 import java.util.*
 
-open class User : RealmObject() {
+open class Contact : RealmObject() {
+
 
     @PrimaryKey
     var id = UUID.randomUUID().toString()
@@ -17,5 +18,6 @@ open class User : RealmObject() {
 
     @Required
     var password: String = "password"
+
 
 }
