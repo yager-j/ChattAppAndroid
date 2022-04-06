@@ -1,5 +1,6 @@
 package com.example.chattapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -41,6 +42,7 @@ class MainActivity : AppCompatActivity() {
 
         binder.addUserBtn.setOnClickListener {
             DialogMaker.createChat(this, userDao)
+
         }
 
     }
@@ -60,7 +62,8 @@ class MainActivity : AppCompatActivity() {
     private fun onListItemClick(position: Int) {
 
         Toast.makeText(this, "click detected position $position", Toast.LENGTH_SHORT).show()
-
+        val intent = Intent(this, ChatActivity::class.java)
+        startActivity(intent)
     }
 
     private fun onListItemLongClick(position: Int){
