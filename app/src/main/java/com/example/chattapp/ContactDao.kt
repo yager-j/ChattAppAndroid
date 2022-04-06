@@ -21,7 +21,7 @@ class ContactDao {
 
         db.executeTransactionAsync {
 
-            val contact = User().apply {
+            val contact = Contact().apply {
                 userName = username
             }
             it.insert(contact)

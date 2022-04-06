@@ -6,13 +6,11 @@ import io.realm.annotations.Required
 import java.util.*
 
 open class User : RealmObject() {
+
     @PrimaryKey
     var id = UUID.randomUUID().toString()
 
-    @Required
     var name: String = "dummy"
-
-    @Required
     var lastName: String = "user"
 
     @Required
@@ -23,4 +21,5 @@ open class User : RealmObject() {
 
     @Required
     var password: String = "password"
+
 }
