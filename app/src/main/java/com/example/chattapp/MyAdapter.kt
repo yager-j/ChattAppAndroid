@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class MyAdapter(
-    private val list: ArrayList<User>,
+    private val list: ArrayList<Contact>,
     private val onItemClicked: (position: Int) -> Unit,
     private val onItemLongClicked: (position: Int) -> Unit
 ) :
