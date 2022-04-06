@@ -1,8 +1,6 @@
 package com.example.chattapp
 
 import io.realm.Realm
-import java.io.File
-import java.util.*
 
 class UserDao {
 
@@ -39,7 +37,7 @@ class UserDao {
 
         db.executeTransaction {
 
-            val user = db.where(User::class.java).equalTo("id", userId).findFirstAsync()
+            val user = db.where(Contact::class.java).equalTo("id", userId).findFirstAsync()
             user?.deleteFromRealm()
 
         }

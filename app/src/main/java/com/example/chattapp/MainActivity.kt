@@ -11,6 +11,7 @@ import io.realm.RealmChangeListener
 import io.realm.RealmConfiguration
 
 private lateinit var binder: ActivityMainBinding
+private lateinit var userDao: UserDao
 private lateinit var contactDao: ContactDao
 private lateinit var realmListener: RealmChangeListener<Realm>
 private lateinit var contactsList: ArrayList<Contact>
@@ -30,8 +31,8 @@ class MainActivity : AppCompatActivity() {
             .build()
         Realm.setDefaultConfiguration(config)
 
+        userDao = UserDao()
         contactDao = ContactDao()
-        //userDao = UserDao()
         loadList()
 
 //creates and add a listener to database to update everytime new items are added
@@ -39,7 +40,7 @@ class MainActivity : AppCompatActivity() {
 
             loadList()
         }
-        contactDao.db.addChangeListener(realmListener)
+        userDao.db.addChangeListener(realmListener)
 
         binder.addUserBtn.setOnClickListener {
             DialogMaker.createChat(this, contactDao)
@@ -68,7 +69,8 @@ class MainActivity : AppCompatActivity() {
     private fun onListItemClick(position: Int) {
 
         Toast.makeText(this, "click detected position $position", Toast.LENGTH_SHORT).show()
-
+        val intent = Intent(this, ChatActivity::class.java)
+        startActivity(intent)
     }
 
     private fun onListItemLongClick(position: Int){
