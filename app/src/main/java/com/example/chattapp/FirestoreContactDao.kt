@@ -54,9 +54,8 @@ class FirestoreContactDao {
 
         var user = Contact()
 
-        FirebaseFirestore
-            .getInstance()
-            .collection("users")
+        firebaseDB
+            .collection(USERS_COLLECTION)
             .get()
             .addOnSuccessListener { result ->
 
