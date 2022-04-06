@@ -6,25 +6,28 @@ class UserDao {
 
     val db = Realm.getDefaultInstance()
 
-    fun getUsers(): ArrayList<Contact> {
+    fun getUsers(): ArrayList<User> {
 
-        val userList = ArrayList<Contact>()
+        val userList = ArrayList<User>()
 
-        userList.addAll(db.where(Contact::class.java).findAllAsync())
+        userList.addAll(db.where(User::class.java).findAllAsync())
 
         return userList
 
     }
 
-    fun addUser(name: String) {
+    fun addUser(first: String, last: String, username: String, mail: String, pw: String) {
 
         db.executeTransactionAsync {
 
-            val contact = Contact().apply {
-
-                userName = name
+            val newUser = User().apply {
+                name = first
+                lastName = last
+                userName = username
+                eMail = mail
+                password = pw
             }
-            it.insert(contact)
+            it.insert(newUser)
 
         }
 
@@ -40,4 +43,32 @@ class UserDao {
         }
     }
 
+    fun checkIfUserExists(username: String): Boolean {
+        var exists = true
+        db.executeTransaction {
+            if (username.contains("@")) {
+                val user = db.where(User::class.java).equalTo("eMail", username).findFirst()
+                if (user == null) {
+                    exists = false
+                }
+            } else {
+                val user = db.where(User::class.java).equalTo("userName", username).findFirst()
+                if (user == null) {
+                    exists = false
+                }
+            }
+        }
+        return exists
+    }
+
+    fun checkPassword(user: String, password: String): Boolean {
+        var rightPw = false
+        db.executeTransaction {
+            val user = db.where(User::class.java).equalTo("userName", user).findFirst()
+            if (user?.password == password) {
+                rightPw = true
+            }
+        }
+        return rightPw
+    }
 }

@@ -1,6 +1,5 @@
 package com.example.chattapp
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -13,7 +12,7 @@ import io.realm.RealmConfiguration
 private lateinit var binder: ActivityMainBinding
 private lateinit var userDao: UserDao
 private lateinit var realmListener: RealmChangeListener<Realm>
-private lateinit var usersList: ArrayList<Contact>
+private lateinit var contactsList: ArrayList<Contact>
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,8 +40,13 @@ class MainActivity : AppCompatActivity() {
         userDao.db.addChangeListener(realmListener)
 
         binder.addUserBtn.setOnClickListener {
-            DialogMaker.createChat(this, userDao)
+            DialogMaker.createChat(this, contactDao)
+        }
 
+        binder.buttonLogin.setOnClickListener{
+            val toLogin = Intent(this, LoginScreen::class.java)
+            toLogin.putExtra("loginPressed", true)
+            startActivity(toLogin)
         }
 
     }
@@ -53,8 +57,8 @@ class MainActivity : AppCompatActivity() {
     private fun loadList() {
 
         binder.chatsList.layoutManager = LinearLayoutManager(this)
-        usersList = userDao.getUsers()
-        val adapter = MyAdapter((usersList),{position -> onListItemClick(position)},{position -> onListItemLongClick(position)})
+        contactsList = contactDao.getContacts()
+        val adapter = MyAdapter((contactsList),{ position -> onListItemClick(position)},{ position -> onListItemLongClick(position)})
         binder.chatsList.adapter = adapter
 
     }
@@ -68,8 +72,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun onListItemLongClick(position: Int){
 
-        val id = usersList[position].id
-        userDao.deleteUser(id)
+        val id = contactsList[position].id
+        contactDao.deleteContact(id)
 
     }
 }

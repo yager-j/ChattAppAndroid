@@ -7,17 +7,15 @@ import java.util.*
 
 open class Contact : RealmObject() {
 
-
     @PrimaryKey
     var id = UUID.randomUUID().toString()
 
-    var userName: String = "user $id"
+    var name: String = "dummy"
+    var lastName: String = "user"
+
+    @Required
+    var userName: String = "user:$id"
 
     @Required
     var eMail: String = "user@chatApp.com"
-
-    @Required
-    var password: String = "password"
-
-
 }
