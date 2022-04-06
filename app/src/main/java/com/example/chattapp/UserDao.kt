@@ -18,19 +18,6 @@ class UserDao {
 
     }
 
-    fun addContact(username: String) {
-
-        db.executeTransactionAsync {
-
-            val contact = User().apply {
-                userName = username
-            }
-            it.insert(contact)
-
-        }
-
-    }
-
     fun addUser(first: String, last: String, username: String, mail: String, pw: String) {
 
         db.executeTransactionAsync {
@@ -61,9 +48,16 @@ class UserDao {
     fun checkIfUserExists(username: String): Boolean {
         var exists = true
         db.executeTransaction {
-            val user = db.where(User::class.java).equalTo("userName", username).findFirst()
-            if (user == null) {
-                exists = false
+            if (username.contains("@")) {
+                val user = db.where(User::class.java).equalTo("eMail", username).findFirst()
+                if (user == null) {
+                    exists = false
+                }
+            } else {
+                val user = db.where(User::class.java).equalTo("userName", username).findFirst()
+                if (user == null) {
+                    exists = false
+                }
             }
         }
         return exists

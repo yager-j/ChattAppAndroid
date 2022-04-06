@@ -16,6 +16,7 @@ class LoginScreen : AppCompatActivity() {
     private lateinit var titles : Array<TextView>
     private lateinit var name : EditText
     private lateinit var lastname : EditText
+    private lateinit var email : EditText
     private lateinit var username : EditText
     private lateinit var password : EditText
     private lateinit var passwordConfirm : EditText
@@ -32,9 +33,10 @@ class LoginScreen : AppCompatActivity() {
 
         isLogin = intent.getBooleanExtra("loginPressed", true)
 
-        titles = arrayOf(binder.titleTitle, binder.titleName, binder.titleLastname, binder.titlePasswordConfirm)
+        titles = arrayOf(binder.titleTitle, binder.titleName, binder.titleLastname, binder.titleMail, binder.titlePasswordConfirm)
         name = binder.inputName
         lastname = binder.inputLastname
+        email = binder.inputEMail
         username = binder.inputUsername
         password = binder.inputPassword
         passwordConfirm = binder.inputPasswordConfirm
@@ -49,6 +51,10 @@ class LoginScreen : AppCompatActivity() {
 
         binder.inputLastname.setOnClickListener{
             lastname.setBackgroundColor(resources.getColor(R.color.textInputBG))
+        }
+
+        binder.inputUsername.setOnClickListener{
+            email.setBackgroundColor(resources.getColor(R.color.textInputBG))
         }
 
         binder.inputUsername.setOnClickListener{
@@ -132,6 +138,14 @@ class LoginScreen : AppCompatActivity() {
                     username.setBackgroundColor(resources.getColor(R.color.textInputBG))
                 }
 
+                //checks email
+                if (email.text.toString() == "" || !email.text.toString().contains("@") || userDao.checkIfUserExists(username.text.toString())) {
+                    email.setBackgroundColor(resources.getColor(R.color.textInputBGNotFilled))
+                    checksOut = false
+                } else {
+                    email.setBackgroundColor(resources.getColor(R.color.textInputBG))
+                }
+
                 //checks passwords
                 if (password.text.toString() == "" || !isLogin && passwordConfirm.text.toString() == "" || !isLogin && password.text.toString() != passwordConfirm.text.toString()) {
                     password.setBackgroundColor(resources.getColor(R.color.textInputBGNotFilled))
@@ -145,7 +159,7 @@ class LoginScreen : AppCompatActivity() {
                 }
 
                 if (checksOut) {
-                    userDao.addUser(name.text.toString(), lastname.text.toString(), username.text.toString(), "mail@mail", password.text.toString())
+                    userDao.addUser(name.text.toString(), lastname.text.toString(), username.text.toString(), email.text.toString(), password.text.toString())
                     val toMain = Intent(this, MainActivity::class.java)
                     startActivity(toMain)
                 }
@@ -155,11 +169,12 @@ class LoginScreen : AppCompatActivity() {
 
     private fun loginSelected() {
         titles[0].text = resources.getString(R.string.login_title)
-        for (i in 1..3) {
+        for (i in 1 until titles.size) {
             titles[i].visibility = View.GONE
         }
         name.visibility = View.GONE
         lastname.visibility = View.GONE
+        email.visibility = View.GONE
         passwordConfirm.visibility = View.GONE
         setBackgroundGrey()
         clearInputs()
@@ -167,11 +182,12 @@ class LoginScreen : AppCompatActivity() {
 
     private fun registerSelected() {
         titles[0].text = resources.getString(R.string.register_title)
-        for (i in 1..3) {
+        for (i in 1 until titles.size) {
             titles[i].visibility = View.VISIBLE
         }
         name.visibility = View.VISIBLE
         lastname.visibility = View.VISIBLE
+        email.visibility = View.VISIBLE
         passwordConfirm.visibility = View.VISIBLE
         setBackgroundGrey()
         clearInputs()
@@ -180,6 +196,7 @@ class LoginScreen : AppCompatActivity() {
     private fun setBackgroundGrey(){
         name.setBackgroundColor(resources.getColor(R.color.textInputBG))
         lastname.setBackgroundColor(resources.getColor(R.color.textInputBG))
+        email.setBackgroundColor(resources.getColor(R.color.textInputBG))
         username.setBackgroundColor(resources.getColor(R.color.textInputBG))
         password.setBackgroundColor(resources.getColor(R.color.textInputBG))
         passwordConfirm.setBackgroundColor(resources.getColor(R.color.textInputBG))
@@ -188,6 +205,7 @@ class LoginScreen : AppCompatActivity() {
     private fun clearInputs(){
         name.setText("")
         lastname.setText("")
+        email.setText("")
         username.setText("")
         password.setText("")
         passwordConfirm.setText("")

@@ -11,9 +11,9 @@ import io.realm.RealmChangeListener
 import io.realm.RealmConfiguration
 
 private lateinit var binder: ActivityMainBinding
-private lateinit var userDao: UserDao
+private lateinit var contactDao: ContactDao
 private lateinit var realmListener: RealmChangeListener<Realm>
-private lateinit var usersList: ArrayList<User>
+private lateinit var contactsList: ArrayList<Contact>
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +30,8 @@ class MainActivity : AppCompatActivity() {
             .build()
         Realm.setDefaultConfiguration(config)
 
-        userDao = UserDao()
+        contactDao = ContactDao()
+        //userDao = UserDao()
         loadList()
 
 //creates and add a listener to database to update everytime new items are added
@@ -38,10 +39,10 @@ class MainActivity : AppCompatActivity() {
 
             loadList()
         }
-        userDao.db.addChangeListener(realmListener)
+        contactDao.db.addChangeListener(realmListener)
 
         binder.addUserBtn.setOnClickListener {
-            DialogMaker.createChat(this, userDao)
+            DialogMaker.createChat(this, contactDao)
         }
 
         binder.buttonLogin.setOnClickListener{
@@ -58,8 +59,8 @@ class MainActivity : AppCompatActivity() {
     private fun loadList() {
 
         binder.chatsList.layoutManager = LinearLayoutManager(this)
-        usersList = userDao.getUsers()
-        val adapter = MyAdapter((usersList),{position -> onListItemClick(position)},{position -> onListItemLongClick(position)})
+        contactsList = contactDao.getContacts()
+        val adapter = MyAdapter((contactsList),{ position -> onListItemClick(position)},{ position -> onListItemLongClick(position)})
         binder.chatsList.adapter = adapter
 
     }
@@ -72,8 +73,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun onListItemLongClick(position: Int){
 
-        val id = usersList[position].id
-        userDao.deleteUser(id)
+        val id = contactsList[position].id
+        contactDao.deleteContact(id)
 
     }
 }

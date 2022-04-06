@@ -51,14 +51,15 @@
         android:paddingHorizontal="@dimen/small_gap"/>
 
     <TextView
+        android:id="@+id/title_mail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/username"
+        android:text="@string/email"
         android:textSize="15sp"
         android:layout_marginTop="@dimen/small_gap"/>
 
     <EditText
-        android:id="@+id/input_username"
+        android:id="@+id/input_eMail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/textInputBG"
@@ -70,12 +71,12 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/email"
+        android:text="@string/username"
         android:textSize="15sp"
         android:layout_marginTop="@dimen/small_gap"/>
 
     <EditText
-        android:id="@+id/input_eMail"
+        android:id="@+id/input_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/textInputBG"
