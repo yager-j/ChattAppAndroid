@@ -1,5 +1,6 @@
 package com.example.chattapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -11,6 +12,7 @@ import io.realm.RealmConfiguration
 
 private lateinit var binder: ActivityMainBinding
 private lateinit var userDao: UserDao
+private lateinit var contactDao: ContactDao
 private lateinit var realmListener: RealmChangeListener<Realm>
 private lateinit var contactsList: ArrayList<Contact>
 
@@ -30,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         Realm.setDefaultConfiguration(config)
 
         userDao = UserDao()
+        contactDao = ContactDao()
         loadList()
 
 //creates and add a listener to database to update everytime new items are added
