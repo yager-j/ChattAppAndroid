@@ -4,7 +4,6 @@ import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.toObject
 
 class FirestoreContactDao {
 
@@ -33,8 +32,6 @@ class FirestoreContactDao {
             .addOnFailureListener {
                 Log.d(ContentValues.TAG, "Failed to add User")
             }
-
-
     }
 
     fun deleteContact(userId: String) {
@@ -48,7 +45,6 @@ class FirestoreContactDao {
             .addOnFailureListener {
                 Log.w(ContentValues.TAG, "Failed to delete user with id: $userId")
             }
-
     }
 
     fun findUser(searchTerm: String, contactDao: ContactDao) {
@@ -82,67 +78,9 @@ class FirestoreContactDao {
                         }
                     }
                 }
-
             }
             .addOnFailureListener {
                 Log.d(TAG, "findUser: FAILED MISERABLY")
-            }
-    }
-
-    fun saveMessage(message: Message){
-
-        val messageHashMap = hashMapOf(
-            "id" to message.id,
-            "sender" to message.sender,
-            "receiver" to message.receiver,
-            "text" to message.text,
-            "timestamp" to message.timestamp
-        )
-
-        firebaseDB
-            .collection(USERS_COLLECTION)
-            .document(message.receiver)
-            .collection("messages")
-            .document(message.id)
-            .set(messageHashMap)
-            .addOnSuccessListener { Log.d("FIRESTORE", "Message sent to Firestore") }
-            .addOnFailureListener { Log.d("FIRESTORE", "Message failed to send") }
-    }
-
-    fun loadMessages(activity: ChatActivity, contact: Contact) {
-        var messagesList = ArrayList<Message>()
-
-        firebaseDB
-            .collection(USERS_COLLECTION)
-            .document(contact.id)
-            .collection("messages")
-            .get()
-            .addOnSuccessListener { result ->
-                for(doc in result) {
-
-                    val msg = Message()
-
-                    val loadedId = doc.getString("id")
-                    val loadedSender = doc.getString("sender")
-                    val loadedReceiver = doc.getString("receiver")
-                    val loadedText = doc.getString("text")
-                    val loadedTimestamp = doc.getDate("timestamp")
-
-                    msg.id = loadedId!!
-                    msg.sender = loadedSender!!
-                    msg.receiver = loadedReceiver!!
-                    msg.text = loadedText!!
-                    msg.timestamp = loadedTimestamp!!
-
-                    messagesList.add(msg)
-                }
-                activity.showMessages(messagesList)
-            }
-            .addOnFailureListener {
-                Log.d("FIRESTORE", "Failed to load messages")
-            }
-            .addOnCanceledListener {
-                Log.d("FIRESTORE", "Load messages canceled")
             }
     }
 }

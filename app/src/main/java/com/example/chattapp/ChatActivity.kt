@@ -7,8 +7,8 @@ import com.example.chattapp.databinding.ActivityChatBinding
 private lateinit var binder: ActivityChatBinding
 private lateinit var contactDao: ContactDao
 private lateinit var firestoreContactDao: FirestoreContactDao
+private lateinit var firestoreMessageDao: FirestoreMessageDao
 private lateinit var contact: Contact
-private lateinit var messageList: ArrayList<Message>
 
 class ChatActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,15 +17,16 @@ class ChatActivity : AppCompatActivity() {
         setContentView(binder.root)
 
         firestoreContactDao = FirestoreContactDao()
+        firestoreMessageDao = FirestoreMessageDao()
         contactDao = ContactDao()
+
         val pos = intent.getIntExtra("pos", 0)
         contact = contactDao.getContacts()[pos]
 
         binder.name.text = contact.userName
 
         //Load messages
-        firestoreContactDao.loadMessages(this, contact)
-
+        firestoreMessageDao.loadMessages(this, contact)
 
         binder.send.setOnClickListener {
             val messages = binder.textView.text.toString()
@@ -50,6 +51,6 @@ class ChatActivity : AppCompatActivity() {
 
     private fun createMessage(text: String){
         val msg = Message(receiver = contact.id, text = text)
-        firestoreContactDao.saveMessage(msg)
+        firestoreMessageDao.saveMessage(msg)
     }
 }
