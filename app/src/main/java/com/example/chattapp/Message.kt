@@ -14,4 +14,7 @@ open class Message(
     var text: String = "",
     var timestamp: Date = Date()
 ) : RealmObject() {
+    override fun toString(): String {
+        return "Message(id='$id', sender='$sender', receiver='$receiver', text='$text', timestamp=$timestamp)"
+    }
 }
