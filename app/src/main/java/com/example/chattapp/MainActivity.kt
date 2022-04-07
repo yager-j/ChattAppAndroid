@@ -72,6 +72,7 @@ class MainActivity : AppCompatActivity() {
 
         Toast.makeText(this, "click detected position $position", Toast.LENGTH_SHORT).show()
         val intent = Intent(this, ChatActivity::class.java)
+        intent.putExtra("pos", position)
         startActivity(intent)
     }
 

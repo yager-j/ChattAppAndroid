@@ -86,6 +86,26 @@ class FirestoreContactDao {
             .addOnFailureListener {
                 Log.d(TAG, "findUser: FAILED MISERABLY")
             }
+    }
+
+    fun saveMessage(message: Message){
+
+        val messageHashMap = hashMapOf(
+            "id" to message.id,
+            "sender" to message.sender,
+            "receiver" to message.receiver,
+            "text" to message.text,
+            "timestamp" to message.timestamp
+        )
+        println("?????????????????????????????????????????????????")
+        firebaseDB
+            .collection(USERS_COLLECTION)
+            .document(message.receiver)
+            .collection("messages")
+            .document(message.id)
+            .set(messageHashMap)
+            .addOnSuccessListener { Log.d("FIRESTORE", "Message sent to Firestore") }
+            .addOnFailureListener { Log.d("FIRESTORE", "Message failed to send") }
 
 
     }
