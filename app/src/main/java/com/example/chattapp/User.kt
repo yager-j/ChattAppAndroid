@@ -22,4 +22,6 @@ open class User : RealmObject() {
     @Required
     var password: String = "password"
 
+    var loggedIn: Boolean = false
+
 }

@@ -13,6 +13,8 @@ object DialogMaker {
      */
     fun createChat(context: Context, contactDao: ContactDao){
 
+        val userDao = UserDao()
+
         val createChatDialog = Dialog(context)
         createChatDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         createChatDialog.setContentView(R.layout.create_chat_layout)
@@ -25,13 +27,11 @@ object DialogMaker {
 
             val input = textInputField.text.toString()
 
-            if (input.isEmpty() || input == " "){
-
-                textInputField.error = "user does not exists"
-
-            }else {
+            if (userDao.checkIfUserExists(input)){
                 contactDao.addContact(input)
                 createChatDialog.dismiss()
+            } else {
+                textInputField.error = "user does not exists"
             }
 
         }
