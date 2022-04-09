@@ -75,8 +75,6 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         Log.d("LoginUser", "updated.")
-        userDao.debugShowUser("Qualthorn")
-        userDao.debugShowUser("Hej")
         updateView()
     }
 

@@ -163,9 +163,10 @@ class LoginScreen : AppCompatActivity() {
 
                 //Adds user and corresponding contact
                 if (checksOut) {
-                    userDao.addUser(name.text.toString(), lastname.text.toString(), username.text.toString(), email.text.toString(), password.text.toString(), true)
-                    userDao.logInUser(username.text.toString())
-                    contactDao.addContact(username.text.toString())
+                    //userDao.addUser(name.text.toString(), lastname.text.toString(), username.text.toString(), email.text.toString(), password.text.toString(), true)
+                    userDao.addUserToFirebase(name.text.toString(), lastname.text.toString(), username.text.toString(), email.text.toString(), password.text.toString())
+                    //userDao.logInUser(username.text.toString())
+                    //contactDao.addContact(username.text.toString())
                     val toMain = Intent(this, MainActivity::class.java)
                     startActivity(toMain)
                 }

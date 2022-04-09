@@ -1,12 +1,20 @@
 package com.example.chattapp
 
 import android.util.Log
+import com.google.firebase.firestore.FirebaseFirestore
 import io.realm.Realm
 
 
 class UserDao {
 
+    val USERS_COLLECTIONS = "users"
+    val USERNAME_KEY = "username"
+    val EMAIL_KEY = "email"
+
     val db: Realm = Realm.getDefaultInstance()
+    val fb : FirebaseFirestore = FirebaseFirestore.getInstance()
+    //val ref : DatabaseReference = fb.collection(USERS_COLLECTIONS).document("id")
+
 
     fun getUsers(): ArrayList<User> {
         val userList = ArrayList<User>()
@@ -14,13 +22,13 @@ class UserDao {
         return userList
     }
 
-    fun addUser(first: String, last: String, username: String, mail: String, pw: String, login: Boolean) {
+    fun addUser(first: String, last: String, user: String, mail: String, pw: String, login: Boolean) {
         db.executeTransactionAsync {
             val newUser = User().apply {
-                name = first
-                lastName = last
-                userName = username
-                eMail = mail
+                first_name = first
+                last_name = last
+                username = user
+                email = mail
                 password = pw
                 loggedIn = login
             }
@@ -28,73 +36,70 @@ class UserDao {
         }
     }
 
-    fun deleteUser(userId: String){
+    fun addUserToFirebase(first: String, last: String, user: String, mail: String, pw: String) {
+        val newUser = User().apply{
+            first_name = first
+            last_name = last
+            username = user
+            email = mail
+            password = pw
+        }
+        val hashUser = HashMap<String, String>()
+        hashUser.put("id", newUser.id)
+        hashUser.put("first_name", newUser.first_name)
+        hashUser.put("last_name", newUser.last_name)
+        hashUser.put("username", newUser.username)
+        hashUser.put("email", newUser.email)
+        hashUser.put("password", newUser.password)
+        fb.document("$USERS_COLLECTIONS/${newUser.id}").set(hashUser)
+    }
+
+    fun deleteUser(userId: String) {
         db.executeTransaction {
             val user = db.where(User::class.java).equalTo("id", userId).findFirstAsync()
             user?.deleteFromRealm()
         }
     }
 
-    fun checkIfUserExists(username: String): Boolean {
-        var exists = true
-        db.executeTransaction {
-            if (username.contains("@")) {
-                val user = db.where(User::class.java).equalTo("eMail", username).findFirst()
-                if (user == null) {
-                    exists = false
-                }
-            } else {
-                val user = db.where(User::class.java).equalTo("userName", username).findFirst()
-                if (user == null) {
-                    exists = false
-                }
-            }
+    fun checkIfUserExists(userOrMail: String): Boolean {
+        val user = if (userOrMail.contains("@")) {
+            db.where(User::class.java).equalTo(EMAIL_KEY, userOrMail).findFirst()
+        } else {
+            db.where(User::class.java).equalTo(USERNAME_KEY, userOrMail).findFirst()
         }
-        return exists
+        return user != null
     }
 
-    fun checkPassword(input: String, password: String): Boolean {
-        var rightPw = false
-        db.executeTransaction {
-            val user = if (input.contains("@")) {
-                db.where(User::class.java).equalTo("eMail", input).findFirst()
-            } else {
-                db.where(User::class.java).equalTo("userName", input).findFirst()
-            }
-            if (user?.password == password) {
-                rightPw = true
-            }
+    fun checkPassword(userOrMail: String, password: String): Boolean {
+        val user = if (userOrMail.contains("@")) {
+            db.where(User::class.java).equalTo(EMAIL_KEY, userOrMail).findFirst()
+        } else {
+            db.where(User::class.java).equalTo(USERNAME_KEY, userOrMail).findFirst()
         }
-        return rightPw
+        return user?.password == password
     }
 
     fun logInUser(userOrMail : String) {
-        db.executeTransaction {
-            val user = if (userOrMail.contains("@")) {
-                db.where(User::class.java).equalTo("eMail", userOrMail).findFirst()
-            } else {
-                db.where(User::class.java).equalTo("userName", userOrMail).findFirst()
-            }
-            user?.loggedIn = true
+        val user = if (userOrMail.contains("@")) {
+            db.where(User::class.java).equalTo(EMAIL_KEY, userOrMail).findFirst()
+        } else {
+            db.where(User::class.java).equalTo(USERNAME_KEY, userOrMail).findFirst()
         }
+        user?.loggedIn = true
     }
 
     fun logOutUser() {
-        db.executeTransaction {
-            val user = db.where(User::class.java).equalTo("loggedIn", true).findFirst()
-            user?.loggedIn = false
-        }
+        val user = db.where(User::class.java).equalTo("loggedIn", true).findFirst()
+        user?.loggedIn = false
     }
 
     fun displayCurrentUser() : String {
         val user = db.where(User::class.java).equalTo("loggedIn", true).findFirst()
-        return user?.userName ?: ""
+        return user?.username ?: ""
     }
 
     fun debugShowUser(username : String){
-        db.executeTransaction {
-            val user = db.where(User::class.java).equalTo("userName", username).findFirst()
-            Log.d("LoginUser", "user:$user")
-        }
+        val user = db.where(User::class.java).equalTo(USERNAME_KEY, username).findFirst()
+        Log.d("LoginUser", "user:$user")
     }
 }
