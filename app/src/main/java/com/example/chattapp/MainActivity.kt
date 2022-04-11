@@ -48,7 +48,9 @@ class MainActivity : AppCompatActivity() {
         userDao.db.addChangeListener(realmListener)
 
         binder.addUserBtn.setOnClickListener {
-            DialogMaker.createChat(this, contactDao, firestoreContactDao)
+            val intent = Intent(this, NewChatActivity::class.java)
+            startActivity(intent)
+            //DialogMaker.createChat(this, contactDao, firestoreContactDao)
         }
 
         binder.buttonLogin.setOnClickListener{
