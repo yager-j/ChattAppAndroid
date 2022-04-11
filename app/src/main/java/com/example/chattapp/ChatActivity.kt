@@ -5,10 +5,9 @@ import android.os.Bundle
 import com.example.chattapp.databinding.ActivityChatBinding
 
 private lateinit var binder: ActivityChatBinding
-private lateinit var contactDao: ContactDao
-private lateinit var firestoreContactDao: FirestoreContactDao
 private lateinit var firestoreMessageDao: FirestoreMessageDao
-private lateinit var contact: Contact
+private lateinit var firestoreChatDao: FirestoreChatDao
+
 
 class ChatActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,17 +15,18 @@ class ChatActivity : AppCompatActivity() {
         binder = ActivityChatBinding.inflate(layoutInflater)
         setContentView(binder.root)
 
-        firestoreContactDao = FirestoreContactDao()
         firestoreMessageDao = FirestoreMessageDao()
-        contactDao = ContactDao()
+        firestoreChatDao = FirestoreChatDao()
 
-        val pos = intent.getIntExtra("pos", 0)
-        contact = contactDao.getContacts()[pos]
+        val id = intent.getStringExtra("chatID")
 
-        binder.name.text = contact.userName
+
+        //binder.name.text =
 
         //Load messages
-        firestoreMessageDao.loadMessages(this, contact)
+        if (id != null) {
+            firestoreMessageDao.loadMessages(this, id)
+        }
 
         binder.send.setOnClickListener {
             val messages = binder.textView.text.toString()
@@ -35,7 +35,9 @@ class ChatActivity : AppCompatActivity() {
             binder.textView.text = messages + newMessage + "\n"
             binder.textInput.text.clear()
 
-            createMessage(newMessage)
+            if (id != null) {
+                createMessage(newMessage, id)
+            }
 
         }
     }
@@ -49,8 +51,8 @@ class ChatActivity : AppCompatActivity() {
         binder.textView.text = messageText
     }
 
-    private fun createMessage(text: String){
-        val msg = Message(receiver = contact.id, text = text)
-        firestoreMessageDao.saveMessage(msg)
+    private fun createMessage(text: String, chatID: String){
+        val msg = Message(text = text)
+        firestoreMessageDao.saveMessage(msg, chatID)
     }
 }
