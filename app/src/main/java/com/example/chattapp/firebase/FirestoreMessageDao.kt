@@ -43,6 +43,7 @@ class FirestoreMessageDao {
             .collection(CHATS_COLLECTION)
             .document(id)
             .collection(MESSAGES_COLLECTION)
+            .orderBy(TIMESTAMP_KEY)
             .get()
             .addOnSuccessListener { result ->
                 for(doc in result) {
