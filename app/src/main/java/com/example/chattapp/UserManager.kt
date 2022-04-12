@@ -1,6 +1,7 @@
 package com.example.chattapp
 
 import android.content.SharedPreferences
+import com.example.chattapp.models.User
 import com.google.firebase.firestore.FirebaseFirestore
 
 

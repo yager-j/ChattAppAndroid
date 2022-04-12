@@ -5,6 +5,8 @@ import android.content.Context
 import android.view.Window
 import android.widget.Button
 import android.widget.EditText
+import com.example.chattapp.firebase.FirestoreContactDao
+import com.example.chattapp.realm.ContactDao
 
 object DialogMaker {
     /**

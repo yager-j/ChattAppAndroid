@@ -3,6 +3,10 @@ package com.example.chattapp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.chattapp.databinding.ActivityChatBinding
+import com.example.chattapp.firebase.FirestoreChatDao
+import com.example.chattapp.firebase.FirestoreMessageDao
+import com.example.chattapp.models.Chat
+import com.example.chattapp.models.Message
 
 private lateinit var binder: ActivityChatBinding
 private lateinit var firestoreMessageDao: FirestoreMessageDao

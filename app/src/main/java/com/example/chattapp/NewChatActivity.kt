@@ -2,15 +2,14 @@ package com.example.chattapp
 
 
 import android.content.Intent
-import android.os.Binder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ArrayAdapter
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chattapp.databinding.ActivityNewChatBinding
+import com.example.chattapp.firebase.FirestoreUserDao
+import com.example.chattapp.models.User
 
 private lateinit var binder: ActivityNewChatBinding
 private lateinit var firestoreUserDao: FirestoreUserDao

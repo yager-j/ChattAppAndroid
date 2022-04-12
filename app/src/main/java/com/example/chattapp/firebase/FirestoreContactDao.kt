@@ -1,8 +1,10 @@
-package com.example.chattapp
+package com.example.chattapp.firebase
 
 import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.util.Log
+import com.example.chattapp.models.Contact
+import com.example.chattapp.realm.ContactDao
 import com.google.firebase.firestore.FirebaseFirestore
 
 class FirestoreContactDao {

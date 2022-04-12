@@ -3,11 +3,15 @@ package com.example.chattapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.chattapp.UserManager
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chattapp.databinding.ActivityMainBinding
+import com.example.chattapp.firebase.FirestoreChatDao
+import com.example.chattapp.firebase.FirestoreContactDao
+import com.example.chattapp.models.Chat
+import com.example.chattapp.models.Contact
+import com.example.chattapp.realm.ContactDao
+import com.example.chattapp.realm.UserDao
 import io.realm.Realm
 import io.realm.RealmChangeListener
 import io.realm.RealmConfiguration

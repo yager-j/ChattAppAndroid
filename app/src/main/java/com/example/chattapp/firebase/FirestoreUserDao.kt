@@ -1,5 +1,7 @@
-package com.example.chattapp
+package com.example.chattapp.firebase
 
+import com.example.chattapp.NewChatActivity
+import com.example.chattapp.models.User
 import com.google.firebase.firestore.FirebaseFirestore
 
 class FirestoreUserDao {

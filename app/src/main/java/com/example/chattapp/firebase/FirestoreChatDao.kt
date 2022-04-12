@@ -1,6 +1,8 @@
-package com.example.chattapp
+package com.example.chattapp.firebase
 
 import android.util.Log
+import com.example.chattapp.models.Chat
+import com.example.chattapp.MainActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
 class FirestoreChatDao {

@@ -1,5 +1,7 @@
-package com.example.chattapp
+package com.example.chattapp.realm
 
+import com.example.chattapp.models.Contact
+import com.example.chattapp.models.User
 import io.realm.Realm
 
 class UserDao {

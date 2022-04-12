@@ -1,4 +1,4 @@
-package com.example.chattapp
+package com.example.chattapp.models
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
