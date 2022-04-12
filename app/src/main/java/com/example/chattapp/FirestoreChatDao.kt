@@ -30,7 +30,7 @@ class FirestoreChatDao {
                     chatList.add(chat)
                 }
                 activity.loadList(chatList)
-                println(chatList.toString())
+
                 Log.d("FIRESTORE", "Updated Chat List")
             }
         }

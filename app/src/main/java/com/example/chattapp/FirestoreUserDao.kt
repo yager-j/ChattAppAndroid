@@ -19,6 +19,7 @@ class FirestoreUserDao {
             .collection(USERS_COLLECTION)
             .addSnapshotListener { result, error ->
                 if (result != null) {
+                    userList.clear()
                     for (doc in result) {
                         val user = User()
                         user.id = doc.getString(ID_KEY)!!
