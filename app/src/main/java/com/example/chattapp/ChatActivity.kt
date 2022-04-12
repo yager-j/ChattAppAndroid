@@ -18,16 +18,14 @@ class ChatActivity : AppCompatActivity() {
         firestoreMessageDao = FirestoreMessageDao()
         firestoreChatDao = FirestoreChatDao()
 
-        val id = intent.getStringExtra("chatID")
-
-
-        //binder.name.text =
+        var id = intent.getStringExtra("chatID")
 
         //Load messages
         if (id != null) {
             firestoreMessageDao.loadMessages(this, id)
         }
 
+        //Send messages
         binder.send.setOnClickListener {
             val messages = binder.textView.text.toString()
             val newMessage = binder.textInput.text.toString()
@@ -35,10 +33,15 @@ class ChatActivity : AppCompatActivity() {
             binder.textView.text = messages + newMessage + "\n"
             binder.textInput.text.clear()
 
-            if (id != null) {
-                createMessage(newMessage, id)
+            //Create new chat
+            if(id == null){
+                val chat = Chat()
+                id = chat.id
+                chat.usersInChat.add("androidUser")
+                chat.usersInChat.addAll(intent.getStringArrayListExtra("userList") as ArrayList<String>)
+                firestoreChatDao.saveChat(chat)
             }
-
+            createMessage(newMessage, id!!)
         }
     }
 
