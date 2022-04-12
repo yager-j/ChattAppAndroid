@@ -3,6 +3,7 @@ package com.example.chattapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.chattapp.UserManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,6 +40,14 @@ class MainActivity : AppCompatActivity() {
         firestoreContactDao = FirestoreContactDao()
         firestoreChatDao = FirestoreChatDao(this)
         //loadList()
+        sharedPrefsSetup()
+
+        if (!UserManager.loadUserLogin()){
+            println("data not loaded")
+            val toLogin = Intent(this, LoginScreen::class.java)
+            toLogin.putExtra("loginPressed", true)
+            startActivity(toLogin)
+        }
 
 //creates and add a listener to database to update everytime new items are added
         realmListener = RealmChangeListener {
@@ -86,5 +95,11 @@ class MainActivity : AppCompatActivity() {
         contactDao.deleteContact(id)
         firestoreContactDao.deleteContact(id)
 
+    }
+
+    fun sharedPrefsSetup(){
+
+        val sp = getSharedPreferences("com.example.chattapp.MyPrefs", MODE_PRIVATE)
+        UserManager.sharedPrefsSetup(sp)
     }
 }

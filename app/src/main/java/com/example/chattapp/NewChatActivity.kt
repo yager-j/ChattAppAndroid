@@ -22,6 +22,6 @@ class NewChatActivity : AppCompatActivity() {
 
     fun showUsers(list: ArrayList<User>){
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, list)
-        binder.listViewNewChat.adapter = adapter
+        binder.listviewNewChat.adapter = adapter
     }
 }

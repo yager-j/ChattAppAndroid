@@ -101,6 +101,7 @@ class LoginScreen : AppCompatActivity() {
                     //TODO go to "Login" function
                     //Current user = userId
                     //Default user = guest?
+
                     val toMain = Intent(this, MainActivity::class.java)
                     startActivity(toMain)
                 }
@@ -160,6 +161,7 @@ class LoginScreen : AppCompatActivity() {
 
                 if (checksOut) {
                     userDao.addUser(name.text.toString(), lastname.text.toString(), username.text.toString(), email.text.toString(), password.text.toString())
+                    UserManager.saveUserLogin(username.text.toString(), password.text.toString())
                     val toMain = Intent(this, MainActivity::class.java)
                     startActivity(toMain)
                 }
