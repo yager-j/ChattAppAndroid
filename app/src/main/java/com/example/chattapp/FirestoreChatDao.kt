@@ -35,4 +35,18 @@ class FirestoreChatDao {
             }
         }
     }
+
+    fun saveChat(chat : Chat){
+        val chatHashMap = hashMapOf(
+            ID_KEY to chat.id,
+            USERS_IN_CHAT_KEY to chat.usersInChat
+        )
+
+        firebaseDB
+            .collection(CHATS_COLLECTION)
+            .document(chat.id)
+            .set(chatHashMap)
+            .addOnSuccessListener { Log.d("FIRESTORE", "Chat saved to Firestore") }
+            .addOnFailureListener { Log.d("FIRESTORE", "Failed to save chat") }
+    }
 }

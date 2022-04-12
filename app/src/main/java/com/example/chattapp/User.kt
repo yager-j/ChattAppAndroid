@@ -22,4 +22,9 @@ open class User : RealmObject() {
     @Required
     var password: String = "password"
 
+
+    override fun toString(): String {
+        return "User(id='$id', name='$name', lastName='$lastName', userName='$userName', eMail='$eMail', password='$password')"
+    }
+
 }

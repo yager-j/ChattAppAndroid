@@ -1,10 +1,15 @@
 package com.example.chattapp
 
 
+import android.content.Intent
 import android.os.Binder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import android.widget.LinearLayout
+import android.widget.Toast
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chattapp.databinding.ActivityNewChatBinding
 
 private lateinit var binder: ActivityNewChatBinding
@@ -21,7 +26,20 @@ class NewChatActivity : AppCompatActivity() {
     }
 
     fun showUsers(list: ArrayList<User>){
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, list)
-        binder.listViewNewChat.adapter = adapter
+
+        val adapter = NewChatAdapter(list, {position ->  onListItemClick(list[position])})
+        binder.recyclerviewNewChat.adapter = adapter
+        binder.recyclerviewNewChat.layoutManager = LinearLayoutManager(this)
+        binder.recyclerviewNewChat.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+    }
+
+    private fun onListItemClick(user: User){
+        Toast.makeText(this, "Clicked on: ${user.userName}", Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, ChatActivity::class.java)
+        val userList = ArrayList<String>()
+        userList.add(user.userName)
+
+        intent.putExtra("userList", userList)
+        startActivity(intent)
     }
 }
