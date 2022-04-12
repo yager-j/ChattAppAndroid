@@ -17,6 +17,40 @@ class FirestoreMessageDao {
 
     private val firebaseDB = FirebaseFirestore.getInstance()
 
+    constructor()
+
+    constructor(activity: ChatActivity, id: String){
+        firebaseDB
+            .collection(CHATS_COLLECTION)
+            .document(id)
+            .collection(MESSAGES_COLLECTION)
+            .orderBy(TIMESTAMP_KEY)
+            .addSnapshotListener(activity) { result, error ->
+                val messagesList = ArrayList<Message>()
+                if (result != null) {
+                    for(doc in result) {
+
+                        val msg = Message()
+
+                        val loadedId = doc.getString(ID_KEY)
+                        val loadedSender = doc.getString(SENDER_KEY)
+                        val loadedText = doc.getString(TEXT_KEY)
+                        val loadedTimestamp = doc.getDate(TIMESTAMP_KEY)
+
+                        msg.id = loadedId!!
+                        msg.sender = loadedSender!!
+                        msg.text = loadedText!!
+                        msg.timestamp = loadedTimestamp!!
+
+                        messagesList.add(msg)
+                    }
+                    activity.showMessages(messagesList)
+                    Log.d("FIRESTORE", "Messages updated")
+                }
+
+            }
+    }
+
     fun saveMessage(message: Message, chatID: String){
 
         val messageHashMap = hashMapOf(

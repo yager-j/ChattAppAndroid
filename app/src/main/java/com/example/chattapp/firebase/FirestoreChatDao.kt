@@ -19,7 +19,7 @@ class FirestoreChatDao {
     constructor(activity: MainActivity) {
         firebaseDB.collection(CHATS_COLLECTION).addSnapshotListener(activity) { value, error ->
             if (error != null){
-                Log.e("FIRESTORE", "Failed to listen for chats")
+                Log.e("FIRESTORE", "Failed to listen for chats", error)
             }
             if(value != null) {
                 val chatList = ArrayList<Chat>()
@@ -34,6 +34,8 @@ class FirestoreChatDao {
                 activity.loadList(chatList)
 
                 Log.d("FIRESTORE", "Updated Chat List")
+            } else {
+                Log.d("FIRESTORE", "Data null")
             }
         }
     }

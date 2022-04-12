@@ -19,15 +19,15 @@ class ChatActivity : AppCompatActivity() {
         binder = ActivityChatBinding.inflate(layoutInflater)
         setContentView(binder.root)
 
-        firestoreMessageDao = FirestoreMessageDao()
-        firestoreChatDao = FirestoreChatDao()
-
         var id = intent.getStringExtra("chatID")
 
-        //Load messages
-        if (id != null) {
-            firestoreMessageDao.loadMessages(this, id)
+        firestoreMessageDao = if(id != null) {
+            FirestoreMessageDao(this, id)
+        } else {
+            FirestoreMessageDao()
         }
+
+        firestoreChatDao = FirestoreChatDao()
 
         //Send messages
         binder.send.setOnClickListener {
@@ -41,7 +41,7 @@ class ChatActivity : AppCompatActivity() {
             if(id == null){
                 val chat = Chat()
                 id = chat.id
-                chat.usersInChat.add("androidUser")
+                chat.usersInChat.add("dave")
                 chat.usersInChat.addAll(intent.getStringArrayListExtra("userList") as ArrayList<String>)
                 firestoreChatDao.saveChat(chat)
             }
