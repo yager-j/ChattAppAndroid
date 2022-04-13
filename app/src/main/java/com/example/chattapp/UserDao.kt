@@ -1,7 +1,12 @@
 package com.example.chattapp
 
+import android.content.ContentValues.TAG
 import android.util.Log
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
+import com.squareup.okhttp.internal.Internal.instance
 import io.realm.Realm
 
 
@@ -13,6 +18,7 @@ class UserDao {
 
     val db: Realm = Realm.getDefaultInstance()
     val fb : FirebaseFirestore = FirebaseFirestore.getInstance()
+    val usersCol: CollectionReference = fb.collection(USERS_COLLECTIONS)
     //val ref : DatabaseReference = fb.collection(USERS_COLLECTIONS).document("id")
 
 
@@ -45,12 +51,12 @@ class UserDao {
             password = pw
         }
         val hashUser = HashMap<String, String>()
-        hashUser.put("id", newUser.id)
-        hashUser.put("first_name", newUser.first_name)
-        hashUser.put("last_name", newUser.last_name)
-        hashUser.put("username", newUser.username)
-        hashUser.put("email", newUser.email)
-        hashUser.put("password", newUser.password)
+        hashUser["id"] = newUser.id
+        hashUser["first_name"] = newUser.first_name
+        hashUser["last_name"] = newUser.last_name
+        hashUser["username"] = newUser.username
+        hashUser["email"] = newUser.email
+        hashUser["password"] = newUser.password
         fb.document("$USERS_COLLECTIONS/${newUser.id}").set(hashUser)
     }
 
@@ -61,16 +67,40 @@ class UserDao {
         }
     }
 
-    fun checkIfUserExists(userOrMail: String): Boolean {
-        val user = if (userOrMail.contains("@")) {
-            db.where(User::class.java).equalTo(EMAIL_KEY, userOrMail).findFirst()
+    private fun getOneUser(userOrMail: String): Query {
+        val query: Query = if (userOrMail.contains("@")){
+            usersCol.whereEqualTo(USERNAME_KEY, userOrMail)
         } else {
-            db.where(User::class.java).equalTo(USERNAME_KEY, userOrMail).findFirst()
+            usersCol.whereEqualTo(EMAIL_KEY, userOrMail)
         }
-        return user != null
+        return query
+    }
+
+    fun checkIfUserExists(userOrMail: String): Boolean {
+        /*
+        val query: Query = if (userOrMail.contains("@")){
+            usersCol.whereEqualTo(USERNAME_KEY, userOrMail)
+        } else {
+            usersCol.whereEqualTo(EMAIL_KEY, userOrMail)
+        }
+         */
+        return getOneUser(userOrMail).get() != null
     }
 
     fun checkPassword(userOrMail: String, password: String): Boolean {
+        val query: Query = usersCol.whereEqualTo(USERNAME_KEY, userOrMail)
+        query
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    Log.d(TAG, "${document.id} => ${document.data}")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting documents: ", exception)
+            }
+
+
         val user = if (userOrMail.contains("@")) {
             db.where(User::class.java).equalTo(EMAIL_KEY, userOrMail).findFirst()
         } else {

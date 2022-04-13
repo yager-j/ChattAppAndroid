@@ -19,7 +19,6 @@ open class User : RealmObject() {
     @Required
     var email: String = "user@chatApp.com"
 
-    @Required
     var password: String = "password"
 
     var loggedIn: Boolean = false
