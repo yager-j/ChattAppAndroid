@@ -42,7 +42,8 @@ class MainActivity : AppCompatActivity() {
         userDao = UserDao()
         contactDao = ContactDao()
         firestoreContactDao = FirestoreContactDao()
-        firestoreChatDao = FirestoreChatDao(this)
+        firestoreChatDao = FirestoreChatDao()
+        firestoreChatDao.firestoreListener(this)
         //loadList()
         sharedPrefsSetup()
 
@@ -105,5 +106,10 @@ class MainActivity : AppCompatActivity() {
 
         val sp = getSharedPreferences("com.example.chattapp.MyPrefs", MODE_PRIVATE)
         UserManager.sharedPrefsSetup(sp)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        firestoreChatDao.firestoreListener(this)
     }
 }

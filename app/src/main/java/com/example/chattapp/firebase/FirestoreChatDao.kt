@@ -1,6 +1,7 @@
 package com.example.chattapp.firebase
 
 import android.util.Log
+import com.example.chattapp.ChatActivity
 import com.example.chattapp.models.Chat
 import com.example.chattapp.MainActivity
 import com.google.firebase.firestore.FirebaseFirestore
@@ -14,9 +15,33 @@ class FirestoreChatDao {
 
     private val firebaseDB = FirebaseFirestore.getInstance()
 
-    constructor()
+//    constructor()
+//
+//    constructor(activity: MainActivity) {
+//        firebaseDB.collection(CHATS_COLLECTION).addSnapshotListener(activity) { value, error ->
+//            if (error != null){
+//                Log.e("FIRESTORE", "Failed to listen for chats", error)
+//            }
+//            if(value != null) {
+//                val chatList = ArrayList<Chat>()
+//                for(doc in value) {
+//                    val chat = Chat()
+//
+//                    chat.id = doc.getString(ID_KEY)!!
+//                    chat.usersInChat = doc.get(USERS_IN_CHAT_KEY) as ArrayList<String>
+//
+//                    chatList.add(chat)
+//                }
+//                activity.loadList(chatList)
+//
+//                Log.d("FIRESTORE", "Updated Chat List")
+//            } else {
+//                Log.d("FIRESTORE", "Data null")
+//            }
+//        }
+//    }
 
-    constructor(activity: MainActivity) {
+    fun firestoreListener(activity: MainActivity){
         firebaseDB.collection(CHATS_COLLECTION).addSnapshotListener(activity) { value, error ->
             if (error != null){
                 Log.e("FIRESTORE", "Failed to listen for chats", error)
