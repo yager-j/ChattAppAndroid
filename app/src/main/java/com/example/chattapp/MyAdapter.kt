@@ -5,9 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.chattapp.models.Chat
 
 class MyAdapter(
-    private val list: ArrayList<Contact>,
+    private val list: ArrayList<Chat>,
     private val onItemClicked: (position: Int) -> Unit,
     private val onItemLongClicked: (position: Int) -> Unit
 ) :
@@ -26,7 +27,7 @@ class MyAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 
-        holder.textView.text = list[position].userName
+        holder.textView.text = list[position].usersInChat.toString()
 
     }
 
