@@ -8,12 +8,12 @@ import com.example.chattapp.firebase.FirestoreMessageDao
 import com.example.chattapp.models.Chat
 import com.example.chattapp.models.Message
 
-private lateinit var binder: ActivityChatBinding
-private lateinit var firestoreMessageDao: FirestoreMessageDao
-private lateinit var firestoreChatDao: FirestoreChatDao
-
-
 class ChatActivity : AppCompatActivity() {
+
+    private lateinit var binder: ActivityChatBinding
+    private lateinit var firestoreMessageDao: FirestoreMessageDao
+    private lateinit var firestoreChatDao: FirestoreChatDao
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binder = ActivityChatBinding.inflate(layoutInflater)
@@ -44,6 +44,8 @@ class ChatActivity : AppCompatActivity() {
                 chat.usersInChat.add("dave")
                 chat.usersInChat.addAll(intent.getStringArrayListExtra("userList") as ArrayList<String>)
                 firestoreChatDao.saveChat(chat)
+                //create listener
+                firestoreMessageDao = FirestoreMessageDao(this, id!!)
             }
             createMessage(newMessage, id!!)
         }

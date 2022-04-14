@@ -11,16 +11,32 @@ import com.example.chattapp.databinding.ActivityNewChatBinding
 import com.example.chattapp.firebase.FirestoreUserDao
 import com.example.chattapp.models.User
 
-private lateinit var binder: ActivityNewChatBinding
-private lateinit var firestoreUserDao: FirestoreUserDao
 
 class NewChatActivity : AppCompatActivity() {
+
+    private lateinit var binder: ActivityNewChatBinding
+    private lateinit var firestoreUserDao: FirestoreUserDao
+
+    private var selectedUsers = arrayListOf<String>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binder = ActivityNewChatBinding.inflate(layoutInflater)
         setContentView(binder.root)
 
         firestoreUserDao = FirestoreUserDao(this)
+
+        //Start new chat
+        binder.createChatButton.setOnClickListener {
+
+            if(selectedUsers.isNotEmpty()) {
+                val intent = Intent(this, ChatActivity::class.java)
+                intent.putExtra("userList", selectedUsers)
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Select a User to create a chat", Toast.LENGTH_SHORT).show()
+            }
+        }
 
     }
 
@@ -33,12 +49,11 @@ class NewChatActivity : AppCompatActivity() {
     }
 
     private fun onListItemClick(user: User){
-        Toast.makeText(this, "Clicked on: ${user.userName}", Toast.LENGTH_SHORT).show()
-        val intent = Intent(this, ChatActivity::class.java)
-        val userList = ArrayList<String>()
-        userList.add(user.userName)
-
-        intent.putExtra("userList", userList)
-        startActivity(intent)
+        if(selectedUsers.contains(user.userName)){
+            selectedUsers.remove(user.userName)
+        } else {
+            selectedUsers.add(user.userName)
+        }
+        Toast.makeText(this, "Selected users: $selectedUsers", Toast.LENGTH_SHORT).show()
     }
 }
