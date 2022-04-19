@@ -28,7 +28,7 @@ class NewChatAdapter( private val userList: ArrayList<User>, private val onItemC
                 itemView.setBackgroundColor(Color.TRANSPARENT)
                 selectedItems.remove(userList[position])
             } else {
-                itemView.setBackgroundColor(Color.DKGRAY)
+                itemView.setBackgroundColor(Color.LTGRAY)
                 selectedItems.add(userList[position])
             }
         }

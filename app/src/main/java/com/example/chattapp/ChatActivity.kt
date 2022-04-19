@@ -2,6 +2,7 @@ package com.example.chattapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chattapp.databinding.ActivityChatBinding
 import com.example.chattapp.firebase.FirestoreChatDao
 import com.example.chattapp.firebase.FirestoreMessageDao
@@ -31,10 +32,9 @@ class ChatActivity : AppCompatActivity() {
 
         //Send messages
         binder.send.setOnClickListener {
-            val messages = binder.textView.text.toString()
+
             val newMessage = binder.textInput.text.toString()
 
-            binder.textView.text = messages + newMessage + "\n"
             binder.textInput.text.clear()
 
             //Create new chat
@@ -51,13 +51,12 @@ class ChatActivity : AppCompatActivity() {
         }
     }
 
-    fun showMessages(list: ArrayList<Message>){
-        //Show messages
-        var messageText = ""
-        for(message in list){
-            messageText += "${message.text} \n"
-        }
-        binder.textView.text = messageText
+    fun loadMessages(messageList: ArrayList<Message>) {
+        val layoutManager = LinearLayoutManager(this)
+        //layoutManager.reverseLayout = true
+        binder.recyclerMessages.layoutManager = layoutManager
+        val adapter = MessageAdapter(this, messageList)
+        binder.recyclerMessages.adapter = adapter
     }
 
     private fun createMessage(text: String, chatID: String){

@@ -32,7 +32,10 @@ class FirestoreMessageDao {
 
                         val msg = Message()
 
+
+
                         val loadedId = doc.getString(ID_KEY)
+                        println(loadedId)
                         val loadedSender = doc.getString(SENDER_KEY)
                         val loadedText = doc.getString(TEXT_KEY)
                         val loadedTimestamp = doc.getDate(TIMESTAMP_KEY)
@@ -44,7 +47,8 @@ class FirestoreMessageDao {
 
                         messagesList.add(msg)
                     }
-                    activity.showMessages(messagesList)
+                    //activity.showMessages(messagesList)
+                    activity.loadMessages(messagesList)
                     Log.d("FIRESTORE", "Messages updated")
                 }
 
@@ -96,7 +100,7 @@ class FirestoreMessageDao {
 
                     messagesList.add(msg)
                 }
-                activity.showMessages(messagesList)
+                activity.loadMessages(messagesList)
             }
             .addOnFailureListener {
                 Log.d("FIRESTORE", "Failed to load messages")
