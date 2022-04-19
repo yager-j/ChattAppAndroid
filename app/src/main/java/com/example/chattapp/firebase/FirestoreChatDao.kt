@@ -10,6 +10,7 @@ class FirestoreChatDao {
 
     private val ID_KEY = "id"
     private val USERS_IN_CHAT_KEY = "users_in_chat"
+    private val CHAT_NAME_KEY = "chat_name"
 
     private val CHATS_COLLECTION = "chats"
 
@@ -53,6 +54,7 @@ class FirestoreChatDao {
 
                     chat.id = doc.getString(ID_KEY)!!
                     chat.usersInChat = doc.get(USERS_IN_CHAT_KEY) as ArrayList<String>
+                    chat.chatName = doc.getString(CHAT_NAME_KEY)!!
 
                     chatList.add(chat)
                 }

@@ -27,7 +27,7 @@ class MyAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 
-        holder.textView.text = list[position].usersInChat.toString()
+        holder.textView.text = list[position].chatName
 
     }
 

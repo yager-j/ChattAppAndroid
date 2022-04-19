@@ -8,7 +8,7 @@ import java.util.*
 open class Message(
     @PrimaryKey
     var id: String = UUID.randomUUID().toString(),
-    var sender: String = "dave",
+    var sender: String = "A0CC5F6F-E5E1-461F-A737-E373C8F30E34",
     var text: String = "",
     var timestamp: Date = Date()
 ) : RealmObject() {

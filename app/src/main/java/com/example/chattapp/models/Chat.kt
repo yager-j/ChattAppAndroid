@@ -9,6 +9,7 @@ open class Chat {
     @PrimaryKey
     var id: String = UUID.randomUUID().toString()
     var usersInChat = ArrayList<String>()
+    var chatName = ""
 
     override fun toString(): String {
         return "Chat(id='$id', usersInChat=$usersInChat)"
