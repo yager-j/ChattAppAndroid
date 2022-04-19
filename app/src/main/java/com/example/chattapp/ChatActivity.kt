@@ -53,7 +53,7 @@ class ChatActivity : AppCompatActivity() {
 
     fun loadMessages(messageList: ArrayList<Message>) {
         val layoutManager = LinearLayoutManager(this)
-        //layoutManager.reverseLayout = true
+        layoutManager.stackFromEnd = true
         binder.recyclerMessages.layoutManager = layoutManager
         val adapter = MessageAdapter(this, messageList)
         binder.recyclerMessages.adapter = adapter
