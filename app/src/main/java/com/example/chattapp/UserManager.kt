@@ -59,7 +59,7 @@ object UserManager {
                     }
                 }
                 .addOnFailureListener {
-                    println("FUCK")
+                    println("didn't work")
                 }
 
             return true
