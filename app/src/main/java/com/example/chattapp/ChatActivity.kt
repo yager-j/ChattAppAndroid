@@ -31,7 +31,7 @@ class ChatActivity : AppCompatActivity() {
         firestoreChatDao = FirestoreChatDao()
 
         //Send messages
-        binder.send.setOnClickListener {
+        binder.sendButton.setOnClickListener {
 
             val newMessage = binder.textInput.text.toString()
 
