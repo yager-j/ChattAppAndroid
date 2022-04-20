@@ -17,8 +17,8 @@ import io.realm.RealmChangeListener
 import io.realm.RealmConfiguration
 
 private lateinit var binder: ActivityMainBinding
-private lateinit var userDao: UserDao
-private lateinit var contactDao: ContactDao
+//private lateinit var userDao: UserDao
+//private lateinit var contactDao: ContactDao
 private lateinit var firestoreContactDao: FirestoreContactDao
 private lateinit var firestoreChatDao: FirestoreChatDao
 private lateinit var realmListener: RealmChangeListener<Realm>
@@ -39,8 +39,8 @@ class MainActivity : AppCompatActivity() {
             .build()
         Realm.setDefaultConfiguration(config)
 
-        userDao = UserDao()
-        contactDao = ContactDao()
+        //userDao = UserDao()
+        //contactDao = ContactDao()
         firestoreContactDao = FirestoreContactDao()
         firestoreChatDao = FirestoreChatDao()
         firestoreChatDao.firestoreListener(this)
@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
 
             //loadList()
         }
-        userDao.db.addChangeListener(realmListener)
+        //userDao.db.addChangeListener(realmListener)
 
         binder.addUserBtn.setOnClickListener {
             val intent = Intent(this, NewChatActivity::class.java)
@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
     private fun onListItemLongClick(position: Int){
 
         val id = contactsList[position].id
-        contactDao.deleteContact(id)
+        //contactDao.deleteContact(id)
         firestoreContactDao.deleteContact(id)
 
     }

@@ -7,11 +7,13 @@ import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import com.example.chattapp.databinding.ActivityLoginScreenBinding
+import com.example.chattapp.firebase.FirestoreUserDao
 import com.example.chattapp.realm.UserDao
 
 class LoginScreen : AppCompatActivity() {
 
-    private lateinit var userDao: UserDao
+    //private lateinit var userDao: UserDao
+    private lateinit var firestoreUserDao: FirestoreUserDao
     private lateinit var binder : ActivityLoginScreenBinding
 
     private lateinit var titles : Array<TextView>
@@ -30,7 +32,8 @@ class LoginScreen : AppCompatActivity() {
 
         binder = ActivityLoginScreenBinding.inflate(layoutInflater)
         setContentView(binder.root)
-        userDao = UserDao()
+        //userDao = UserDao()
+        firestoreUserDao = FirestoreUserDao()
 
         isLogin = intent.getBooleanExtra("loginPressed", true)
 
@@ -80,7 +83,7 @@ class LoginScreen : AppCompatActivity() {
                 checksOut = true
 
                 //checks username
-                if (username.text.toString() == "" || !userDao.checkIfUserExists(username.text.toString())) {
+                if (username.text.toString() == "" || !firestoreUserDao.checkIfUserExists(username.text.toString())) {
                     username.setBackgroundColor(resources.getColor(R.color.textInputBGNotFilled))
                     password.setBackgroundColor(resources.getColor(R.color.textInputBGNotFilled))
                     password.setText("")
@@ -89,7 +92,7 @@ class LoginScreen : AppCompatActivity() {
                     username.setBackgroundColor(resources.getColor(R.color.textInputBG))
 
                     //checks password only if username exists
-                    if (password.text.toString() == "" || !userDao.checkPassword(username.text.toString(), password.text.toString())) {
+                    if (password.text.toString() == "" || !firestoreUserDao.checkPassword(username.text.toString(), password.text.toString())) {
                         password.setBackgroundColor(resources.getColor(R.color.textInputBGNotFilled))
                         password.setText("")
                         checksOut = false
@@ -133,7 +136,7 @@ class LoginScreen : AppCompatActivity() {
                 }
 
                 //checks username
-                if (username.text.toString() == "" || userDao.checkIfUserExists(username.text.toString())) {
+                if (username.text.toString() == "" || firestoreUserDao.checkIfUserExists(username.text.toString())) {
                     username.setBackgroundColor(resources.getColor(R.color.textInputBGNotFilled))
                     checksOut = false
                 } else {
@@ -141,7 +144,7 @@ class LoginScreen : AppCompatActivity() {
                 }
 
                 //checks email
-                if (email.text.toString() == "" || !email.text.toString().contains("@") || userDao.checkIfUserExists(username.text.toString())) {
+                if (email.text.toString() == "" || !email.text.toString().contains("@") || firestoreUserDao.checkIfUserExists(username.text.toString())) {
                     email.setBackgroundColor(resources.getColor(R.color.textInputBGNotFilled))
                     checksOut = false
                 } else {
@@ -161,7 +164,7 @@ class LoginScreen : AppCompatActivity() {
                 }
 
                 if (checksOut) {
-                    userDao.addUser(name.text.toString(), lastname.text.toString(), username.text.toString(), email.text.toString(), password.text.toString())
+                    firestoreUserDao.addUser(name.text.toString(), lastname.text.toString(), username.text.toString(), email.text.toString(), password.text.toString())
                     UserManager.saveUserLogin(username.text.toString(), password.text.toString())
                     val toMain = Intent(this, MainActivity::class.java)
                     startActivity(toMain)
