@@ -11,11 +11,12 @@
         <entry key="..\:/Users/metal/Desktop/Android Studio Projects/ChattAppAndroid/app/src/main/res/layout/card_view_layout.xml" value="0.1762917933130699" />
         <entry key="..\:/Users/metal/Desktop/Android Studio Projects/ChattAppAndroid/app/src/main/res/layout/chat_list_layout.xml" value="0.358695652173913" />
         <entry key="..\:/Users/metal/Desktop/Android Studio Projects/ChattAppAndroid/app/src/main/res/layout/create_chat_layout.xml" value="0.358695652173913" />
+        <entry key="app/src/main/res/drawable/profile_placeholder.xml" value="0.252" />
         <entry key="app/src/main/res/layout/activity_chat.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_login_screen.xml" value="0.18888888888888888" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_new_chat.xml" value="0.2536231884057971" />
-        <entry key="app/src/main/res/layout/chat_list_layout.xml" value="0.19174265450861194" />
+        <entry key="app/src/main/res/layout/chat_list_layout.xml" value="0.5" />
         <entry key="app/src/main/res/layout/item_message_current_user.xml" value="0.27395833333333336" />
         <entry key="app/src/main/res/layout/item_message_other_user.xml" value="0.27395833333333336" />
         <entry key="app/src/main/res/layout/new_chat_list_layout.xml" value="0.358695652173913" />

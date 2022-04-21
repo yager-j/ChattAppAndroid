@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chattapp.databinding.ActivityMainBinding
 import com.example.chattapp.firebase.FirestoreChatDao
@@ -16,21 +17,24 @@ import io.realm.Realm
 import io.realm.RealmChangeListener
 import io.realm.RealmConfiguration
 
-private lateinit var binder: ActivityMainBinding
-private lateinit var userDao: UserDao
-private lateinit var contactDao: ContactDao
-private lateinit var firestoreContactDao: FirestoreContactDao
-private lateinit var firestoreChatDao: FirestoreChatDao
-private lateinit var realmListener: RealmChangeListener<Realm>
-private lateinit var contactsList: ArrayList<Contact>
+
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binder: ActivityMainBinding
+    private lateinit var userDao: UserDao
+    private lateinit var contactDao: ContactDao
+    private lateinit var firestoreContactDao: FirestoreContactDao
+    private lateinit var firestoreChatDao: FirestoreChatDao
+    private lateinit var realmListener: RealmChangeListener<Realm>
+    private lateinit var contactsList: ArrayList<Contact>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binder = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binder.root)
 
-//creates or initializes the database
+        //creates or initializes the database
         Realm.init(this)
         val config = RealmConfiguration.Builder()
             .name("chatAppDB")
@@ -44,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         firestoreContactDao = FirestoreContactDao()
         firestoreChatDao = FirestoreChatDao()
         firestoreChatDao.firestoreListener(this)
-        //loadList()
+
         sharedPrefsSetup()
 
         if (!UserManager.loadUserLogin()){
@@ -54,7 +58,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(toLogin)
         }
 
-//creates and add a listener to database to update everytime new items are added
+        //creates and add a listener to database to update everytime new items are added
         realmListener = RealmChangeListener {
 
             //loadList()
@@ -83,6 +87,7 @@ class MainActivity : AppCompatActivity() {
         binder.chatsList.layoutManager = LinearLayoutManager(this)
         val adapter = MyAdapter((chatList),{ position -> onListItemClick(chatList[position])},{ position -> onListItemLongClick(position)})
         binder.chatsList.adapter = adapter
+        //binder.chatsList.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
 
     }
 
