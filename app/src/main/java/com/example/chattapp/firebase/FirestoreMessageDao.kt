@@ -12,8 +12,11 @@ class FirestoreMessageDao {
     private val TEXT_KEY = "text"
     private val TIMESTAMP_KEY = "timestamp"
 
+    private val LAST_MESSAGE_KEY = "last_message"
+
     private val MESSAGES_COLLECTION = "messages"
     private val CHATS_COLLECTION = "chats"
+
 
     private val firebaseDB = FirebaseFirestore.getInstance()
 
@@ -72,7 +75,7 @@ class FirestoreMessageDao {
             .addOnSuccessListener { Log.d("FIRESTORE", "Message sent to Firestore") }
             .addOnFailureListener { Log.d("FIRESTORE", "Message failed to send") }
 
-        firebaseDB.collection(CHATS_COLLECTION).document(chatID).update("lastMessage", message.text)
+        firebaseDB.collection(CHATS_COLLECTION).document(chatID).update(LAST_MESSAGE_KEY, message.text)
 
     }
 

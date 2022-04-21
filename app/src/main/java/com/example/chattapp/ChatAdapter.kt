@@ -7,12 +7,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chattapp.models.Chat
 
-class MyAdapter(
+class ChatAdapter(
     private val list: ArrayList<Chat>,
     private val onItemClicked: (position: Int) -> Unit,
     private val onItemLongClicked: (position: Int) -> Unit
 ) :
-    RecyclerView.Adapter<MyAdapter.ViewHolder>() {
+    RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -26,8 +26,9 @@ class MyAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
+        holder.tvName.text = list[position].chatName
 
-        holder.textView.text = list[position].chatName
+        holder.tvLastMessage.text = list[position].lastMessage
 
     }
 
@@ -38,7 +39,8 @@ class MyAdapter(
     class ViewHolder(ItemView: View, private val onItemClicked: (position: Int) -> Unit, private val onItemLongClicked: (position: Int) -> Unit) :
         RecyclerView.ViewHolder(ItemView), View.OnClickListener, View.OnLongClickListener {
 
-        val textView: TextView = itemView.findViewById(R.id.name_text_view)
+        val tvName: TextView = itemView.findViewById(R.id.name_text_view)
+        val tvLastMessage: TextView = itemView.findViewById(R.id.last_message_text_view)
 
         init {
             ItemView.setOnClickListener(this)

@@ -3,8 +3,6 @@ package com.example.chattapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chattapp.databinding.ActivityMainBinding
 import com.example.chattapp.firebase.FirestoreChatDao
@@ -85,7 +83,7 @@ class MainActivity : AppCompatActivity() {
     fun loadList(chatList: ArrayList<Chat>) {
 
         binder.chatsList.layoutManager = LinearLayoutManager(this)
-        val adapter = MyAdapter((chatList),{ position -> onListItemClick(chatList[position])},{ position -> onListItemLongClick(position)})
+        val adapter = ChatAdapter((chatList),{ position -> onListItemClick(chatList[position])},{ position -> onListItemLongClick(position)})
         binder.chatsList.adapter = adapter
         //binder.chatsList.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
 
@@ -93,7 +91,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun onListItemClick(chat: Chat) {
 
-        Toast.makeText(this, "click detected chat ${chat.id}", Toast.LENGTH_SHORT).show()
         val intent = Intent(this, ChatActivity::class.java)
         intent.putExtra("chatID", chat.id)
         startActivity(intent)

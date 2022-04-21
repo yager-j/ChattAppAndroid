@@ -11,6 +11,7 @@ class FirestoreChatDao {
     private val ID_KEY = "id"
     private val USERS_IN_CHAT_KEY = "users_in_chat"
     private val CHAT_NAME_KEY = "chat_name"
+    private val LAST_MESSAGE_KEY = "last_message"
 
     private val CHATS_COLLECTION = "chats"
 
@@ -61,6 +62,12 @@ class FirestoreChatDao {
                     } else {
                         chat.chatName = "No Name"
                     }
+                    if(doc.getString(LAST_MESSAGE_KEY) != null){
+                        chat.lastMessage = doc.getString(LAST_MESSAGE_KEY)!!
+                    } else {
+                        chat.lastMessage = "No Last Message"
+                    }
+
 
 
                     chatList.add(chat)
