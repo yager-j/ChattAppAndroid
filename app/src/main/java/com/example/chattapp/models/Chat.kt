@@ -3,6 +3,7 @@ package com.example.chattapp.models
 import io.realm.annotations.PrimaryKey
 import java.util.*
 import kotlin.collections.ArrayList
+import java.util.Date
 
 open class Chat {
 
@@ -14,6 +15,6 @@ open class Chat {
     var timestamp: Date = Date()
 
     override fun toString(): String {
-        return "Chat(id='$id', usersInChat=$usersInChat, chatName=$chatName, lastMessage=$lastMessage)"
+        return "Chat(id='$id', usersInChat=$usersInChat, chatName=$chatName, lastMessage=$lastMessage, timestamp=$timestamp)"
     }
 }
