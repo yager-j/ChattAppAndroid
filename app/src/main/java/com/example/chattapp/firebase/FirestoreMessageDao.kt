@@ -32,8 +32,6 @@ class FirestoreMessageDao {
 
                         val msg = Message()
 
-
-
                         val loadedId = doc.getString(ID_KEY)
                         println(loadedId)
                         val loadedSender = doc.getString(SENDER_KEY)

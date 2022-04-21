@@ -52,9 +52,16 @@ class FirestoreChatDao {
                 for(doc in value) {
                     val chat = Chat()
 
+
+                    // Null checks
                     chat.id = doc.getString(ID_KEY)!!
                     chat.usersInChat = doc.get(USERS_IN_CHAT_KEY) as ArrayList<String>
-                    chat.chatName = doc.getString(CHAT_NAME_KEY)!!
+                    if(doc.getString(CHAT_NAME_KEY) != null){
+                        chat.chatName = doc.getString(CHAT_NAME_KEY)!!
+                    } else {
+                        chat.chatName = "No Name"
+                    }
+
 
                     chatList.add(chat)
                 }
@@ -71,6 +78,7 @@ class FirestoreChatDao {
         val chatHashMap = hashMapOf(
             ID_KEY to chat.id,
             USERS_IN_CHAT_KEY to chat.usersInChat,
+            CHAT_NAME_KEY to chat.chatName
         )
 
         firebaseDB

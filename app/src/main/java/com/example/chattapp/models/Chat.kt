@@ -10,8 +10,9 @@ open class Chat {
     var id: String = UUID.randomUUID().toString()
     var usersInChat = ArrayList<String>()
     var chatName = ""
+    var lastMessage : String = ""
 
     override fun toString(): String {
-        return "Chat(id='$id', usersInChat=$usersInChat)"
+        return "Chat(id='$id', usersInChat=$usersInChat, chatName=$chatName, lastMessage=$lastMessage)"
     }
 }

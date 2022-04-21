@@ -15,6 +15,7 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var firestoreMessageDao: FirestoreMessageDao
     private lateinit var firestoreChatDao: FirestoreChatDao
     private var currentUserId = "A0CC5F6F-E5E1-461F-A737-E373C8F30E34"
+    private var currentUserName = "Jocke"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +44,12 @@ class ChatActivity : AppCompatActivity() {
                 val chat = Chat()
                 id = chat.id
                 chat.usersInChat.add(currentUserId)
-                chat.usersInChat.addAll(intent.getStringArrayListExtra("userList") as ArrayList<String>)
+                chat.usersInChat.addAll(intent.getStringArrayListExtra("userIdList") as ArrayList<String>)
+                val usernameList = intent.getStringArrayListExtra("userNameList")
+                usernameList?.add(currentUserName)
+                val chatName = usernameList.toString()
+                chat.chatName = chatName.substring(1, chatName.length - 1)
+
                 firestoreChatDao.saveChat(chat)
                 //create listener
                 firestoreMessageDao = FirestoreMessageDao(this, id!!)

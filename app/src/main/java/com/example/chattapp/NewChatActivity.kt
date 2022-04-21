@@ -17,7 +17,9 @@ class NewChatActivity : AppCompatActivity() {
     private lateinit var binder: ActivityNewChatBinding
     private lateinit var firestoreUserDao: FirestoreUserDao
 
-    private var selectedUsers = arrayListOf<String>()
+    private var selectedUsers = arrayListOf<User>()
+    private var selectedUsersId = arrayListOf<String>()
+    private var selectedUsersName = arrayListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +33,8 @@ class NewChatActivity : AppCompatActivity() {
 
             if(selectedUsers.isNotEmpty()) {
                 val intent = Intent(this, ChatActivity::class.java)
-                intent.putExtra("userList", selectedUsers)
+                intent.putExtra("userIdList", selectedUsersId)
+                intent.putExtra("userNameList", selectedUsersName)
                 startActivity(intent)
             } else {
                 Toast.makeText(this, "Select a User to create a chat", Toast.LENGTH_SHORT).show()
@@ -49,10 +52,14 @@ class NewChatActivity : AppCompatActivity() {
     }
 
     private fun onListItemClick(user: User){
-        if(selectedUsers.contains(user.id)){
-            selectedUsers.remove(user.id)
+        if(selectedUsers.contains(user)){
+            selectedUsers.remove(user)
+            selectedUsersId.remove(user.id)
+            selectedUsersName.remove(user.userName)
         } else {
-            selectedUsers.add(user.id)
+            selectedUsers.add(user)
+            selectedUsersId.add(user.id)
+            selectedUsersName.add(user.userName)
         }
         Toast.makeText(this, "Selected users: $selectedUsers", Toast.LENGTH_SHORT).show()
     }
