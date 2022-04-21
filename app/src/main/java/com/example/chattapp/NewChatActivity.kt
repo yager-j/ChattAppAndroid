@@ -49,10 +49,10 @@ class NewChatActivity : AppCompatActivity() {
     }
 
     private fun onListItemClick(user: User){
-        if(selectedUsers.contains(user.userName)){
-            selectedUsers.remove(user.userName)
+        if(selectedUsers.contains(user.id)){
+            selectedUsers.remove(user.id)
         } else {
-            selectedUsers.add(user.userName)
+            selectedUsers.add(user.id)
         }
         Toast.makeText(this, "Selected users: $selectedUsers", Toast.LENGTH_SHORT).show()
     }

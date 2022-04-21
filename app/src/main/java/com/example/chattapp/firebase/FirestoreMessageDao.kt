@@ -61,7 +61,8 @@ class FirestoreMessageDao {
             ID_KEY to message.id,
             SENDER_KEY to message.sender,
             TEXT_KEY  to message.text,
-            TIMESTAMP_KEY to message.timestamp
+            TIMESTAMP_KEY to message.timestamp,
+
         )
 
         firebaseDB
@@ -72,6 +73,9 @@ class FirestoreMessageDao {
             .set(messageHashMap)
             .addOnSuccessListener { Log.d("FIRESTORE", "Message sent to Firestore") }
             .addOnFailureListener { Log.d("FIRESTORE", "Message failed to send") }
+
+        firebaseDB.collection(CHATS_COLLECTION).document(chatID).update("lastMessage", message.text)
+
     }
 
     fun loadMessages(activity: ChatActivity, id: String) {

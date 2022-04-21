@@ -14,6 +14,7 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var binder: ActivityChatBinding
     private lateinit var firestoreMessageDao: FirestoreMessageDao
     private lateinit var firestoreChatDao: FirestoreChatDao
+    private var currentUserId = "A0CC5F6F-E5E1-461F-A737-E373C8F30E34"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +42,7 @@ class ChatActivity : AppCompatActivity() {
             if(id == null){
                 val chat = Chat()
                 id = chat.id
-                chat.usersInChat.add("dave")
+                chat.usersInChat.add(currentUserId)
                 chat.usersInChat.addAll(intent.getStringArrayListExtra("userList") as ArrayList<String>)
                 firestoreChatDao.saveChat(chat)
                 //create listener
@@ -60,7 +61,7 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun createMessage(text: String, chatID: String){
-        val msg = Message(text = text)
+        val msg = Message(text = text, sender = currentUserId)
         firestoreMessageDao.saveMessage(msg, chatID)
     }
 }
