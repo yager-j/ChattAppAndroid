@@ -10,6 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.chattapp.models.Chat
 import java.time.Duration
 import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.*
 import kotlin.collections.ArrayList
@@ -36,10 +39,14 @@ class ChatAdapter(
 
         holder.tvName.text = list[position].chatName
         holder.tvLastMessage.text = list[position].lastMessage
-        //val currentTimePlusOneDay = Instant.now().plus(1, ChronoUnit.DAYS)
+        val currentTimePlusOneDay = LocalDateTime.now().minusDays(1)
+        val timestamp = list[position].timestamp.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
 
-        holder.tvTimestamp.text = "${list[position].timestamp.hours}:${list[position].timestamp.minutes}"
-
+        if(timestamp > currentTimePlusOneDay){
+            holder.tvTimestamp.text = timestamp.format(DateTimeFormatter.ofPattern("HH:mm"))
+        } else {
+            holder.tvTimestamp.text = timestamp.format(DateTimeFormatter.ofPattern("dd MMM"))
+        }
     }
 
     override fun getItemCount(): Int {
