@@ -1,10 +1,12 @@
 package com.example.chattapp.firebase
 
+import android.os.Build
 import android.util.Log
 import com.example.chattapp.ChatActivity
 import com.example.chattapp.models.Chat
 import com.example.chattapp.MainActivity
 import com.google.firebase.firestore.FirebaseFirestore
+import java.time.format.DateTimeFormatter
 
 class FirestoreChatDao {
 
@@ -12,6 +14,7 @@ class FirestoreChatDao {
     private val USERS_IN_CHAT_KEY = "users_in_chat"
     private val CHAT_NAME_KEY = "chat_name"
     private val LAST_MESSAGE_KEY = "last_message"
+    private val TIMESTAMP_KEY = "timestamp"
 
     private val CHATS_COLLECTION = "chats"
 
@@ -57,6 +60,7 @@ class FirestoreChatDao {
                     // Null checks
                     chat.id = doc.getString(ID_KEY)!!
                     chat.usersInChat = doc.get(USERS_IN_CHAT_KEY) as ArrayList<String>
+
                     if(doc.getString(CHAT_NAME_KEY) != null){
                         chat.chatName = doc.getString(CHAT_NAME_KEY)!!
                     } else {
@@ -67,6 +71,10 @@ class FirestoreChatDao {
                     } else {
                         chat.lastMessage = "No Last Message"
                     }
+                    if(doc.getDate(TIMESTAMP_KEY) != null){
+                        chat.timestamp = doc.getDate(TIMESTAMP_KEY)!!
+                    }
+
 
 
 
@@ -85,7 +93,8 @@ class FirestoreChatDao {
         val chatHashMap = hashMapOf(
             ID_KEY to chat.id,
             USERS_IN_CHAT_KEY to chat.usersInChat,
-            CHAT_NAME_KEY to chat.chatName
+            CHAT_NAME_KEY to chat.chatName,
+            LAST_MESSAGE_KEY to chat.lastMessage,
         )
 
         firebaseDB

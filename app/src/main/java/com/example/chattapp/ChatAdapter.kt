@@ -1,11 +1,18 @@
 package com.example.chattapp
 
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chattapp.models.Chat
+import java.time.Duration
+import java.time.Instant
+import java.time.temporal.ChronoUnit
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ChatAdapter(
     private val list: ArrayList<Chat>,
@@ -24,11 +31,14 @@ class ChatAdapter(
         return ViewHolder(view, onItemClicked, onItemLongClicked)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         holder.tvName.text = list[position].chatName
-
         holder.tvLastMessage.text = list[position].lastMessage
+        //val currentTimePlusOneDay = Instant.now().plus(1, ChronoUnit.DAYS)
+
+        holder.tvTimestamp.text = "${list[position].timestamp.hours}:${list[position].timestamp.minutes}"
 
     }
 
@@ -41,6 +51,7 @@ class ChatAdapter(
 
         val tvName: TextView = itemView.findViewById(R.id.name_text_view)
         val tvLastMessage: TextView = itemView.findViewById(R.id.last_message_text_view)
+        val tvTimestamp: TextView = itemView.findViewById(R.id.timestamp_text_view)
 
         init {
             ItemView.setOnClickListener(this)
