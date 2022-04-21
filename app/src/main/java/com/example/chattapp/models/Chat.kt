@@ -11,6 +11,7 @@ open class Chat {
     var usersInChat = ArrayList<String>()
     var chatName = ""
     var lastMessage = ""
+    var timestamp: Date = Date()
 
     override fun toString(): String {
         return "Chat(id='$id', usersInChat=$usersInChat, chatName=$chatName, lastMessage=$lastMessage)"

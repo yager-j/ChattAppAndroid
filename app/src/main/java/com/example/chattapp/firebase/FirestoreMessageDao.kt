@@ -76,6 +76,7 @@ class FirestoreMessageDao {
             .addOnFailureListener { Log.d("FIRESTORE", "Message failed to send") }
 
         firebaseDB.collection(CHATS_COLLECTION).document(chatID).update(LAST_MESSAGE_KEY, message.text)
+        firebaseDB.collection(CHATS_COLLECTION).document(chatID).update(TIMESTAMP_KEY, message.timestamp)
 
     }
 
