@@ -1,29 +1,33 @@
 package com.example.chattapp
 
+import android.content.Context
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.chattapp.firebase.StorageManager
 import com.example.chattapp.models.Chat
-import java.time.Duration
-import java.time.Instant
+import java.io.File
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 import java.util.*
 import kotlin.collections.ArrayList
 
 class ChatAdapter(
     private val list: ArrayList<Chat>,
+    private val mCotext: Context,
     private val onItemClicked: (position: Int) -> Unit,
     private val onItemLongClicked: (position: Int) -> Unit
 ) :
     RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
 
+    private val storageManager = StorageManager()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
@@ -39,6 +43,14 @@ class ChatAdapter(
 
         holder.tvName.text = list[position].chatName
         holder.tvLastMessage.text = list[position].lastMessage
+
+        val imageRef = storageManager.getImageURL(list[position].usersInChat[0])
+        imageRef.downloadUrl.addOnSuccessListener {
+            Glide.with(mCotext).load(it).into(holder.ivProfilePic)
+        }.addOnFailureListener {
+            println("Failed to load image")
+        }
+
         val currentTimePlusOneDay = LocalDateTime.now().minusDays(1)
         val timestamp = list[position].timestamp.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
 
@@ -59,6 +71,7 @@ class ChatAdapter(
         val tvName: TextView = itemView.findViewById(R.id.name_text_view)
         val tvLastMessage: TextView = itemView.findViewById(R.id.last_message_text_view)
         val tvTimestamp: TextView = itemView.findViewById(R.id.timestamp_text_view)
+        val ivProfilePic: ImageView = itemView.findViewById(R.id.profile_chat_image_view)
 
         init {
             ItemView.setOnClickListener(this)

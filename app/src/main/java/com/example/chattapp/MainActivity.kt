@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity() {
     fun loadList(chatList: ArrayList<Chat>) {
 
         binder.chatsList.layoutManager = LinearLayoutManager(this)
-        val adapter = ChatAdapter((chatList),{ position -> onListItemClick(chatList[position])},{ position -> onListItemLongClick(position)})
+        val adapter = ChatAdapter(chatList,this, { position -> onListItemClick(chatList[position])},{ position -> onListItemLongClick(position)})
         binder.chatsList.adapter = adapter
         //binder.chatsList.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
 
