@@ -15,7 +15,6 @@ import com.example.chattapp.models.User
 class NewChatActivity : AppCompatActivity() {
 
     private lateinit var binder: ActivityNewChatBinding
-    private lateinit var firestoreUserDao: FirestoreUserDao
 
     private var selectedUsers = arrayListOf<User>()
     private var selectedUsersId = arrayListOf<String>()
@@ -26,7 +25,7 @@ class NewChatActivity : AppCompatActivity() {
         binder = ActivityNewChatBinding.inflate(layoutInflater)
         setContentView(binder.root)
 
-        firestoreUserDao = FirestoreUserDao(this)
+        FirestoreUserDao.firestoreUserListener(this)
 
         //Start new chat
         binder.createChatButton.setOnClickListener {

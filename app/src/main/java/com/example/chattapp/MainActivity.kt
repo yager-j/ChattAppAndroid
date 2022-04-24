@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chattapp.databinding.ActivityMainBinding
 import com.example.chattapp.firebase.FirestoreChatDao
 import com.example.chattapp.firebase.FirestoreContactDao
+import com.example.chattapp.firebase.FirestoreUserDao
 import com.example.chattapp.models.Chat
 import com.example.chattapp.models.Contact
 import com.example.chattapp.realm.ContactDao
@@ -46,6 +47,7 @@ class MainActivity : AppCompatActivity() {
         firestoreContactDao = FirestoreContactDao()
         firestoreChatDao = FirestoreChatDao()
         firestoreChatDao.firestoreListener(this)
+        FirestoreUserDao.loadUsers()
 
         sharedPrefsSetup()
 

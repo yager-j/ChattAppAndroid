@@ -4,33 +4,55 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <TextView
+        android:id="@+id/username_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:textSize="12sp"
+        android:text="username"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/card_other_user"
+        app:layout_constraintStart_toEndOf="@+id/image_profile_other" />
+
+    <TextView
+        android:id="@+id/timestamp_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="timestamp"
+        android:textSize="10sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/card_other_user"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/image_profile_other"
-        app:shapeAppearanceOverlay="@style/roundedImageView"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:scaleType="centerCrop"
-        app:strokeColor="@android:color/darker_gray"
-        app:strokeWidth="1dp"
-        android:src="@drawable/profile_placeholder"
         android:layout_marginStart="16dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/profile_placeholder"
+        app:layout_constraintBottom_toBottomOf="@id/card_other_user"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/card_other_user"/>
+        app:layout_constraintTop_toTopOf="@+id/card_other_user"
+        app:shapeAppearanceOverlay="@style/roundedImageView"
+        app:strokeColor="@android:color/darker_gray"
+        app:strokeWidth="1dp" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card_other_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="50dp"
         app:cardBackgroundColor="@color/teal_200"
         app:cardCornerRadius="16dp"
         app:cardUseCompatPadding="true"
-        android:layout_marginEnd="50dp"
         app:layout_constrainedWidth="true"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/image_profile_other"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/username_tv">
 
         <TextView
             android:id="@+id/text_other_user"
@@ -40,7 +62,6 @@
             android:paddingVertical="8dp"
             android:text="Test Message Other User"
             android:textColor="@color/black" />
-
 
     </com.google.android.material.card.MaterialCardView>
 

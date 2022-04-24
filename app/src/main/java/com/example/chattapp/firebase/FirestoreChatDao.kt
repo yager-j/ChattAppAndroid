@@ -49,9 +49,6 @@ class FirestoreChatDao {
                         chat.timestamp = doc.getDate(TIMESTAMP_KEY)!!
                     }
 
-
-
-
                     chatList.add(chat)
                 }
                 activity.loadList(chatList)

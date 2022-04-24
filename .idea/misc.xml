@@ -17,8 +17,8 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_new_chat.xml" value="0.2536231884057971" />
         <entry key="app/src/main/res/layout/chat_list_layout.xml" value="0.5" />
-        <entry key="app/src/main/res/layout/item_message_current_user.xml" value="0.27395833333333336" />
-        <entry key="app/src/main/res/layout/item_message_other_user.xml" value="0.27395833333333336" />
+        <entry key="app/src/main/res/layout/item_message_current_user.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/item_message_other_user.xml" value="0.5" />
         <entry key="app/src/main/res/layout/new_chat_list_layout.xml" value="0.358695652173913" />
         <entry key="app/src/main/res/layout/recycler_chat_layout.xml" value="0.27395833333333336" />
       </map>

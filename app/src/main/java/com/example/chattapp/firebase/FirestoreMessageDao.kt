@@ -36,7 +36,6 @@ class FirestoreMessageDao {
                         val msg = Message()
 
                         val loadedId = doc.getString(ID_KEY)
-                        println(loadedId)
                         val loadedSender = doc.getString(SENDER_KEY)
                         val loadedText = doc.getString(TEXT_KEY)
                         val loadedTimestamp = doc.getDate(TIMESTAMP_KEY)
@@ -63,7 +62,6 @@ class FirestoreMessageDao {
             SENDER_KEY to message.sender,
             TEXT_KEY  to message.text,
             TIMESTAMP_KEY to message.timestamp,
-
         )
 
         firebaseDB
