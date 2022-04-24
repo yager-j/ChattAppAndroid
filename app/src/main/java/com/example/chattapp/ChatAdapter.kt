@@ -49,10 +49,10 @@ class ChatAdapter(
             println("Failed to load image")
         }
 
-        val currentTimePlusOneDay = LocalDateTime.now().minusDays(1)
+        val currentTimeMinusOneDay = LocalDateTime.now().minusDays(1)
         val timestamp = list[position].timestamp.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
 
-        if(timestamp > currentTimePlusOneDay){
+        if(timestamp > currentTimeMinusOneDay){
             holder.tvTimestamp.text = timestamp.format(DateTimeFormatter.ofPattern("HH:mm"))
         } else {
             holder.tvTimestamp.text = timestamp.format(DateTimeFormatter.ofPattern("dd MMM"))
