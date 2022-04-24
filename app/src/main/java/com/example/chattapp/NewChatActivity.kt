@@ -1,16 +1,15 @@
 package com.example.chattapp
 
-
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
 import android.widget.Toast
-import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chattapp.databinding.ActivityNewChatBinding
 import com.example.chattapp.firebase.FirestoreUserDao
 import com.example.chattapp.models.User
-
 
 class NewChatActivity : AppCompatActivity() {
 
@@ -19,6 +18,7 @@ class NewChatActivity : AppCompatActivity() {
     private var selectedUsers = arrayListOf<User>()
     private var selectedUsersId = arrayListOf<String>()
     private var selectedUsersName = arrayListOf<String>()
+    private var searchTerm = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +27,12 @@ class NewChatActivity : AppCompatActivity() {
 
         FirestoreUserDao.firestoreUserListener(this)
 
+        //Search for user
+        binder.searchUserEdittext.addTextChangedListener {
+            val searchResult = searchUsers(it)
+            showUsers(searchResult)
+        }
+        
         //Start new chat
         binder.createChatButton.setOnClickListener {
 
@@ -42,6 +48,21 @@ class NewChatActivity : AppCompatActivity() {
         }
     }
 
+    private fun searchUsers(it: Editable?): ArrayList<User> {
+        var searchResult = arrayListOf<User>()
+        searchTerm = it.toString()
+        if (searchTerm.isNotEmpty()){
+            for(user in FirestoreUserDao.userList){
+                if(user.userName.contains(searchTerm, ignoreCase = true)){
+                    searchResult.add(user)
+                }
+            }
+        } else {
+            searchResult = FirestoreUserDao.userList
+        }
+        return searchResult
+    }
+
     private fun createChatName(): String {
         var chatName = ""
         for(name in selectedUsersName){
@@ -55,8 +76,9 @@ class NewChatActivity : AppCompatActivity() {
 
         val adapter = NewChatAdapter(list, {position ->  onListItemClick(list[position])})
         binder.recyclerviewNewChat.adapter = adapter
-        binder.recyclerviewNewChat.layoutManager = LinearLayoutManager(this)
-        binder.recyclerviewNewChat.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        val layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binder.recyclerviewNewChat.layoutManager = layoutManager
+
     }
 
     private fun onListItemClick(user: User){
@@ -69,6 +91,5 @@ class NewChatActivity : AppCompatActivity() {
             selectedUsersId.add(user.id)
             selectedUsersName.add(user.userName)
         }
-        Toast.makeText(this, "Selected users: $selectedUsers", Toast.LENGTH_SHORT).show()
     }
 }
