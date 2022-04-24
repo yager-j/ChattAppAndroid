@@ -10,8 +10,9 @@
         android:id="@+id/chat_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text=""
+
+        android:textSize="24sp"
+        android:text="Chat"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -31,7 +32,7 @@
         android:layout_marginHorizontal="4dp"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:hint="text"
+        android:hint="Message..."
         android:inputType="textLongMessage|textMultiLine"
         android:maxLines="3"
         app:layout_constraintEnd_toStartOf="@+id/send_button"
