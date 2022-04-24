@@ -20,9 +20,9 @@
         android:id="@+id/recycler_messages"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/chat_name"
         app:layout_constraintBottom_toTopOf="@id/text_input"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chat_name" />
 
     <EditText
         android:id="@+id/text_input"

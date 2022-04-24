@@ -10,13 +10,11 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.chattapp.firebase.StorageManager
+import com.example.chattapp.firebase.ImageManager
 import com.example.chattapp.models.Chat
-import java.io.File
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.*
 import kotlin.collections.ArrayList
 
 class ChatAdapter(
@@ -27,7 +25,7 @@ class ChatAdapter(
 ) :
     RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
 
-    private val storageManager = StorageManager()
+    private val storageManager = ImageManager()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 

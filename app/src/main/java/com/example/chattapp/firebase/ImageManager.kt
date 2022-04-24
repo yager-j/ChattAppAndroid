@@ -5,7 +5,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 
-class StorageManager {
+public class ImageManager {
 
 
     var storage = Firebase.storage.reference

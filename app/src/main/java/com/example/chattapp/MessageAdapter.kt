@@ -4,11 +4,16 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.chattapp.firebase.ImageManager
 import com.example.chattapp.models.Message
 
 class MessageAdapter(private var context: Context, messageList: ArrayList<Message>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private val storageManager = ImageManager()
 
     private val VIEW_TYPE_USER_MESSAGE_ME = 10
     private val VIEW_TYPE_USER_MESSAGE_OTHER = 11
@@ -84,10 +89,18 @@ class MessageAdapter(private var context: Context, messageList: ArrayList<Messag
     inner class OtherUserHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         val messageText = view.findViewById<TextView>(R.id.text_other_user)
+        val profilePic = view.findViewById<ImageView>(R.id.image_profile_other)
 
         fun bindView(context: Context, message: Message) {
 
             messageText.text = message.text
+
+            val imageRef = storageManager.getImageURL(message.sender)
+            imageRef.downloadUrl.addOnSuccessListener {
+                Glide.with(context).load(it).into(profilePic)
+            }.addOnFailureListener {
+                println("Failed to load image")
+            }
 
         }
     }
