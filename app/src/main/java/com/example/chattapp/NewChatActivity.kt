@@ -34,12 +34,21 @@ class NewChatActivity : AppCompatActivity() {
                 val intent = Intent(this, ChatActivity::class.java)
                 intent.putExtra("userIdList", selectedUsersId)
                 intent.putExtra("userNameList", selectedUsersName)
+                intent.putExtra("chatName", createChatName())
                 startActivity(intent)
             } else {
                 Toast.makeText(this, "Select a User to create a chat", Toast.LENGTH_SHORT).show()
             }
         }
+    }
 
+    private fun createChatName(): String {
+        var chatName = ""
+        for(name in selectedUsersName){
+            chatName += "$name, "
+        }
+        chatName = chatName.dropLast(2)
+        return chatName
     }
 
     fun showUsers(list: ArrayList<User>){

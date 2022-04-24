@@ -17,12 +17,15 @@ class ChatActivity : AppCompatActivity() {
     private var currentUserId = "A0CC5F6F-E5E1-461F-A737-E373C8F30E34"
     private var currentUserName = "Jocke"
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binder = ActivityChatBinding.inflate(layoutInflater)
         setContentView(binder.root)
 
         var id = intent.getStringExtra("chatID")
+
+        binder.chatName.text = intent.getStringExtra("chatName")
 
         firestoreMessageDao = if(id != null) {
             FirestoreMessageDao(this, id)

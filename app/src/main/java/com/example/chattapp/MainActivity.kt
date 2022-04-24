@@ -97,6 +97,7 @@ class MainActivity : AppCompatActivity() {
 
         val intent = Intent(this, ChatActivity::class.java)
         intent.putExtra("chatID", chat.id)
+        intent.putExtra("chatName", chat.chatName)
         startActivity(intent)
     }
 
