@@ -22,9 +22,13 @@
         android:id="@+id/card_other_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/teal_200"
         app:cardCornerRadius="16dp"
         app:cardUseCompatPadding="true"
-        app:cardBackgroundColor="@color/teal_200"
+        android:layout_marginEnd="50dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/image_profile_other"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -32,10 +36,10 @@
             android:id="@+id/text_other_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:paddingVertical="8dp"
             android:paddingHorizontal="16dp"
-            android:text="Test Message Other User"/>
+            android:paddingVertical="8dp"
+            android:text="Test Message Other User"
+            android:textColor="@color/black" />
 
 
     </com.google.android.material.card.MaterialCardView>

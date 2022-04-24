@@ -31,9 +31,11 @@
 
     <TextView
         android:id="@+id/last_message_text_view"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:maxLines="1"
         android:text="Last message..."
+        app:layout_constraintEnd_toStartOf="@+id/timestamp_text_view"
         app:layout_constraintStart_toStartOf="@+id/name_text_view"
         app:layout_constraintTop_toBottomOf="@+id/name_text_view" />
 

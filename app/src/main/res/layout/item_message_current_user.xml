@@ -9,20 +9,24 @@
         android:id="@+id/card_current_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
         app:cardBackgroundColor="@color/teal_700"
         app:cardCornerRadius="16dp"
         app:cardUseCompatPadding="true"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/text_current_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:paddingVertical="8dp"
             android:paddingHorizontal="16dp"
-            android:text="Test Message Current User"/>
+            android:paddingVertical="8dp"
+            android:text="Test Message Current User"
+            android:textColor="@color/white" />
 
     </androidx.cardview.widget.CardView>
 
