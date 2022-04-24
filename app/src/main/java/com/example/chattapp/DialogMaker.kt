@@ -19,7 +19,7 @@ object DialogMaker {
         createChatDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         createChatDialog.setContentView(R.layout.create_chat_layout)
 
-        val addBtn = createChatDialog.findViewById<Button>(R.id.add_user_btn)
+        val addBtn = createChatDialog.findViewById<Button>(R.id.new_chat_btn)
         val cancelBtn = createChatDialog.findViewById<Button>(R.id.cancel_button)
         val textInputField = createChatDialog.findViewById<EditText>(R.id.name_input_field)
 

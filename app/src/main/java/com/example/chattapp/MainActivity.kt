@@ -61,7 +61,6 @@ class MainActivity : AppCompatActivity() {
         //creates and add a listener to database to update everytime new items are added
         realmListener = RealmChangeListener {
 
-            //loadList()
         }
         userDao.db.addChangeListener(realmListener)
 
@@ -76,7 +75,6 @@ class MainActivity : AppCompatActivity() {
             toLogin.putExtra("loginPressed", true)
             startActivity(toLogin)
         }
-
     }
 
     /**
@@ -86,11 +84,10 @@ class MainActivity : AppCompatActivity() {
 
         val layoutManager = LinearLayoutManager(this)
         layoutManager.reverseLayout = true
+        layoutManager.stackFromEnd = true
         binder.chatsList.layoutManager = layoutManager
         val adapter = ChatAdapter(chatList,this, { position -> onListItemClick(chatList[position])},{ position -> onListItemLongClick(position)})
         binder.chatsList.adapter = adapter
-        //binder.chatsList.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-
     }
 
     private fun onListItemClick(chat: Chat) {
