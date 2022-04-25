@@ -40,9 +40,12 @@ class NewChatActivity : AppCompatActivity() {
 
             if(selectedUsers.isNotEmpty()) {
                 val intent = Intent(this, ChatActivity::class.java)
+                selectedUsersId.add(UserManager.currentUser!!.id)
                 intent.putExtra("userIdList", selectedUsersId)
+                selectedUsersName.add(UserManager.currentUser!!.username)
                 intent.putExtra("userNameList", selectedUsersName)
                 intent.putExtra("chatName", createChatName())
+                println(selectedUsersId.toString())
                 startActivity(intent)
             } else {
                 Toast.makeText(this, "Select a User to create a chat", Toast.LENGTH_SHORT).show()
