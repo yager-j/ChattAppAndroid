@@ -30,6 +30,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chats_list"
+        android:layout_below="@id/chats_title"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -48,10 +50,11 @@
 
     <Button
         android:id="@+id/button_login"
-        android:layout_width="50dp"
+        android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_margin="16dp"
-        android:padding="0dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="5dp"
+        android:layout_marginTop="5dp"
         android:text="@string/login"
         android:textSize="8sp"
         app:layout_constraintStart_toStartOf="parent"
