@@ -31,7 +31,7 @@ class LoginScreen : AppCompatActivity() {
 
         binder = ActivityLoginScreenBinding.inflate(layoutInflater)
         setContentView(binder.root)
-        firestoreUserDao = FirestoreUserDao()
+        //FirestoreUserDao.firestoreUserListener()
 
         isLogin = intent.getBooleanExtra("loginPressed", true)
 
@@ -87,7 +87,7 @@ class LoginScreen : AppCompatActivity() {
                 checksOut = true
 
                 //checks username
-                firestoreUserDao.userExists(
+                FirestoreUserDao.userExists(
                     username.text.toString(),
                 ) { exists ->
                     if (username.text.toString() == "" || !exists) {
@@ -99,7 +99,7 @@ class LoginScreen : AppCompatActivity() {
                         username.setBackgroundColor(resources.getColor(R.color.textInputBG))
 
                         //checks password only if username exists
-                        firestoreUserDao.checkPassword(
+                        FirestoreUserDao.checkPassword(
                             username.text.toString(),
                             password.text.toString()
                         ) { isCorrect ->
@@ -158,7 +158,7 @@ class LoginScreen : AppCompatActivity() {
                 }
 
                 //checks username
-                firestoreUserDao.userExists(
+                FirestoreUserDao.userExists(
                     username.text.toString()
                 ) { nameTaken ->
                     if (username.text.toString() == "" || nameTaken) {
@@ -168,7 +168,7 @@ class LoginScreen : AppCompatActivity() {
                         username.setBackgroundColor(resources.getColor(R.color.textInputBG))
                     }
                     //checks email
-                    firestoreUserDao.userExists(
+                    FirestoreUserDao.userExists(
                         username.text.toString()
                     ) { mailTaken ->
                         if (email.text.toString() == "" || !email.text.toString()

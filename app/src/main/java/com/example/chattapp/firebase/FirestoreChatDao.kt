@@ -5,6 +5,7 @@ import android.util.Log
 import com.example.chattapp.ChatActivity
 import com.example.chattapp.models.Chat
 import com.example.chattapp.MainActivity
+import com.example.chattapp.UserManager
 import com.google.firebase.firestore.FirebaseFirestore
 import java.time.format.DateTimeFormatter
 
@@ -48,8 +49,6 @@ class FirestoreChatDao {
 
     fun firestoreListener(activity: MainActivity){
         firebaseDB.collection(CHATS_COLLECTION).orderBy(TIMESTAMP_KEY).addSnapshotListener(activity) { value, error ->
-            if (error != null){
-        firebaseDB.collection(CHATS_COLLECTION).addSnapshotListener(activity) { value, error ->
             if (error != null) {
                 Log.e("FIRESTORE", "Failed to listen for chats", error)
             }

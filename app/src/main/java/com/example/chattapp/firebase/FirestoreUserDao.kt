@@ -8,7 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import io.realm.Realm
 
-class FirestoreUserDao {
+object FirestoreUserDao {
 
     private val ID_KEY = "id"
     private val USERNAME_KEY = "username"
@@ -19,8 +19,30 @@ class FirestoreUserDao {
 
     private val firebaseDB = FirebaseFirestore.getInstance()
 
-    constructor(activity: NewChatActivity) {
-        val userList = ArrayList<User>()
+    var userList = ArrayList<User>()
+
+    fun loadUsers(){
+        userList.clear()
+
+        firebaseDB
+            .collection(USERS_COLLECTION)
+            .get().addOnSuccessListener { result ->
+                if (result != null) {
+                    userList.clear()
+                    for (doc in result) {
+                        val user = User()
+                        user.id = doc.getString(ID_KEY)!!
+                        user.userName = doc.getString(USERNAME_KEY)!!
+                        user.eMail = doc.getString(EMAIL_KEY)!!
+
+                        userList.add(user)
+                    }
+                }
+            }
+    }
+
+    fun firestoreUserListener(activity: NewChatActivity){
+        userList.clear()
 
         firebaseDB
             .collection(USERS_COLLECTION)
@@ -39,8 +61,6 @@ class FirestoreUserDao {
                 }
             }
     }
-
-    constructor()
 
     fun addUser(first: String, last: String, username: String, mail: String, pw: String) {
 

@@ -15,6 +15,8 @@ class NewChatActivity : AppCompatActivity() {
 
     private lateinit var binder: ActivityNewChatBinding
 
+    private lateinit var firestoreUserDao: FirestoreUserDao
+
     private var selectedUsers = arrayListOf<User>()
     private var selectedUsersId = arrayListOf<String>()
     private var selectedUsersName = arrayListOf<String>()
@@ -26,6 +28,7 @@ class NewChatActivity : AppCompatActivity() {
         setContentView(binder.root)
 
         FirestoreUserDao.firestoreUserListener(this)
+
 
         //Search for user
         binder.searchUserEdittext.addTextChangedListener {
