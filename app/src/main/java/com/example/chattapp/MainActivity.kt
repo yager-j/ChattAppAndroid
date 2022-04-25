@@ -64,23 +64,12 @@ class MainActivity : AppCompatActivity() {
         }
         userDao.db.addChangeListener(realmListener)
 
-        if(UserManager.currentUser != null){
-            val imageRef = ImageManager.getImageURL(UserManager.currentUser!!.id)
-            imageRef.downloadUrl.addOnSuccessListener {
-                Glide.with(this).load(it).into(binder.imgProfileCurrent)
-            }.addOnFailureListener {
-                println("Failed to load image")
-            }
-        }
+
+
 
         binder.newChatBtn.setOnClickListener {
             val intent = Intent(this, NewChatActivity::class.java)
             startActivity(intent)
-            //DialogMaker.createChat(this, contactDao, firestoreContactDao)
-        }
-
-        binder.imgProfileCurrent.setOnClickListener {
-            imageChooser()
         }
 
         binder.buttonLogin.setOnClickListener {
@@ -96,6 +85,7 @@ class MainActivity : AppCompatActivity() {
                     when (item.itemId) {
                         R.id.item_change_profile -> {
                             Log.d("login", "............................Profile Changing.")
+                            imageChooser()
                         }
                         R.id.item_change_password -> {
                             Log.d("login", "............................Password Changing.")
@@ -170,7 +160,19 @@ class MainActivity : AppCompatActivity() {
         Log.d("login", "............................is this happening?")
         reloadUser()
         updateView()
+        loadProfilePic()
         //firestoreChatDao.firestoreListener(this)
+    }
+
+    private fun loadProfilePic() {
+        if(UserManager.currentUser != null){
+            val imageRef = ImageManager.getImageURL(UserManager.currentUser!!.id)
+            imageRef.downloadUrl.addOnSuccessListener {
+                Glide.with(this).load(it).into(binder.imgProfileCurrent)
+            }.addOnFailureListener {
+                println("Failed to load image")
+            }
+        }
     }
 
     private fun reloadUser() {
