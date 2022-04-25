@@ -20,8 +20,6 @@ import java.time.format.DateTimeFormatter
 
 class MessageAdapter(private var context: Context, messageList: ArrayList<Message>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val storageManager = ImageManager()
-
     private val VIEW_TYPE_USER_MESSAGE_ME = 10
     private val VIEW_TYPE_USER_MESSAGE_OTHER = 11
 
@@ -142,7 +140,7 @@ class MessageAdapter(private var context: Context, messageList: ArrayList<Messag
                 timestampTextView.text = timestamp.format(DateTimeFormatter.ofPattern("dd MMM HH:mm"))
             }
             //Profile Pic
-            val imageRef = storageManager.getImageURL(message.sender)
+            val imageRef = ImageManager.getImageURL(message.sender)
             imageRef.downloadUrl.addOnSuccessListener {
                 Glide.with(context).load(it).into(profilePic)
             }.addOnFailureListener {

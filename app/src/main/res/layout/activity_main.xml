@@ -18,8 +18,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/img_profile_current"
+        app:shapeAppearanceOverlay="@style/roundedImageView"
+        android:scaleType="centerCrop"
+        app:strokeColor="@android:color/darker_gray"
+        app:strokeWidth="1dp"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:src="@drawable/profile_placeholder"
