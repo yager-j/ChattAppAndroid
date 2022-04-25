@@ -49,7 +49,7 @@ class ChatActivity : AppCompatActivity() {
                 chat.usersInChat.add(currentUserId)
                 chat.usersInChat.addAll(intent.getStringArrayListExtra("userIdList") as ArrayList<String>)
                 val usernameList = intent.getStringArrayListExtra("userNameList")
-                usernameList?.add(UserManager.currentUser?.username)
+                usernameList?.add(currentUserName)
                 val chatName = usernameList.toString()
                 chat.chatName = chatName.substring(1, chatName.length - 1)
 
