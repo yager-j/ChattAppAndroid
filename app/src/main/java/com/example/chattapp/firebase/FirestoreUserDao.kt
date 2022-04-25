@@ -11,6 +11,8 @@ import io.realm.Realm
 class FirestoreUserDao {
 
     private val ID_KEY = "id"
+    private val NAME_KEY = "first_name"
+    private val LASTNAME_KEY = "last_name"
     private val USERNAME_KEY = "username"
     private val EMAIL_KEY = "email"
     private val PASSWORD_KEY = "password"
@@ -42,8 +44,15 @@ class FirestoreUserDao {
 
     constructor()
 
-    fun addUser(first: String, last: String, username: String, mail: String, pw: String) {
-
+    fun addUser(user: User) {
+        val userHashMap = HashMap<String, String>()
+        userHashMap[ID_KEY] = user.id
+        userHashMap[NAME_KEY] = user.name
+        userHashMap[LASTNAME_KEY] = user.lastName
+        userHashMap[USERNAME_KEY] = user.userName
+        userHashMap[EMAIL_KEY] = user.eMail
+        userHashMap[PASSWORD_KEY] = user.password
+        firebaseDB.document("$USERS_COLLECTION/${user.id}").set(userHashMap)
     }
 
     fun userExists(userOrMail: String, callback: (Boolean) -> Unit) {
@@ -77,19 +86,24 @@ class FirestoreUserDao {
                 //if it is the correct password it adds that user to the "logged in" pool
                 //(so far its only one at a time but it could be multiple people logged in at the same time)
                 if (isCorrect) {
-                    UserManager.saveLoggedInUser(
-                        document.data["id"].toString(),
-                        document.data["first_name"].toString(),
-                        document.data["last_name"].toString(),
-                        document.data["username"].toString(),
-                        document.data["email"].toString(),
-                        document.data["password"].toString()
-                    )
+                    val newUser = User().apply{
+                        id = document.data["id"].toString()
+                        name = document.data["first_name"].toString()
+                        lastName = document.data["last_name"].toString()
+                        userName = document.data["username"].toString()
+                        eMail = document.data["email"].toString()
+                        password = document.data["password"].toString()
+                    }
+                    saveToManager(newUser)
                 }
                 Log.d("login", "${document.id} => ${document.data}")
                 Log.d("login", "${document.id} => ${document.data[PASSWORD_KEY]}")
             }
             callback(isCorrect)
         }
+    }
+
+    fun saveToManager(user: User){
+        UserManager.saveLoggedInUser(user)
     }
 }

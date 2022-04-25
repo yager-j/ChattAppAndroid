@@ -86,15 +86,15 @@ object UserManager {
 
     }
 
-    fun saveLoggedInUser(ID: String, first: String, last: String, user: String, mail: String, pw: String){
+    fun saveLoggedInUser(user: User){
         realmDB.executeTransaction {
             val newUser = User().apply {
-                id = ID
-                name = first
-                lastName = last
-                userName = user
-                eMail = mail
-                password = pw
+                id = user.id
+                name = user.name
+                lastName = user.lastName
+                userName = user.userName
+                eMail = user.eMail
+                password = user.password
             }
             it.insert(newUser)
         }

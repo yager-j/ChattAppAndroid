@@ -29,15 +29,15 @@ class FirestoreChatDao {
 
                     chat.id = doc.getString(ID_KEY)!!
                     chat.usersInChat = doc.get(USERS_IN_CHAT_KEY) as ArrayList<String>
-                    //chat.chatName = doc.getString(CHAT_NAME_KEY)!!
+                    if (doc.getString(CHAT_NAME_KEY) != null)
+                        chat.chatName = doc.getString(CHAT_NAME_KEY)!!
 
-                    for (i in 0..chat.usersInChat.size) {
-                        if (UserManager.currentUser?.id == chat.usersInChat[i]){
+                    for (i in 0 until chat.usersInChat.size) {
+                        if (UserManager.currentUser?.id == chat.usersInChat[i]) {
                             chatList.add(chat)
+                            break
                         }
-                        break
                     }
-                    chatList.add(chat)
                 }
                 activity.loadList(chatList)
 
@@ -51,7 +51,8 @@ class FirestoreChatDao {
     fun saveChat(chat : Chat){
         val chatHashMap = hashMapOf(
             ID_KEY to chat.id,
-            USERS_IN_CHAT_KEY to chat.usersInChat
+            USERS_IN_CHAT_KEY to chat.usersInChat,
+            CHAT_NAME_KEY to chat.chatName
         )
 
         firebaseDB
@@ -60,5 +61,8 @@ class FirestoreChatDao {
             .set(chatHashMap)
             .addOnSuccessListener { Log.d("FIRESTORE", "Chat saved to Firestore") }
             .addOnFailureListener { Log.d("FIRESTORE", "Failed to save chat") }
+
+        //Test Oscar:
+        //firebaseDB.document("$CHATS_COLLECTION/${chat.id}").set(chatHashMap)
     }
 }

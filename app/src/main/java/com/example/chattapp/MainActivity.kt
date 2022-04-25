@@ -133,7 +133,7 @@ class MainActivity : AppCompatActivity() {
         Log.d("login", "............................is this happening?")
         UserManager.logInUser()
         updateView()
-        firestoreChatDao.firestoreListener(this)
+        //firestoreChatDao.firestoreListener(this)
     }
 
     private fun updateView() {
@@ -143,5 +143,6 @@ class MainActivity : AppCompatActivity() {
         } else {
             binder.buttonLogin.text = resources.getString(R.string.login)
         }
+        firestoreChatDao.firestoreListener(this)
     }
 }
