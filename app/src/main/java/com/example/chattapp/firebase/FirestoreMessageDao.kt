@@ -12,8 +12,11 @@ class FirestoreMessageDao {
     private val TEXT_KEY = "text"
     private val TIMESTAMP_KEY = "timestamp"
 
+    private val LAST_MESSAGE_KEY = "last_message"
+
     private val MESSAGES_COLLECTION = "messages"
     private val CHATS_COLLECTION = "chats"
+
 
     private val firebaseDB = FirebaseFirestore.getInstance()
 
@@ -32,10 +35,7 @@ class FirestoreMessageDao {
 
                         val msg = Message()
 
-
-
                         val loadedId = doc.getString(ID_KEY)
-                        println(loadedId)
                         val loadedSender = doc.getString(SENDER_KEY)
                         val loadedText = doc.getString(TEXT_KEY)
                         val loadedTimestamp = doc.getDate(TIMESTAMP_KEY)
@@ -61,7 +61,7 @@ class FirestoreMessageDao {
             ID_KEY to message.id,
             SENDER_KEY to message.sender,
             TEXT_KEY  to message.text,
-            TIMESTAMP_KEY to message.timestamp
+            TIMESTAMP_KEY to message.timestamp,
         )
 
         firebaseDB
@@ -72,6 +72,10 @@ class FirestoreMessageDao {
             .set(messageHashMap)
             .addOnSuccessListener { Log.d("FIRESTORE", "Message sent to Firestore") }
             .addOnFailureListener { Log.d("FIRESTORE", "Message failed to send") }
+
+        firebaseDB.collection(CHATS_COLLECTION).document(chatID).update(LAST_MESSAGE_KEY, message.text)
+        firebaseDB.collection(CHATS_COLLECTION).document(chatID).update(TIMESTAMP_KEY, message.timestamp)
+
     }
 
     fun loadMessages(activity: ChatActivity, id: String) {

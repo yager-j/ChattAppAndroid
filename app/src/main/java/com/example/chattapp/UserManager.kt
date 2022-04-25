@@ -64,10 +64,10 @@ object UserManager {
                         for (doc in it) {
                             val user = User()
                             user.id = doc.getString(ID_KEY)!!
-                            user.name = doc.getString(NAME_KEY)!!
-                            user.lastName = doc.getString(LASTNAME_KEY)!!
-                            user.userName = doc.getString(USERNAME_KEY)!!
-                            user.eMail = doc.getString(EMAIL_KEY)!!
+                            user.first_name = doc.getString(NAME_KEY)!!
+                            user.last_name = doc.getString(LASTNAME_KEY)!!
+                            user.username = doc.getString(USERNAME_KEY)!!
+                            user.email = doc.getString(EMAIL_KEY)!!
                             user.password = doc.getString(PASSWORD_KEY)!!
                             currentUser = user
                             println("VICTORY")

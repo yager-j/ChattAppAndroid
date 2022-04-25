@@ -21,8 +21,30 @@ class FirestoreUserDao {
 
     private val firebaseDB = FirebaseFirestore.getInstance()
 
-    constructor(activity: NewChatActivity) {
-        val userList = ArrayList<User>()
+    var userList = ArrayList<User>()
+
+    fun loadUsers(){
+        userList.clear()
+
+        firebaseDB
+            .collection(USERS_COLLECTION)
+            .get().addOnSuccessListener { result ->
+                if (result != null) {
+                    userList.clear()
+                    for (doc in result) {
+                        val user = User()
+                        user.id = doc.getString(ID_KEY)!!
+                        user.username = doc.getString(USERNAME_KEY)!!
+                        user.email = doc.getString(EMAIL_KEY)!!
+
+                        userList.add(user)
+                    }
+                }
+            }
+    }
+
+    fun firestoreUserListener(activity: NewChatActivity){
+        userList.clear()
 
         firebaseDB
             .collection(USERS_COLLECTION)
@@ -32,8 +54,8 @@ class FirestoreUserDao {
                     for (doc in result) {
                         val user = User()
                         user.id = doc.getString(ID_KEY)!!
-                        user.userName = doc.getString(USERNAME_KEY)!!
-                        user.eMail = doc.getString(EMAIL_KEY)!!
+                        user.username = doc.getString(USERNAME_KEY)!!
+                        user.email = doc.getString(EMAIL_KEY)!!
 
                         userList.add(user)
                     }
@@ -41,8 +63,6 @@ class FirestoreUserDao {
                 }
             }
     }
-
-    constructor()
 
     fun addUser(user: User) {
         val userHashMap = HashMap<String, String>()
@@ -105,5 +125,16 @@ class FirestoreUserDao {
 
     fun saveToManager(user: User){
         UserManager.saveLoggedInUser(user)
+    }
+
+    fun getUsername(id: String): String{
+        println(userList.toString())
+        for(user in userList){
+            //println("sender:$id")
+            //println("user:${user.toString()}")
+            if(id == user.id)
+                return user.username
+        }
+        return "No Username"
     }
 }

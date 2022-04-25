@@ -4,25 +4,51 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <TextView
+        android:id="@+id/username_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:textSize="12sp"
+        android:text="username"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/card_current_user"
+         />
+
+    <TextView
+        android:id="@+id/timestamp_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="timestamp"
+        android:textSize="10sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/card_current_user"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_current_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
         app:cardBackgroundColor="@color/teal_700"
         app:cardCornerRadius="16dp"
         app:cardUseCompatPadding="true"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/username_tv">
 
         <TextView
             android:id="@+id/text_current_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:paddingVertical="8dp"
             android:paddingHorizontal="16dp"
-            android:text="Test Message Current User"/>
+            android:paddingVertical="8dp"
+            android:text="Test Message Current User"
+            android:textColor="@color/white" />
 
     </androidx.cardview.widget.CardView>
 

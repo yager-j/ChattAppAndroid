@@ -40,8 +40,7 @@ class NewChatAdapter( private val userList: ArrayList<User>, private val onItemC
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.username.text = userList[position].userName
-        println(userList[position].toString())
+        holder.username.text = userList[position].username
     }
 
     override fun getItemCount(): Int {

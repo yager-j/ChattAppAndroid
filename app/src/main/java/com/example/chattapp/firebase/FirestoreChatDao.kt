@@ -12,13 +12,15 @@ class FirestoreChatDao {
     private val ID_KEY = "id"
     private val USERS_IN_CHAT_KEY = "users_in_chat"
     private val CHAT_NAME_KEY = "chat_name"
+    private val LAST_MESSAGE_KEY = "last_message"
+    private val TIMESTAMP_KEY = "timestamp"
 
     private val CHATS_COLLECTION = "chats"
 
     private val firebaseDB = FirebaseFirestore.getInstance()
 
     fun firestoreListener(activity: MainActivity){
-        firebaseDB.collection(CHATS_COLLECTION).addSnapshotListener(activity) { value, error ->
+        firebaseDB.collection(CHATS_COLLECTION).orderBy(TIMESTAMP_KEY).addSnapshotListener(activity) { value, error ->
             if (error != null) {
                 Log.e("FIRESTORE", "Failed to listen for chats", error)
             }
@@ -29,14 +31,26 @@ class FirestoreChatDao {
 
                     chat.id = doc.getString(ID_KEY)!!
                     chat.usersInChat = doc.get(USERS_IN_CHAT_KEY) as ArrayList<String>
-                    if (doc.getString(CHAT_NAME_KEY) != null)
-                        chat.chatName = doc.getString(CHAT_NAME_KEY)!!
 
-                    for (i in 0 until chat.usersInChat.size) {
-                        if (UserManager.currentUser?.id == chat.usersInChat[i]) {
+                    if(doc.getString(CHAT_NAME_KEY) != null){
+                        chat.chatName = doc.getString(CHAT_NAME_KEY)!!
+                    } else {
+                        chat.chatName = "No Name"
+                    }
+                    if(doc.getString(LAST_MESSAGE_KEY) != null){
+                        chat.lastMessage = doc.getString(LAST_MESSAGE_KEY)!!
+                    } else {
+                        chat.lastMessage = "No Last Message"
+                    }
+                    if(doc.getDate(TIMESTAMP_KEY) != null){
+                        chat.timestamp = doc.getDate(TIMESTAMP_KEY)!!
+                    }
+
+                    for (i in 0..chat.usersInChat.size) {
+                        if (UserManager.currentUser?.id == chat.usersInChat[i]){
                             chatList.add(chat)
-                            break
                         }
+                        break
                     }
                 }
                 activity.loadList(chatList)
@@ -52,7 +66,8 @@ class FirestoreChatDao {
         val chatHashMap = hashMapOf(
             ID_KEY to chat.id,
             USERS_IN_CHAT_KEY to chat.usersInChat,
-            CHAT_NAME_KEY to chat.chatName
+            CHAT_NAME_KEY to chat.chatName,
+            LAST_MESSAGE_KEY to chat.lastMessage,
         )
 
         firebaseDB

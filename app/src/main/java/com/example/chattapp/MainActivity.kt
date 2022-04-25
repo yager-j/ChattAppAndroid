@@ -13,7 +13,6 @@ import com.example.chattapp.firebase.FirestoreContactDao
 import com.example.chattapp.firebase.FirestoreUserDao
 import com.example.chattapp.models.Chat
 import com.example.chattapp.models.Contact
-import com.example.chattapp.models.User
 import com.example.chattapp.realm.UserDao
 import io.realm.Realm
 import io.realm.RealmChangeListener
@@ -22,6 +21,8 @@ import java.net.UnknownServiceException
 
 
 private lateinit var binder: ActivityMainBinding
+private lateinit var userDao: UserDao
+private lateinit var contactDao: ContactDao
 private lateinit var firestoreContactDao: FirestoreContactDao
 private lateinit var firestoreChatDao: FirestoreChatDao
 private lateinit var realmListener: RealmChangeListener<Realm>
@@ -33,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         binder = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binder.root)
 
-//creates or initializes the database
+        //creates or initializes the database
         Realm.init(this)
         val config = RealmConfiguration.Builder()
             .name("chatAppDB")
@@ -42,9 +43,13 @@ class MainActivity : AppCompatActivity() {
             .build()
         Realm.setDefaultConfiguration(config)
 
+        userDao = UserDao()
+        contactDao = ContactDao()
         firestoreContactDao = FirestoreContactDao()
         firestoreChatDao = FirestoreChatDao()
         firestoreChatDao.firestoreListener(this)
+        FirestoreUserDao.loadUsers()
+
         sharedPrefsSetup()
 
         if (!UserManager.loadUserLogin()) {
@@ -59,10 +64,12 @@ class MainActivity : AppCompatActivity() {
 
             //loadList()
         }
+        userDao.db.addChangeListener(realmListener)
 
-        binder.addUserBtn.setOnClickListener {
+        binder.newChatBtn.setOnClickListener {
             val intent = Intent(this, NewChatActivity::class.java)
             startActivity(intent)
+            //DialogMaker.createChat(this, contactDao, firestoreContactDao)
         }
 
         binder.buttonLogin.setOnClickListener {
@@ -90,7 +97,6 @@ class MainActivity : AppCompatActivity() {
                 popupMenu.show()
             }
         }
-
     }
 
     /**
@@ -98,19 +104,20 @@ class MainActivity : AppCompatActivity() {
      */
     fun loadList(chatList: ArrayList<Chat>) {
 
-        binder.chatsList.layoutManager = LinearLayoutManager(this)
-        val adapter = MyAdapter((chatList),
-            { position -> onListItemClick(chatList[position]) },
-            { position -> onListItemLongClick(position) })
+        val layoutManager = LinearLayoutManager(this)
+        layoutManager.reverseLayout = true
+        layoutManager.stackFromEnd = true
+        binder.chatsList.layoutManager = layoutManager
+        val adapter = ChatAdapter(chatList,this, { position -> onListItemClick(chatList[position])},{ position -> onListItemLongClick(position)})
         binder.chatsList.adapter = adapter
 
     }
 
     private fun onListItemClick(chat: Chat) {
 
-        Toast.makeText(this, "click detected chat ${chat.id}", Toast.LENGTH_SHORT).show()
         val intent = Intent(this, ChatActivity::class.java)
         intent.putExtra("chatID", chat.id)
+        intent.putExtra("chatName", chat.chatName)
         startActivity(intent)
     }
 
@@ -139,7 +146,7 @@ class MainActivity : AppCompatActivity() {
     private fun updateView() {
         Log.d("login", "............................Hello ${UserManager.currentUser}")
         if (UserManager.currentUser != null) {
-            binder.buttonLogin.text = UserManager.currentUser!!.userName
+            binder.buttonLogin.text = UserManager.currentUser!!.username
         } else {
             binder.buttonLogin.text = resources.getString(R.string.login)
         }

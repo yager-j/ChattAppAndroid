@@ -3,9 +3,11 @@ package com.example.chattapp
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chattapp.models.Chat
+import com.example.chattapp.models.Contact
 
 class MyAdapter(
     private val list: ArrayList<Chat>,
@@ -46,14 +48,20 @@ class MyAdapter(
         }
 
         override fun onClick(v: View?) {
+
             val position = adapterPosition
             onItemClicked(position)
         }
 
         override fun onLongClick(v: View?): Boolean {
+
             val position = adapterPosition
             onItemLongClicked(position)
             return true
+
         }
+
+
     }
+
 }
