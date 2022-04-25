@@ -47,10 +47,8 @@ class ChatActivity : AppCompatActivity() {
             if(id == null){
                 val chat = Chat()
                 id = chat.id
-                chat.usersInChat.add(currentUserId)
                 chat.usersInChat.addAll(intent.getStringArrayListExtra("userIdList") as ArrayList<String>)
                 val usernameList = intent.getStringArrayListExtra("userNameList")
-                usernameList?.add(currentUserName)
                 val chatName = usernameList.toString()
                 chat.chatName = chatName.substring(1, chatName.length - 1)
 

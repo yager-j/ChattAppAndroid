@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chattapp.models.User
 
-class NewChatAdapter( private val userList: ArrayList<User>, private val onItemClicked: (position: Int) -> Unit) : RecyclerView.Adapter<NewChatAdapter.ViewHolder>() {
+class NewChatAdapter( private val userList: ArrayList<User>, private val selectedUsers: ArrayList<String>, private val onItemClicked: (position: Int) -> Unit) : RecyclerView.Adapter<NewChatAdapter.ViewHolder>() {
 
     private var selectedItems : ArrayList<User> = arrayListOf()
 
@@ -41,6 +41,9 @@ class NewChatAdapter( private val userList: ArrayList<User>, private val onItemC
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.username.text = userList[position].username
+        if (selectedUsers.contains(holder.username.text)){
+            holder.itemView.setBackgroundColor(Color.LTGRAY)
+        }
     }
 
     override fun getItemCount(): Int {

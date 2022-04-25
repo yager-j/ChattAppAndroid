@@ -29,7 +29,6 @@ class NewChatActivity : AppCompatActivity() {
 
         FirestoreUserDao.firestoreUserListener(this)
 
-
         //Search for user
         binder.searchUserEdittext.addTextChangedListener {
             val searchResult = searchUsers(it)
@@ -77,7 +76,7 @@ class NewChatActivity : AppCompatActivity() {
 
     fun showUsers(list: ArrayList<User>){
 
-        val adapter = NewChatAdapter(list, {position ->  onListItemClick(list[position])})
+        val adapter = NewChatAdapter(list, selectedUsersName, {position ->  onListItemClick(list[position])})
         binder.recyclerviewNewChat.adapter = adapter
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binder.recyclerviewNewChat.layoutManager = layoutManager
