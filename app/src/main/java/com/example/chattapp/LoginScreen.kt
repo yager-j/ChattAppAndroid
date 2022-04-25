@@ -3,15 +3,17 @@ package com.example.chattapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import com.example.chattapp.R.string.email
 import com.example.chattapp.databinding.ActivityLoginScreenBinding
-import com.example.chattapp.realm.UserDao
 
 class LoginScreen : AppCompatActivity() {
 
     private lateinit var userDao: UserDao
+    private lateinit var contactDao: ContactDao
     private lateinit var binder : ActivityLoginScreenBinding
 
     private lateinit var titles : Array<TextView>
@@ -31,10 +33,11 @@ class LoginScreen : AppCompatActivity() {
         binder = ActivityLoginScreenBinding.inflate(layoutInflater)
         setContentView(binder.root)
         userDao = UserDao()
+        contactDao = ContactDao()
 
         isLogin = intent.getBooleanExtra("loginPressed", true)
 
-        titles = arrayOf(binder.titleTitle, binder.titleName, binder.titleLastname, binder.titleMail, binder.titlePasswordConfirm)
+        titles = arrayOf(binder.titleUsername, binder.titleTitle, binder.titleName, binder.titleLastname, binder.titleMail, binder.titlePasswordConfirm)
         name = binder.inputName
         lastname = binder.inputLastname
         email = binder.inputEMail
@@ -98,11 +101,9 @@ class LoginScreen : AppCompatActivity() {
                     }
                 }
 
-                if (checksOut){
-                    //TODO go to "Login" function
-                    //Current user = userId
-                    //Default user = guest?
-
+                //Log in user
+                if (checksOut) {
+                    userDao.logInUser(username.text.toString())
                     val toMain = Intent(this, MainActivity::class.java)
                     startActivity(toMain)
                 }
@@ -133,7 +134,7 @@ class LoginScreen : AppCompatActivity() {
                 }
 
                 //checks username
-                if (username.text.toString() == "" || userDao.checkIfUserExists(username.text.toString())) {
+                if (username.text.toString() == "" || userDao.checkIfUserExists(username.text.toString()) || username.text.toString().contains("@")) {
                     username.setBackgroundColor(resources.getColor(R.color.textInputBGNotFilled))
                     checksOut = false
                 } else {
@@ -160,9 +161,12 @@ class LoginScreen : AppCompatActivity() {
                     passwordConfirm.setBackgroundColor(resources.getColor(R.color.textInputBG))
                 }
 
+                //Adds user and corresponding contact
                 if (checksOut) {
-                    userDao.addUser(name.text.toString(), lastname.text.toString(), username.text.toString(), email.text.toString(), password.text.toString())
-                    UserManager.saveUserLogin(username.text.toString(), password.text.toString())
+                    //userDao.addUser(name.text.toString(), lastname.text.toString(), username.text.toString(), email.text.toString(), password.text.toString(), true)
+                    userDao.addUserToFirebase(name.text.toString(), lastname.text.toString(), username.text.toString(), email.text.toString(), password.text.toString())
+                    //userDao.logInUser(username.text.toString())
+                    //contactDao.addContact(username.text.toString())
                     val toMain = Intent(this, MainActivity::class.java)
                     startActivity(toMain)
                 }
@@ -171,8 +175,9 @@ class LoginScreen : AppCompatActivity() {
     }
 
     private fun loginSelected() {
-        titles[0].text = resources.getString(R.string.login_title)
-        for (i in 1 until titles.size) {
+        titles[0].text = "${resources.getString(R.string.username)} or e-${resources.getString(R.string.email)}"
+        titles[1].text = resources.getString(R.string.login_title)
+        for (i in 2 until titles.size) {
             titles[i].visibility = View.GONE
         }
         name.visibility = View.GONE
@@ -184,8 +189,9 @@ class LoginScreen : AppCompatActivity() {
     }
 
     private fun registerSelected() {
-        titles[0].text = resources.getString(R.string.register_title)
-        for (i in 1 until titles.size) {
+        titles[0].text = resources.getString(R.string.username)
+        titles[1].text = resources.getString(R.string.register_title)
+        for (i in 2 until titles.size) {
             titles[i].visibility = View.VISIBLE
         }
         name.visibility = View.VISIBLE

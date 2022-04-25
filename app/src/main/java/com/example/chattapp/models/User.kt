@@ -10,14 +10,14 @@ open class User : RealmObject() {
     @PrimaryKey
     var id = UUID.randomUUID().toString()
 
-    var name: String = "dummy"
-    var lastName: String = "user"
+    var first_name: String = "dummy"
+    var last_name: String = "user"
 
     @Required
-    var userName: String = "user:$id"
+    var username: String = "user:$id"
 
     @Required
-    var eMail: String = "user@chatApp.com"
+    var email: String = "user@chatApp.com"
 
     @Required
     var password: String = "password"
@@ -26,5 +26,7 @@ open class User : RealmObject() {
     override fun toString(): String {
         return "User(id='$id', name='$name', lastName='$lastName', userName='$userName', eMail='$eMail', password='$password')"
     }
+
+    var loggedIn: Boolean = false
 
 }
