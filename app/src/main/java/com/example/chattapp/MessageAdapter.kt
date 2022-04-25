@@ -20,15 +20,13 @@ import java.time.format.DateTimeFormatter
 
 class MessageAdapter(private var context: Context, messageList: ArrayList<Message>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val storageManager = ImageManager()
-
     private val VIEW_TYPE_USER_MESSAGE_ME = 10
     private val VIEW_TYPE_USER_MESSAGE_OTHER = 11
 
     private var messages = messageList
 
-    private val currentUser = "A0CC5F6F-E5E1-461F-A737-E373C8F30E34"
-    private val currentUserName = "Jocke"
+    private val currentUser = UserManager.currentUser!!.id
+    private val currentUserName = UserManager.currentUser!!.username
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -41,14 +39,12 @@ class MessageAdapter(private var context: Context, messageList: ArrayList<Messag
                 OtherUserHolder(layoutInflater.inflate(R.layout.item_message_other_user, parent, false))
             }
             else -> CurrentUserHolder(layoutInflater.inflate(R.layout.item_message_current_user, parent, false)) //Generic return
-
         }
     }
 
     override fun getItemViewType(position: Int): Int {
 
         val message = messages.get(position)
-
 
         return if (message.sender == currentUser) VIEW_TYPE_USER_MESSAGE_ME
         else VIEW_TYPE_USER_MESSAGE_OTHER
@@ -66,7 +62,6 @@ class MessageAdapter(private var context: Context, messageList: ArrayList<Messag
                 holder as OtherUserHolder
                 holder.bindView(context, messages.get(position) as Message)
             }
-
         }
     }
 
@@ -144,14 +139,13 @@ class MessageAdapter(private var context: Context, messageList: ArrayList<Messag
             } else {
                 timestampTextView.text = timestamp.format(DateTimeFormatter.ofPattern("dd MMM HH:mm"))
             }
-
-            val imageRef = storageManager.getImageURL(message.sender)
+            //Profile Pic
+            val imageRef = ImageManager.getImageURL(message.sender)
             imageRef.downloadUrl.addOnSuccessListener {
                 Glide.with(context).load(it).into(profilePic)
             }.addOnFailureListener {
                 println("Failed to load image")
             }
-
         }
     }
 }

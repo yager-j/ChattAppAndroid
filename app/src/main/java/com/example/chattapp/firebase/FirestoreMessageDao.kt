@@ -11,6 +11,7 @@ class FirestoreMessageDao {
     private val SENDER_KEY = "sender"
     private val TEXT_KEY = "text"
     private val TIMESTAMP_KEY = "timestamp"
+    private val REFERENCE_CHAT_ID = "referenceChatId"
 
     private val LAST_MESSAGE_KEY = "last_message"
 
@@ -62,6 +63,7 @@ class FirestoreMessageDao {
             SENDER_KEY to message.sender,
             TEXT_KEY  to message.text,
             TIMESTAMP_KEY to message.timestamp,
+            REFERENCE_CHAT_ID to chatID
         )
 
         firebaseDB
