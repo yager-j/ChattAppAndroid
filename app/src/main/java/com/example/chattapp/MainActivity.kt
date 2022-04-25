@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chattapp.databinding.ActivityMainBinding
 import com.example.chattapp.firebase.FirestoreChatDao
@@ -12,8 +13,6 @@ import com.example.chattapp.firebase.FirestoreContactDao
 import com.example.chattapp.firebase.FirestoreUserDao
 import com.example.chattapp.models.Chat
 import com.example.chattapp.models.Contact
-import com.example.chattapp.models.User
-import com.example.chattapp.realm.ContactDao
 import com.example.chattapp.realm.UserDao
 import io.realm.Realm
 import io.realm.RealmChangeListener
@@ -100,13 +99,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        Log.d("LoginUser", "updated.")
-        updateView()
-        firestoreChatDao.firestoreListener(this)
-    }
-
     /**
      * loads the user list in the recycler view
      */
@@ -154,7 +146,7 @@ class MainActivity : AppCompatActivity() {
     private fun updateView() {
         Log.d("login", "............................Hello ${UserManager.currentUser}")
         if (UserManager.currentUser != null) {
-            binder.buttonLogin.text = UserManager.currentUser!!.userName
+            binder.buttonLogin.text = UserManager.currentUser!!.username
         } else {
             binder.buttonLogin.text = resources.getString(R.string.login)
         }

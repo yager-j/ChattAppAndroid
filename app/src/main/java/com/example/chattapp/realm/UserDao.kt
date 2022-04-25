@@ -72,14 +72,6 @@ class UserDao {
         return user != null
     }
 
-    fun checkPassword(userOrMail: String, password: String): Boolean {
-        val user = if (userOrMail.contains("@")) {
-            db.where(User::class.java).equalTo(EMAIL_KEY, userOrMail).findFirst()
-        } else {
-            db.where(User::class.java).equalTo(USERNAME_KEY, userOrMail).findFirst()
-        }
-        return user?.password == password
-    }
 
     fun logInUser(userOrMail : String) {
         val user = if (userOrMail.contains("@")) {
