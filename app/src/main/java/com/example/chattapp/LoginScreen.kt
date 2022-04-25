@@ -1,28 +1,27 @@
 package com.example.chattapp
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.example.chattapp.databinding.ActivityLoginScreenBinding
 import com.example.chattapp.firebase.FirestoreUserDao
-import com.example.chattapp.realm.UserDao
 
 class LoginScreen : AppCompatActivity() {
 
-    //private lateinit var userDao: UserDao
     private lateinit var firestoreUserDao: FirestoreUserDao
-    private lateinit var binder : ActivityLoginScreenBinding
+    private lateinit var binder: ActivityLoginScreenBinding
 
-    private lateinit var titles : Array<TextView>
-    private lateinit var name : EditText
-    private lateinit var lastname : EditText
-    private lateinit var email : EditText
-    private lateinit var username : EditText
-    private lateinit var password : EditText
-    private lateinit var passwordConfirm : EditText
+    private lateinit var titles: Array<TextView>
+    private lateinit var name: EditText
+    private lateinit var lastname: EditText
+    private lateinit var email: EditText
+    private lateinit var username: EditText
+    private lateinit var password: EditText
+    private lateinit var passwordConfirm: EditText
 
     private var isLogin = true
     private var checksOut = true
@@ -32,12 +31,17 @@ class LoginScreen : AppCompatActivity() {
 
         binder = ActivityLoginScreenBinding.inflate(layoutInflater)
         setContentView(binder.root)
-        //userDao = UserDao()
         firestoreUserDao = FirestoreUserDao()
 
         isLogin = intent.getBooleanExtra("loginPressed", true)
 
-        titles = arrayOf(binder.titleTitle, binder.titleName, binder.titleLastname, binder.titleMail, binder.titlePasswordConfirm)
+        titles = arrayOf(
+            binder.titleTitle,
+            binder.titleName,
+            binder.titleLastname,
+            binder.titleMail,
+            binder.titlePasswordConfirm
+        )
         name = binder.inputName
         lastname = binder.inputLastname
         email = binder.inputEMail
@@ -45,75 +49,81 @@ class LoginScreen : AppCompatActivity() {
         password = binder.inputPassword
         passwordConfirm = binder.inputPasswordConfirm
 
-        if (isLogin){
+        if (isLogin) {
             loginSelected()
         }
 
-        binder.inputName.setOnClickListener{
+        binder.inputName.setOnClickListener {
             name.setBackgroundColor(resources.getColor(R.color.textInputBG))
         }
 
-        binder.inputLastname.setOnClickListener{
+        binder.inputLastname.setOnClickListener {
             lastname.setBackgroundColor(resources.getColor(R.color.textInputBG))
         }
 
-        binder.inputUsername.setOnClickListener{
+        binder.inputUsername.setOnClickListener {
             email.setBackgroundColor(resources.getColor(R.color.textInputBG))
         }
 
-        binder.inputUsername.setOnClickListener{
+        binder.inputUsername.setOnClickListener {
             username.setBackgroundColor(resources.getColor(R.color.textInputBG))
         }
 
-        binder.inputPassword.setOnClickListener{
+        binder.inputPassword.setOnClickListener {
             password.setBackgroundColor(resources.getColor(R.color.textInputBG))
             passwordConfirm.setBackgroundColor(resources.getColor(R.color.textInputBG))
         }
 
-        binder.inputPasswordConfirm.setOnClickListener{
+        binder.inputPasswordConfirm.setOnClickListener {
             password.setBackgroundColor(resources.getColor(R.color.textInputBG))
             passwordConfirm.setBackgroundColor(resources.getColor(R.color.textInputBG))
         }
 
-        binder.buttonLogin.setOnClickListener{
-            if (!isLogin){
+        binder.buttonLogin.setOnClickListener {
+            if (!isLogin) {
                 isLogin = true
                 loginSelected()
             } else {
                 checksOut = true
 
                 //checks username
-                if (username.text.toString() == "" || !firestoreUserDao.checkIfUserExists(username.text.toString())) {
-                    username.setBackgroundColor(resources.getColor(R.color.textInputBGNotFilled))
-                    password.setBackgroundColor(resources.getColor(R.color.textInputBGNotFilled))
-                    password.setText("")
-                    checksOut = false
-                } else {
-                    username.setBackgroundColor(resources.getColor(R.color.textInputBG))
-
-                    //checks password only if username exists
-                    if (password.text.toString() == "" || !firestoreUserDao.checkPassword(username.text.toString(), password.text.toString())) {
+                firestoreUserDao.userExists(
+                    username.text.toString(),
+                ) { exists ->
+                    if (username.text.toString() == "" || !exists) {
+                        username.setBackgroundColor(resources.getColor(R.color.textInputBGNotFilled))
                         password.setBackgroundColor(resources.getColor(R.color.textInputBGNotFilled))
                         password.setText("")
                         checksOut = false
                     } else {
-                        password.setBackgroundColor(resources.getColor(R.color.textInputBG))
+                        username.setBackgroundColor(resources.getColor(R.color.textInputBG))
+
+                        //checks password only if username exists
+                        firestoreUserDao.checkPassword(
+                            username.text.toString(),
+                            password.text.toString()
+                        ) { isCorrect ->
+                            Log.d("login", "............................statusInLogin: $isCorrect")
+                            if (password.text.toString() == "" || !isCorrect) {
+                                password.setBackgroundColor(resources.getColor(R.color.textInputBGNotFilled))
+                                password.setText("")
+                                checksOut = false
+                            } else {
+                                password.setBackgroundColor(resources.getColor(R.color.textInputBG))
+                            }
+                            if (checksOut) {
+                                onBackPressed()
+                                //startActivity(Intent(this, MainActivity::class.java))
+                            }
+                        }
                     }
                 }
 
-                if (checksOut){
-                    //TODO go to "Login" function
-                    //Current user = userId
-                    //Default user = guest?
-
-                    val toMain = Intent(this, MainActivity::class.java)
-                    startActivity(toMain)
-                }
             }
         }
 
-        binder.buttonRegister.setOnClickListener{
-            if (isLogin){
+        binder.buttonRegister.setOnClickListener {
+            if (isLogin) {
                 isLogin = false
                 registerSelected()
             } else {
@@ -135,22 +145,6 @@ class LoginScreen : AppCompatActivity() {
                     lastname.setBackgroundColor(resources.getColor(R.color.textInputBG))
                 }
 
-                //checks username
-                if (username.text.toString() == "" || firestoreUserDao.checkIfUserExists(username.text.toString())) {
-                    username.setBackgroundColor(resources.getColor(R.color.textInputBGNotFilled))
-                    checksOut = false
-                } else {
-                    username.setBackgroundColor(resources.getColor(R.color.textInputBG))
-                }
-
-                //checks email
-                if (email.text.toString() == "" || !email.text.toString().contains("@") || firestoreUserDao.checkIfUserExists(username.text.toString())) {
-                    email.setBackgroundColor(resources.getColor(R.color.textInputBGNotFilled))
-                    checksOut = false
-                } else {
-                    email.setBackgroundColor(resources.getColor(R.color.textInputBG))
-                }
-
                 //checks passwords
                 if (password.text.toString() == "" || !isLogin && passwordConfirm.text.toString() == "" || !isLogin && password.text.toString() != passwordConfirm.text.toString()) {
                     password.setBackgroundColor(resources.getColor(R.color.textInputBGNotFilled))
@@ -163,12 +157,43 @@ class LoginScreen : AppCompatActivity() {
                     passwordConfirm.setBackgroundColor(resources.getColor(R.color.textInputBG))
                 }
 
-                if (checksOut) {
-                    firestoreUserDao.addUser(name.text.toString(), lastname.text.toString(), username.text.toString(), email.text.toString(), password.text.toString())
-                    UserManager.saveUserLogin(username.text.toString(), password.text.toString())
-                    val toMain = Intent(this, MainActivity::class.java)
-                    startActivity(toMain)
+                //checks username
+                firestoreUserDao.userExists(
+                    username.text.toString()
+                ) { nameTaken ->
+                    if (username.text.toString() == "" || nameTaken) {
+                        username.setBackgroundColor(resources.getColor(R.color.textInputBGNotFilled))
+                        checksOut = false
+                    } else {
+                        username.setBackgroundColor(resources.getColor(R.color.textInputBG))
+                    }
+                    //checks email
+                    firestoreUserDao.userExists(
+                        username.text.toString()
+                    ) { mailTaken ->
+                        if (email.text.toString() == "" || !email.text.toString()
+                                .contains("@") || mailTaken
+                        ) {
+                            email.setBackgroundColor(resources.getColor(R.color.textInputBGNotFilled))
+                            checksOut = false
+                        } else {
+                            email.setBackgroundColor(resources.getColor(R.color.textInputBG))
+                        }
+                        if (checksOut) {
+                            firestoreUserDao.addUser(
+                                name.text.toString(),
+                                lastname.text.toString(),
+                                username.text.toString(),
+                                email.text.toString(),
+                                password.text.toString()
+                            )
+                            onBackPressed()
+                            //startActivity(Intent(this, MainActivity::class.java))
+                        }
+                    }
                 }
+
+
             }
         }
     }
@@ -199,7 +224,7 @@ class LoginScreen : AppCompatActivity() {
         clearInputs()
     }
 
-    private fun setBackgroundGrey(){
+    private fun setBackgroundGrey() {
         name.setBackgroundColor(resources.getColor(R.color.textInputBG))
         lastname.setBackgroundColor(resources.getColor(R.color.textInputBG))
         email.setBackgroundColor(resources.getColor(R.color.textInputBG))
@@ -208,7 +233,7 @@ class LoginScreen : AppCompatActivity() {
         passwordConfirm.setBackgroundColor(resources.getColor(R.color.textInputBG))
     }
 
-    private fun clearInputs(){
+    private fun clearInputs() {
         name.setText("")
         lastname.setText("")
         email.setText("")

@@ -41,6 +41,6 @@
         android:layout_marginEnd="5dp"
         android:text="@string/login"
         android:textSize="8sp"
-        tools:ignore="SmallSp"/>
+        tools:ignore="SmallSp" />
 
 </RelativeLayout>
