@@ -20,8 +20,8 @@ import io.realm.RealmConfiguration
 
 
 private lateinit var binder: ActivityMainBinding
-private lateinit var userDao: UserDao
-private lateinit var contactDao: ContactDao
+//private lateinit var userDao: UserDao
+//private lateinit var contactDao: ContactDao
 private lateinit var firestoreContactDao: FirestoreContactDao
 private lateinit var firestoreChatDao: FirestoreChatDao
 private lateinit var realmListener: RealmChangeListener<Realm>
@@ -43,8 +43,8 @@ class MainActivity : AppCompatActivity() {
         Realm.setDefaultConfiguration(config)
 
 
-        userDao = UserDao()
-        contactDao = ContactDao()
+        //userDao = UserDao()
+        //contactDao = ContactDao()
         firestoreContactDao = FirestoreContactDao()
         firestoreChatDao = FirestoreChatDao()
         firestoreChatDao.firestoreListener(this)
@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
 
             //loadList()
         }
-        userDao.db.addChangeListener(realmListener)
+        //userDao.db.addChangeListener(realmListener)
 
         binder.newChatBtn.setOnClickListener {
             val intent = Intent(this, NewChatActivity::class.java)
@@ -80,10 +80,14 @@ class MainActivity : AppCompatActivity() {
                         }
                         R.id.item_change_password -> {
                             Log.d("login", "............................Password Changing.")
+                            val toLogin = Intent(this, LoginScreen::class.java)
+                            toLogin.putExtra("changePassword", true)
+                            startActivity(toLogin)
                         }
                         R.id.item_logout -> {
                             Log.d("login", "............................Log out now.")
                             UserManager.logOutUser(UserManager.currentUser!!.id)
+                            reloadUser()
                             updateView()
                         }
                     }

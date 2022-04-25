@@ -9,4 +9,10 @@
     <string name="register">Register</string>
     <string name="login">Log In</string>
     <string name="logout">Log Out</string>
+
+    <string name="change_password_title">CHANGE PASSWORD</string>
+    <string name="change_password">Change Password</string>
+    <string name="old_password">Old Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_new_password">Confirm New Password</string>
 </resources>

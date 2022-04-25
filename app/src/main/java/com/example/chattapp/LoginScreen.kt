@@ -2,6 +2,7 @@ package com.example.chattapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import android.view.View
 import android.widget.EditText
@@ -24,6 +25,7 @@ class LoginScreen : AppCompatActivity() {
     private lateinit var passwordConfirmET: EditText
 
     private var isLogin = true
+    private var isChangePassword = false
     private var checksOut = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,12 +35,15 @@ class LoginScreen : AppCompatActivity() {
         setContentView(binder.root)
 
         isLogin = intent.getBooleanExtra("loginPressed", true)
+        isChangePassword = intent.getBooleanExtra("changePassword", false)
 
         titlesET = arrayOf(
             binder.titleTitle,
             binder.titleName,
             binder.titleLastname,
             binder.titleMail,
+            binder.titleUsername,
+            binder.titlePassword,
             binder.titlePasswordConfirm
         )
         nameET = binder.inputName
@@ -50,6 +55,10 @@ class LoginScreen : AppCompatActivity() {
 
         if (isLogin) {
             loginSelected()
+        }
+
+        if (isChangePassword) {
+            changePasswordSelected()
         }
 
         binder.inputName.setOnClickListener {
@@ -82,7 +91,7 @@ class LoginScreen : AppCompatActivity() {
             if (!isLogin) {
                 isLogin = true
                 loginSelected()
-            } else {
+            } else if (!isChangePassword) {
                 checksOut = true
 
                 //checks username
@@ -117,6 +126,34 @@ class LoginScreen : AppCompatActivity() {
                     }
                 }
 
+            } else {
+                Log.d("login", "............................button pressed and is change password")
+                if (passwordET.text.toString() == "" || passwordConfirmET.text.toString() == "" || passwordET.text.toString() != passwordConfirmET.text.toString()) {
+                    passwordET.setBackgroundColor(resources.getColor(R.color.textInputBGNotFilled))
+                    passwordConfirmET.setBackgroundColor(resources.getColor(R.color.textInputBGNotFilled))
+                    passwordET.setText("")
+                    passwordConfirmET.setText("")
+                    Log.d("login", "............................Password do not match")
+                } else {
+                    Log.d("login", "............................password can change")
+                    passwordET.setBackgroundColor(resources.getColor(R.color.textInputBG))
+                    passwordConfirmET.setBackgroundColor(resources.getColor(R.color.textInputBG))
+
+                    FirestoreUserDao.changePassword(
+                        UserManager.currentUser!!.username,
+                        usernameET.text.toString(),
+                        passwordET.text.toString()
+                    ) {
+                        if (it){
+                            Log.d("login", "............................Password did change.")
+                            startActivity(Intent(this, MainActivity::class.java))
+                        } else {
+                            Log.d("login", "............................wrong old password")
+                            usernameET.setBackgroundColor(resources.getColor(R.color.textInputBGNotFilled))
+                            usernameET.setText("")
+                        }
+                    }
+                }
             }
         }
 
@@ -198,7 +235,11 @@ class LoginScreen : AppCompatActivity() {
     private fun loginSelected() {
         titlesET[0].text = resources.getString(R.string.login_title)
         for (i in 1 until titlesET.size) {
-            titlesET[i].visibility = View.GONE
+            if (i == 4 || i == 5){
+                titlesET[i].visibility = View.VISIBLE
+            } else {
+                titlesET[i].visibility = View.GONE
+            }
         }
         nameET.visibility = View.GONE
         lastnameET.visibility = View.GONE
@@ -217,6 +258,29 @@ class LoginScreen : AppCompatActivity() {
         lastnameET.visibility = View.VISIBLE
         emailET.visibility = View.VISIBLE
         passwordConfirmET.visibility = View.VISIBLE
+        setBackgroundGrey()
+        clearInputs()
+    }
+
+    private fun changePasswordSelected() {
+        titlesET[0].text = resources.getString(R.string.change_password_title)
+        titlesET[4].text = resources.getString(R.string.old_password)
+        titlesET[5].text = resources.getString(R.string.new_password)
+        titlesET[6].text = resources.getString(R.string.confirm_new_password)
+        binder.buttonLogin.text = resources.getString(R.string.change_password)
+        for (i in 1 until titlesET.size) {
+            if (i < 4) {
+                titlesET[i].visibility = View.GONE
+            } else {
+                titlesET[i].visibility = View.VISIBLE
+            }
+        }
+        nameET.visibility = View.GONE
+        lastnameET.visibility = View.GONE
+        emailET.visibility = View.GONE
+        usernameET.inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
+        passwordConfirmET.visibility = View.VISIBLE
+        binder.buttonRegister.visibility = View.GONE
         setBackgroundGrey()
         clearInputs()
     }

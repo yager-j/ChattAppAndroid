@@ -26,14 +26,14 @@ object DialogMaker {
 
         addBtn.setOnClickListener {
 
-            val input = textInputField.text.toString()
-
-            if (userDao.checkIfUserExists(input)){
-                contactDao.addContact(input)
-                createChatDialog.dismiss()
-            } else {
-                textInputField.error = "user does not exists"
-            }
+//            val input = textInputField.text.toString()
+//
+//            if (userDao.checkIfUserExists(input)){
+//                contactDao.addContact(input)
+//                createChatDialog.dismiss()
+//            } else {
+//                textInputField.error = "user does not exists"
+//            }
 
         }
 
