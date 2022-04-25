@@ -22,12 +22,10 @@ class MyAdapter(
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.chat_list_layout, parent, false)
 
-
         return ViewHolder(view, onItemClicked, onItemLongClicked)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
 
         holder.textView.text = list[position].chatName
 
@@ -60,8 +58,5 @@ class MyAdapter(
             return true
 
         }
-
-
     }
-
 }

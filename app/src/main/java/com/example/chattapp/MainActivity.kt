@@ -1,24 +1,27 @@
 package com.example.chattapp
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.chattapp.databinding.ActivityMainBinding
 import com.example.chattapp.firebase.FirestoreChatDao
 import com.example.chattapp.firebase.FirestoreContactDao
 import com.example.chattapp.firebase.FirestoreUserDao
+import com.example.chattapp.firebase.ImageManager
 import com.example.chattapp.models.Chat
 import com.example.chattapp.models.Contact
 import com.example.chattapp.realm.UserDao
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.realm.Realm
 import io.realm.RealmChangeListener
 import io.realm.RealmConfiguration
 import java.net.UnknownServiceException
-
 
 private lateinit var binder: ActivityMainBinding
 private lateinit var userDao: UserDao
@@ -59,10 +62,23 @@ class MainActivity : AppCompatActivity() {
         }
         userDao.db.addChangeListener(realmListener)
 
+        if(UserManager.currentUser != null){
+            val imageRef = ImageManager.getImageURL(UserManager.currentUser!!.id)
+            imageRef.downloadUrl.addOnSuccessListener {
+                Glide.with(this).load(it).into(binder.imgProfileCurrent)
+            }.addOnFailureListener {
+                println("Failed to load image")
+            }
+        }
+
         binder.newChatBtn.setOnClickListener {
             val intent = Intent(this, NewChatActivity::class.java)
             startActivity(intent)
             //DialogMaker.createChat(this, contactDao, firestoreContactDao)
+        }
+
+        binder.imgProfileCurrent.setOnClickListener {
+            imageChooser()
         }
 
         binder.buttonLogin.setOnClickListener {
@@ -88,6 +104,23 @@ class MainActivity : AppCompatActivity() {
                     false
                 }
                 popupMenu.show()
+            }
+        }
+    }
+
+    private fun imageChooser() {
+        val intent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(intent, 3)
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == RESULT_OK && data != null){
+            var selectedImage = data.data
+            binder.imgProfileCurrent.setImageURI(selectedImage)
+            if (selectedImage != null) {
+                ImageManager.saveImage(selectedImage)
             }
         }
     }
@@ -118,7 +151,7 @@ class MainActivity : AppCompatActivity() {
 
         val id = contactsList[position].id
         //contactDao.deleteContact(id)
-        firestoreContactDao.deleteContact(id)
+        //firestoreContactDao.deleteContact(id)
 
     }
 

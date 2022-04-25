@@ -25,8 +25,6 @@ class ChatAdapter(
 ) :
     RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
 
-    private val storageManager = ImageManager()
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
         val view = LayoutInflater.from(parent.context)
@@ -42,7 +40,7 @@ class ChatAdapter(
         holder.tvName.text = list[position].chatName
         holder.tvLastMessage.text = list[position].lastMessage
 
-        val imageRef = storageManager.getImageURL(list[position].usersInChat[0])
+        val imageRef = ImageManager.getImageURL(list[position].usersInChat[0])
         imageRef.downloadUrl.addOnSuccessListener {
             Glide.with(mCotext).load(it).into(holder.ivProfilePic)
         }.addOnFailureListener {
