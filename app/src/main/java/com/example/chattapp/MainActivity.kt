@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity() {
                         R.id.item_logout -> {
                             Log.d("login", "............................Log out now.")
                             UserManager.logOutUser(UserManager.currentUser!!.id)
-                            //load login screen activity
+                            reloadUser()
                             updateView()
                         }
                     }
