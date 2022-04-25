@@ -49,6 +49,7 @@ object UserManager {
         val loadUsername = sp.getString(USERNAME_LOGIN_KEY, "null")
         val loadMail = sp.getString(MAIL_LOGIN_KEY, "null")
         val loadPw = sp.getString(PASSWORD_LOGIN_KEY, "null")
+        println("loadUsername:$loadUsername, loadMail:$loadMail, loadPw:$loadPw")
 
         if (loadUsername != "null" && loadPw != "null" || loadMail != "null" && loadPw != "null") {
 
@@ -81,6 +82,7 @@ object UserManager {
                 }
             return true
         } else {
+            println("false, false, false, false, false, false, false, false, false, false, false, false, ")
             return false
         }
 

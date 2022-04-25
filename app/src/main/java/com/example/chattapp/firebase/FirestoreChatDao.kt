@@ -21,32 +21,6 @@ class FirestoreChatDao {
 
     private val firebaseDB = FirebaseFirestore.getInstance()
 
-//    constructor()
-//
-//    constructor(activity: MainActivity) {
-//        firebaseDB.collection(CHATS_COLLECTION).addSnapshotListener(activity) { value, error ->
-//            if (error != null){
-//                Log.e("FIRESTORE", "Failed to listen for chats", error)
-//            }
-//            if(value != null) {
-//                val chatList = ArrayList<Chat>()
-//                for(doc in value) {
-//                    val chat = Chat()
-//
-//                    chat.id = doc.getString(ID_KEY)!!
-//                    chat.usersInChat = doc.get(USERS_IN_CHAT_KEY) as ArrayList<String>
-//
-//                    chatList.add(chat)
-//                }
-//                activity.loadList(chatList)
-//
-//                Log.d("FIRESTORE", "Updated Chat List")
-//            } else {
-//                Log.d("FIRESTORE", "Data null")
-//            }
-//        }
-//    }
-
     fun firestoreListener(activity: MainActivity){
         firebaseDB.collection(CHATS_COLLECTION).orderBy(TIMESTAMP_KEY).addSnapshotListener(activity) { value, error ->
             if (error != null) {
@@ -74,13 +48,13 @@ class FirestoreChatDao {
                         chat.timestamp = doc.getDate(TIMESTAMP_KEY)!!
                     }
 
-                    for (i in 0..chat.usersInChat.size) {
+                    for (i in 0 until chat.usersInChat.size) {
                         if (UserManager.currentUser?.id == chat.usersInChat[i]){
                             chatList.add(chat)
+                            break
                         }
-                        break
+
                     }
-                    chatList.add(chat)
                 }
                 activity.loadList(chatList)
 

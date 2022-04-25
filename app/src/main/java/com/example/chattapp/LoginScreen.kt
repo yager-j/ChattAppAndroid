@@ -12,7 +12,6 @@ import com.example.chattapp.firebase.FirestoreUserDao
 
 class LoginScreen : AppCompatActivity() {
 
-    private lateinit var firestoreUserDao: FirestoreUserDao
     private lateinit var binder: ActivityLoginScreenBinding
 
     private lateinit var titles: Array<TextView>
@@ -31,7 +30,6 @@ class LoginScreen : AppCompatActivity() {
 
         binder = ActivityLoginScreenBinding.inflate(layoutInflater)
         setContentView(binder.root)
-        //FirestoreUserDao.firestoreUserListener()
 
         isLogin = intent.getBooleanExtra("loginPressed", true)
 
@@ -180,7 +178,7 @@ class LoginScreen : AppCompatActivity() {
                             email.setBackgroundColor(resources.getColor(R.color.textInputBG))
                         }
                         if (checksOut) {
-                            firestoreUserDao.addUser(
+                            FirestoreUserDao.addUser(
                                 name.text.toString(),
                                 lastname.text.toString(),
                                 username.text.toString(),
@@ -192,8 +190,6 @@ class LoginScreen : AppCompatActivity() {
                         }
                     }
                 }
-
-
             }
         }
     }

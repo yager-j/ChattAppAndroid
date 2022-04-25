@@ -14,8 +14,8 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var binder: ActivityChatBinding
     private lateinit var firestoreMessageDao: FirestoreMessageDao
     private lateinit var firestoreChatDao: FirestoreChatDao
-    private var currentUserId = "A0CC5F6F-E5E1-461F-A737-E373C8F30E34"
-    private var currentUserName = "Jocke"
+    private var currentUserId = UserManager.currentUser!!.id
+    private var currentUserName = UserManager.currentUser!!.username
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,7 +49,7 @@ class ChatActivity : AppCompatActivity() {
                 chat.usersInChat.add(currentUserId)
                 chat.usersInChat.addAll(intent.getStringArrayListExtra("userIdList") as ArrayList<String>)
                 val usernameList = intent.getStringArrayListExtra("userNameList")
-                usernameList?.add(currentUserName)
+                usernameList?.add(UserManager.currentUser?.username)
                 val chatName = usernameList.toString()
                 chat.chatName = chatName.substring(1, chatName.length - 1)
 

@@ -52,13 +52,6 @@ class MainActivity : AppCompatActivity() {
 
         sharedPrefsSetup()
 
-        if (!UserManager.loadUserLogin()) {
-            println("data not loaded")
-            val toLogin = Intent(this, LoginScreen::class.java)
-            toLogin.putExtra("loginPressed", true)
-            startActivity(toLogin)
-        }
-
         //creates and add a listener to database to update everytime new items are added
         realmListener = RealmChangeListener {
 
