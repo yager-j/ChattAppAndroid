@@ -5,6 +5,7 @@ import android.content.Context
 import android.view.Window
 import android.widget.Button
 import android.widget.EditText
+import com.example.chattapp.realm.UserDao
 
 object DialogMaker {
     /**
@@ -19,7 +20,7 @@ object DialogMaker {
         createChatDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         createChatDialog.setContentView(R.layout.create_chat_layout)
 
-        val addBtn = createChatDialog.findViewById<Button>(R.id.add_user_btn)
+        val addBtn = createChatDialog.findViewById<Button>(R.id.new_chat_btn)
         val cancelBtn = createChatDialog.findViewById<Button>(R.id.cancel_button)
         val textInputField = createChatDialog.findViewById<EditText>(R.id.name_input_field)
 

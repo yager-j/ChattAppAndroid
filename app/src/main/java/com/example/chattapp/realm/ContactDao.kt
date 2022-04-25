@@ -1,5 +1,6 @@
 package com.example.chattapp
 
+import com.example.chattapp.models.Contact
 import io.realm.Realm
 import java.util.ArrayList
 

@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.TextView
 import com.example.chattapp.R.string.email
 import com.example.chattapp.databinding.ActivityLoginScreenBinding
+import com.example.chattapp.realm.UserDao
 
 class LoginScreen : AppCompatActivity() {
 

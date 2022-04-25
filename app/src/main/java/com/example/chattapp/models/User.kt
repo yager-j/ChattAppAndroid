@@ -24,7 +24,7 @@ open class User : RealmObject() {
 
 
     override fun toString(): String {
-        return "User(id='$id', name='$name', lastName='$lastName', userName='$userName', eMail='$eMail', password='$password')"
+        return "User(id='$id', name='$first_name', lastName='$last_name', userName='$username', eMail='$email', password='$password')"
     }
 
     var loggedIn: Boolean = false

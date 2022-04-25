@@ -50,8 +50,8 @@ object UserManager {
 
                             val user = User()
                             user.id = doc.getString(ID_KEY)!!
-                            user.userName = doc.getString(USERNAME_KEY)!!
-                            user.eMail = doc.getString(EMAIL_KEY)!!
+                            user.username = doc.getString(USERNAME_KEY)!!
+                            user.email = doc.getString(EMAIL_KEY)!!
                             currentUser = user
                             println("VICTORY")
 

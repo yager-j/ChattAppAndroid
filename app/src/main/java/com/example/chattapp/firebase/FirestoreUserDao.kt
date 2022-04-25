@@ -27,8 +27,8 @@ object FirestoreUserDao {
                     for (doc in result) {
                         val user = User()
                         user.id = doc.getString(ID_KEY)!!
-                        user.userName = doc.getString(USERNAME_KEY)!!
-                        user.eMail = doc.getString(EMAIL_KEY)!!
+                        user.username = doc.getString(USERNAME_KEY)!!
+                        user.email = doc.getString(EMAIL_KEY)!!
 
                         userList.add(user)
                     }
@@ -47,8 +47,8 @@ object FirestoreUserDao {
                     for (doc in result) {
                         val user = User()
                         user.id = doc.getString(ID_KEY)!!
-                        user.userName = doc.getString(USERNAME_KEY)!!
-                        user.eMail = doc.getString(EMAIL_KEY)!!
+                        user.username = doc.getString(USERNAME_KEY)!!
+                        user.email = doc.getString(EMAIL_KEY)!!
 
                         userList.add(user)
                     }
@@ -63,7 +63,7 @@ object FirestoreUserDao {
             //println("sender:$id")
             //println("user:${user.toString()}")
             if(id == user.id)
-                return user.userName
+                return user.username
         }
         return "No Username"
     }

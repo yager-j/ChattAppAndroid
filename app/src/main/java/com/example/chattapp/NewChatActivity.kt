@@ -53,7 +53,7 @@ class NewChatActivity : AppCompatActivity() {
         searchTerm = it.toString()
         if (searchTerm.isNotEmpty()){
             for(user in FirestoreUserDao.userList){
-                if(user.userName.contains(searchTerm, ignoreCase = true)){
+                if(user.username.contains(searchTerm, ignoreCase = true)){
                     searchResult.add(user)
                 }
             }
@@ -85,11 +85,11 @@ class NewChatActivity : AppCompatActivity() {
         if(selectedUsers.contains(user)){
             selectedUsers.remove(user)
             selectedUsersId.remove(user.id)
-            selectedUsersName.remove(user.userName)
+            selectedUsersName.remove(user.username)
         } else {
             selectedUsers.add(user)
             selectedUsersId.add(user.id)
-            selectedUsersName.add(user.userName)
+            selectedUsersName.add(user.username)
         }
     }
 }

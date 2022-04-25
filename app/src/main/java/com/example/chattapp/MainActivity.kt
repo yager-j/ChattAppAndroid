@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chattapp.databinding.ActivityMainBinding
 import com.example.chattapp.firebase.FirestoreChatDao
@@ -14,23 +13,18 @@ import com.example.chattapp.firebase.FirestoreContactDao
 import com.example.chattapp.firebase.FirestoreUserDao
 import com.example.chattapp.models.Chat
 import com.example.chattapp.models.Contact
-import com.example.chattapp.realm.ContactDao
 import com.example.chattapp.realm.UserDao
 import io.realm.Realm
 import io.realm.RealmChangeListener
 import io.realm.RealmConfiguration
 
-
-
-class MainActivity : AppCompatActivity() {
-
-    private lateinit var binder: ActivityMainBinding
-    private lateinit var userDao: UserDao
-    private lateinit var contactDao: ContactDao
-    private lateinit var firestoreContactDao: FirestoreContactDao
-    private lateinit var firestoreChatDao: FirestoreChatDao
-    private lateinit var realmListener: RealmChangeListener<Realm>
-    private lateinit var contactsList: ArrayList<Contact>
+private lateinit var binder: ActivityMainBinding
+private lateinit var userDao: UserDao
+private lateinit var contactDao: ContactDao
+private lateinit var firestoreContactDao: FirestoreContactDao
+private lateinit var firestoreChatDao: FirestoreChatDao
+private lateinit var realmListener: RealmChangeListener<Realm>
+private lateinit var contactsList: ArrayList<Contact>
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,11 +60,11 @@ class MainActivity : AppCompatActivity() {
         //creates and add a listener to database to update everytime new items are added
         realmListener = RealmChangeListener {
 
-            loadList()
+            //loadList()
         }
         userDao.db.addChangeListener(realmListener)
 
-        binder.addUserBtn.setOnClickListener {
+        binder.newChatBtn.setOnClickListener {
             val intent = Intent(this, NewChatActivity::class.java)
             startActivity(intent)
             //DialogMaker.createChat(this, contactDao, firestoreContactDao)
@@ -103,6 +97,7 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         Log.d("LoginUser", "updated.")
         updateView()
+        firestoreChatDao.firestoreListener(this)
     }
 
     /**
@@ -121,7 +116,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun onListItemClick(chat: Chat) {
 
-        Toast.makeText(this, "click detected position $position", Toast.LENGTH_SHORT).show()
         val intent = Intent(this, ChatActivity::class.java)
         intent.putExtra("chatID", chat.id)
         intent.putExtra("chatName", chat.chatName)
@@ -142,9 +136,7 @@ class MainActivity : AppCompatActivity() {
         UserManager.sharedPrefsSetup(sp)
     }
 
-    override fun onResume() {
-        super.onResume()
-        firestoreChatDao.firestoreListener(this)
+
     private fun updateView() {
         binder.buttonLogin.text = userDao.displayCurrentUser()
         if (binder.buttonLogin.text == "") {
