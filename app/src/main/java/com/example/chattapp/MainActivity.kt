@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chattapp.databinding.ActivityMainBinding
@@ -17,7 +16,6 @@ import com.example.chattapp.realm.UserDao
 import io.realm.Realm
 import io.realm.RealmChangeListener
 import io.realm.RealmConfiguration
-import java.net.UnknownServiceException
 
 
 private lateinit var binder: ActivityMainBinding
@@ -43,6 +41,7 @@ class MainActivity : AppCompatActivity() {
             .build()
         Realm.setDefaultConfiguration(config)
 
+
         userDao = UserDao()
         contactDao = ContactDao()
         firestoreContactDao = FirestoreContactDao()
@@ -51,13 +50,6 @@ class MainActivity : AppCompatActivity() {
         FirestoreUserDao.loadUsers()
 
         sharedPrefsSetup()
-
-        if (!UserManager.loadUserLogin()) {
-            println("data not loaded")
-            val toLogin = Intent(this, LoginScreen::class.java)
-            toLogin.putExtra("loginPressed", true)
-            startActivity(toLogin)
-        }
 
         //creates and add a listener to database to update everytime new items are added
         realmListener = RealmChangeListener {

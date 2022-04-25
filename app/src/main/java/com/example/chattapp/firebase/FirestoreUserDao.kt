@@ -8,7 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import io.realm.Realm
 
-class FirestoreUserDao {
+object FirestoreUserDao {
 
     private val ID_KEY = "id"
     private val NAME_KEY = "first_name"
@@ -23,7 +23,7 @@ class FirestoreUserDao {
 
     var userList = ArrayList<User>()
 
-    fun loadUsers(){
+    fun loadUsers() {
         userList.clear()
 
         firebaseDB
@@ -67,10 +67,10 @@ class FirestoreUserDao {
     fun addUser(user: User) {
         val userHashMap = HashMap<String, String>()
         userHashMap[ID_KEY] = user.id
-        userHashMap[NAME_KEY] = user.name
-        userHashMap[LASTNAME_KEY] = user.lastName
-        userHashMap[USERNAME_KEY] = user.userName
-        userHashMap[EMAIL_KEY] = user.eMail
+        userHashMap[NAME_KEY] = user.first_name
+        userHashMap[LASTNAME_KEY] = user.last_name
+        userHashMap[USERNAME_KEY] = user.username
+        userHashMap[EMAIL_KEY] = user.email
         userHashMap[PASSWORD_KEY] = user.password
         firebaseDB.document("$USERS_COLLECTION/${user.id}").set(userHashMap)
     }
@@ -108,10 +108,10 @@ class FirestoreUserDao {
                 if (isCorrect) {
                     val newUser = User().apply{
                         id = document.data["id"].toString()
-                        name = document.data["first_name"].toString()
-                        lastName = document.data["last_name"].toString()
-                        userName = document.data["username"].toString()
-                        eMail = document.data["email"].toString()
+                        first_name = document.data["first_name"].toString()
+                        last_name = document.data["last_name"].toString()
+                        username = document.data["username"].toString()
+                        email = document.data["email"].toString()
                         password = document.data["password"].toString()
                     }
                     saveToManager(newUser)
@@ -130,8 +130,6 @@ class FirestoreUserDao {
     fun getUsername(id: String): String{
         println(userList.toString())
         for(user in userList){
-            //println("sender:$id")
-            //println("user:${user.toString()}")
             if(id == user.id)
                 return user.username
         }

@@ -13,7 +13,6 @@ import com.example.chattapp.models.User
 
 class LoginScreen : AppCompatActivity() {
 
-    private lateinit var firestoreUserDao: FirestoreUserDao
     private lateinit var binder: ActivityLoginScreenBinding
 
     private lateinit var titlesET: Array<TextView>
@@ -32,7 +31,6 @@ class LoginScreen : AppCompatActivity() {
 
         binder = ActivityLoginScreenBinding.inflate(layoutInflater)
         setContentView(binder.root)
-        firestoreUserDao = FirestoreUserDao()
 
         isLogin = intent.getBooleanExtra("loginPressed", true)
 
@@ -88,7 +86,7 @@ class LoginScreen : AppCompatActivity() {
                 checksOut = true
 
                 //checks username
-                firestoreUserDao.userExists(
+                FirestoreUserDao.userExists(
                     usernameET.text.toString(),
                 ) { exists ->
                     if (usernameET.text.toString() == "" || !exists) {
@@ -100,7 +98,7 @@ class LoginScreen : AppCompatActivity() {
                         usernameET.setBackgroundColor(resources.getColor(R.color.textInputBG))
 
                         //checks password only if username exists
-                        firestoreUserDao.checkPassword(
+                        FirestoreUserDao.checkPassword(
                             usernameET.text.toString(),
                             passwordET.text.toString()
                         ) { isCorrect ->
@@ -159,7 +157,7 @@ class LoginScreen : AppCompatActivity() {
                 }
 
                 //checks username
-                firestoreUserDao.userExists(
+                FirestoreUserDao.userExists(
                     usernameET.text.toString()
                 ) { nameTaken ->
                     if (usernameET.text.toString() == "" || nameTaken) {
@@ -169,7 +167,7 @@ class LoginScreen : AppCompatActivity() {
                         usernameET.setBackgroundColor(resources.getColor(R.color.textInputBG))
                     }
                     //checks email
-                    firestoreUserDao.userExists(
+                    FirestoreUserDao.userExists(
                         usernameET.text.toString()
                     ) { mailTaken ->
                         if (emailET.text.toString() == "" || !emailET.text.toString()
@@ -182,14 +180,14 @@ class LoginScreen : AppCompatActivity() {
                         }
                         if (checksOut) {
                             val newUser = User().apply {
-                                name = nameET.text.toString()
-                                lastName = lastnameET.text.toString()
-                                userName = usernameET.text.toString()
-                                eMail = emailET.text.toString()
+                                first_name = nameET.text.toString()
+                                last_name = lastnameET.text.toString()
+                                username = usernameET.text.toString()
+                                email = emailET.text.toString()
                                 password = passwordET.text.toString()
                             }
-                            firestoreUserDao.addUser(newUser)
-                            firestoreUserDao.saveToManager(newUser)
+                            FirestoreUserDao.addUser(newUser)
+                            FirestoreUserDao.saveToManager(newUser)
                             onBackPressed()
                             //startActivity(Intent(this, MainActivity::class.java))
                         }

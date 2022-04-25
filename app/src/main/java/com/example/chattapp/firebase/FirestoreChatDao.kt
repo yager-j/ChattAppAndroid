@@ -19,7 +19,7 @@ class FirestoreChatDao {
 
     private val firebaseDB = FirebaseFirestore.getInstance()
 
-    fun firestoreListener(activity: MainActivity){
+    fun firestoreListener(activity: MainActivity) {
         firebaseDB.collection(CHATS_COLLECTION).orderBy(TIMESTAMP_KEY).addSnapshotListener(activity) { value, error ->
             if (error != null) {
                 Log.e("FIRESTORE", "Failed to listen for chats", error)
@@ -46,11 +46,11 @@ class FirestoreChatDao {
                         chat.timestamp = doc.getDate(TIMESTAMP_KEY)!!
                     }
 
-                    for (i in 0..chat.usersInChat.size) {
+                    for (i in 0 until chat.usersInChat.size) {
                         if (UserManager.currentUser?.id == chat.usersInChat[i]){
                             chatList.add(chat)
+                            break
                         }
-                        break
                     }
                 }
                 activity.loadList(chatList)
@@ -76,8 +76,5 @@ class FirestoreChatDao {
             .set(chatHashMap)
             .addOnSuccessListener { Log.d("FIRESTORE", "Chat saved to Firestore") }
             .addOnFailureListener { Log.d("FIRESTORE", "Failed to save chat") }
-
-        //Test Oscar:
-        //firebaseDB.document("$CHATS_COLLECTION/${chat.id}").set(chatHashMap)
     }
 }
