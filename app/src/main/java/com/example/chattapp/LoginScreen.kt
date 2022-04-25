@@ -111,8 +111,7 @@ class LoginScreen : AppCompatActivity() {
                                 passwordET.setBackgroundColor(resources.getColor(R.color.textInputBG))
                             }
                             if (checksOut) {
-                                onBackPressed()
-                                //startActivity(Intent(this, MainActivity::class.java))
+                                startActivity(Intent(this, MainActivity::class.java))
                             }
                         }
                     }
@@ -188,8 +187,7 @@ class LoginScreen : AppCompatActivity() {
                             }
                             FirestoreUserDao.addUser(newUser)
                             FirestoreUserDao.saveToManager(newUser)
-                            onBackPressed()
-                            //startActivity(Intent(this, MainActivity::class.java))
+                            startActivity(Intent(this, MainActivity::class.java))
                         }
                     }
                 }

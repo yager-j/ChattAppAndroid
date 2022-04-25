@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chattapp.databinding.ActivityMainBinding
 import com.example.chattapp.firebase.FirestoreChatDao
@@ -61,7 +62,6 @@ class MainActivity : AppCompatActivity() {
         binder.newChatBtn.setOnClickListener {
             val intent = Intent(this, NewChatActivity::class.java)
             startActivity(intent)
-            //DialogMaker.createChat(this, contactDao, firestoreContactDao)
         }
 
         binder.buttonLogin.setOnClickListener {
@@ -72,15 +72,18 @@ class MainActivity : AppCompatActivity() {
             } else {
                 val popupMenu = PopupMenu(this, it)
                 popupMenu.menuInflater.inflate(R.menu.menu_profile_options, popupMenu.menu)
+                popupMenu.menu[0].title = "${UserManager.currentUser!!.first_name} ${UserManager.currentUser!!.last_name}"
                 popupMenu.setOnMenuItemClickListener { item ->
                     when (item.itemId) {
-                        R.id.item_1 -> {
-                            Log.d("login", "............................First option pressed")
+                        R.id.item_change_profile -> {
+                            Log.d("login", "............................Profile Changing.")
+                        }
+                        R.id.item_change_password -> {
+                            Log.d("login", "............................Password Changing.")
                         }
                         R.id.item_logout -> {
                             Log.d("login", "............................Log out now.")
                             UserManager.logOutUser(UserManager.currentUser!!.id)
-                            //load login screen activity
                             updateView()
                         }
                     }
@@ -114,11 +117,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onListItemLongClick(position: Int) {
-
-        val id = contactsList[position].id
-        //contactDao.deleteContact(id)
-        firestoreContactDao.deleteContact(id)
-
+//        val id = contactsList[position].id
+//        contactDao.deleteContact(id)
+//        firestoreContactDao.deleteContact(id)
     }
 
     private fun sharedPrefsSetup() {
@@ -130,9 +131,20 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         Log.d("login", "............................is this happening?")
-        UserManager.logInUser()
+        reloadUser()
         updateView()
         //firestoreChatDao.firestoreListener(this)
+    }
+
+    private fun reloadUser() {
+        UserManager.logInUser()
+        if (UserManager.currentUser == null) {
+            RegLogSelection.selectOption( this) { isLogin ->
+                val toLogin = Intent(this, LoginScreen::class.java)
+                toLogin.putExtra("loginPressed", isLogin)
+                startActivity(toLogin)
+            }
+        }
     }
 
     private fun updateView() {

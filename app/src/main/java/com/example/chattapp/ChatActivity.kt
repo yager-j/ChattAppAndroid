@@ -1,5 +1,6 @@
 package com.example.chattapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -72,5 +73,10 @@ class ChatActivity : AppCompatActivity() {
     private fun createMessage(text: String, chatID: String){
         val msg = Message(text = text, sender = currentUserId)
         firestoreMessageDao.saveMessage(msg, chatID)
+    }
+
+    @Override
+    override fun onBackPressed() {
+        startActivity(Intent(this, MainActivity::class.java))
     }
 }

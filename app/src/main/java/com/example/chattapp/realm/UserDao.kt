@@ -14,8 +14,6 @@ class UserDao {
     val EMAIL_KEY = "email"
 
     val db: Realm = Realm.getDefaultInstance()
-    val fb : FirebaseFirestore = FirebaseFirestore.getInstance()
-    //val ref : DatabaseReference = fb.collection(USERS_COLLECTIONS).document("id")
 
 
     fun getUsers(): ArrayList<User> {
@@ -38,24 +36,6 @@ class UserDao {
         }
     }
 
-    fun addUserToFirebase(first: String, last: String, user: String, mail: String, pw: String) {
-        val newUser = User().apply{
-            first_name = first
-            last_name = last
-            username = user
-            email = mail
-            password = pw
-        }
-        val hashUser = HashMap<String, String>()
-        hashUser.put("id", newUser.id)
-        hashUser.put("first_name", newUser.first_name)
-        hashUser.put("last_name", newUser.last_name)
-        hashUser.put("username", newUser.username)
-        hashUser.put("email", newUser.email)
-        hashUser.put("password", newUser.password)
-        fb.document("$USERS_COLLECTIONS/${newUser.id}").set(hashUser)
-    }
-
     fun deleteUser(userId: String) {
         db.executeTransaction {
             val user = db.where(User::class.java).equalTo("id", userId).findFirstAsync()
@@ -70,26 +50,5 @@ class UserDao {
             db.where(User::class.java).equalTo(USERNAME_KEY, userOrMail).findFirst()
         }
         return user != null
-    }
-
-
-    fun logInUser(userOrMail : String) {
-        val user = if (userOrMail.contains("@")) {
-            db.where(User::class.java).equalTo(EMAIL_KEY, userOrMail).findFirst()
-        } else {
-            db.where(User::class.java).equalTo(USERNAME_KEY, userOrMail).findFirst()
-        }
-        user?.loggedIn = true
-    }
-
-    fun checkPassword(user: String, password: String): Boolean {
-        var rightPw = false
-        db.executeTransaction {
-            val user = db.where(User::class.java).equalTo("userName", user).findFirst()
-            if (user?.password == password) {
-                rightPw = true
-            }
-        }
-        return rightPw
     }
 }
