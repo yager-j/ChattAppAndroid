@@ -5,15 +5,16 @@ import android.content.Context
 import android.view.Window
 import android.widget.Button
 import android.widget.EditText
-import com.example.chattapp.firebase.FirestoreContactDao
-import com.example.chattapp.realm.ContactDao
+import com.example.chattapp.realm.UserDao
 
 object DialogMaker {
     /**
      * creates and manages the dialog that pops up when clicking on the add user button to check the DB for users with the same
      * Username or mail that the user is writing
      */
-    fun createChat(context: Context, contactDao: ContactDao, firestoreContactDao: FirestoreContactDao){
+    fun createChat(context: Context, contactDao: ContactDao){
+
+        val userDao = UserDao()
 
         val createChatDialog = Dialog(context)
         createChatDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -27,14 +28,11 @@ object DialogMaker {
 
             val input = textInputField.text.toString()
 
-            if (input.isEmpty() || input == " "){
-
-                textInputField.error = "user does not exists"
-
-            }else {
-
-                firestoreContactDao.findUser(input, contactDao)
+            if (userDao.checkIfUserExists(input)){
+                contactDao.addContact(input)
                 createChatDialog.dismiss()
+            } else {
+                textInputField.error = "user does not exists"
             }
 
         }

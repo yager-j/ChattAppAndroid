@@ -1,7 +1,6 @@
 package com.example.chattapp
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.PopupMenu
@@ -50,7 +49,8 @@ class MainActivity : AppCompatActivity() {
         firestoreContactDao = FirestoreContactDao()
         firestoreChatDao = FirestoreChatDao()
         firestoreChatDao.firestoreListener(this)
-        //loadList()
+        FirestoreUserDao.loadUsers()
+
         sharedPrefsSetup()
 
         if (!UserManager.loadUserLogin()) {
@@ -98,7 +98,13 @@ class MainActivity : AppCompatActivity() {
                 popupMenu.show()
             }
         }
+    }
 
+    override fun onResume() {
+        super.onResume()
+        Log.d("LoginUser", "updated.")
+        updateView()
+        firestoreChatDao.firestoreListener(this)
     }
 
     /**
@@ -117,7 +123,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun onListItemClick(chat: Chat) {
 
-        Toast.makeText(this, "click detected chat ${chat.id}", Toast.LENGTH_SHORT).show()
         val intent = Intent(this, ChatActivity::class.java)
         intent.putExtra("chatID", chat.id)
         intent.putExtra("chatName", chat.chatName)
