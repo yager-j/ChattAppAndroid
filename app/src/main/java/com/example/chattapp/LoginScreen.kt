@@ -193,8 +193,6 @@ class LoginScreen : AppCompatActivity() {
                         }
                     }
                 }
-
-
             }
         }
     }

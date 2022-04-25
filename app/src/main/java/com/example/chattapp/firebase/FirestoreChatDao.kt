@@ -19,7 +19,7 @@ class FirestoreChatDao {
 
     private val firebaseDB = FirebaseFirestore.getInstance()
 
-    fun firestoreListener(activity: MainActivity) {
+    fun firestoreListener(activity: MainActivity){
         firebaseDB.collection(CHATS_COLLECTION).orderBy(TIMESTAMP_KEY).addSnapshotListener(activity) { value, error ->
             if (error != null) {
                 Log.e("FIRESTORE", "Failed to listen for chats", error)
