@@ -9,6 +9,7 @@ import com.example.chattapp.firebase.FirestoreChatDao
 import com.example.chattapp.firebase.FirestoreMessageDao
 import com.example.chattapp.models.Chat
 import com.example.chattapp.models.Message
+import com.example.chattapp.realm.MessageDao
 
 class ChatActivity : AppCompatActivity() {
 
@@ -16,8 +17,6 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var firestoreMessageDao: FirestoreMessageDao
     private lateinit var firestoreChatDao: FirestoreChatDao
     private var currentUserId = UserManager.currentUser!!.id
-    private var currentUserName = UserManager.currentUser!!.username
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +24,10 @@ class ChatActivity : AppCompatActivity() {
         setContentView(binder.root)
 
         var id = intent.getStringExtra("chatID")
+
+        if (id != null) {
+            println(MessageDao.getMessages(id))
+        }
 
         binder.chatName.text = intent.getStringExtra("chatName")
 

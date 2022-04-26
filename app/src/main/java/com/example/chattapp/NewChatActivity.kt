@@ -1,10 +1,16 @@
 package com.example.chattapp
 
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
+import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chattapp.databinding.ActivityNewChatBinding
@@ -22,6 +28,7 @@ class NewChatActivity : AppCompatActivity() {
     private var selectedUsersName = arrayListOf<String>()
     private var searchTerm = ""
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binder = ActivityNewChatBinding.inflate(layoutInflater)
@@ -37,20 +44,49 @@ class NewChatActivity : AppCompatActivity() {
         
         //Start new chat
         binder.createChatButton.setOnClickListener {
-
-            if(selectedUsers.isNotEmpty()) {
-                val intent = Intent(this, ChatActivity::class.java)
-                selectedUsersId.add(UserManager.currentUser!!.id)
-                intent.putExtra("userIdList", selectedUsersId)
-                selectedUsersName.add(UserManager.currentUser!!.username)
-                intent.putExtra("userNameList", selectedUsersName)
-                intent.putExtra("chatName", createChatName())
-                println(selectedUsersId.toString())
-                startActivity(intent)
+            if(isOnline(this)){
+                if(selectedUsers.isNotEmpty()) {
+                    val intent = Intent(this, ChatActivity::class.java)
+                    selectedUsersId.add(UserManager.currentUser!!.id)
+                    intent.putExtra("userIdList", selectedUsersId)
+                    selectedUsersName.add(UserManager.currentUser!!.username)
+                    intent.putExtra("userNameList", selectedUsersName)
+                    intent.putExtra("chatName", createChatName())
+                    println(selectedUsersId.toString())
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(this, "Select a User to create a chat", Toast.LENGTH_SHORT).show()
+                }
             } else {
-                Toast.makeText(this, "Select a User to create a chat", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Can't create new chat while offline", Toast.LENGTH_SHORT).show()
+
+            }
+
+
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    fun isOnline(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (connectivityManager != null) {
+            val capabilities =
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
+                    return true
+                }
             }
         }
+        return false
     }
 
     private fun searchUsers(it: Editable?): ArrayList<User> {

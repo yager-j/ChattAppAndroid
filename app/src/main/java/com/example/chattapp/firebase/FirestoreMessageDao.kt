@@ -3,6 +3,7 @@ package com.example.chattapp.firebase
 import android.util.Log
 import com.example.chattapp.ChatActivity
 import com.example.chattapp.models.Message
+import com.example.chattapp.realm.MessageDao
 import com.google.firebase.firestore.FirebaseFirestore
 
 class FirestoreMessageDao {
@@ -40,13 +41,16 @@ class FirestoreMessageDao {
                         val loadedSender = doc.getString(SENDER_KEY)
                         val loadedText = doc.getString(TEXT_KEY)
                         val loadedTimestamp = doc.getDate(TIMESTAMP_KEY)
+                        val loadedReferenceId = doc.getString(REFERENCE_CHAT_ID)
 
                         msg.id = loadedId!!
                         msg.sender = loadedSender!!
                         msg.text = loadedText!!
                         msg.timestamp = loadedTimestamp!!
+                        msg.referenceChatId = loadedReferenceId!!
 
                         messagesList.add(msg)
+                        MessageDao.insertMessage(msg)
                     }
                     //activity.showMessages(messagesList)
                     activity.loadMessages(messagesList)

@@ -7,9 +7,9 @@ import io.realm.RealmList
 
 object ChatDao {
 
-     fun insertChat(chat: Chat){
+    val realm = Realm.getDefaultInstance()
 
-        val realm = Realm.getDefaultInstance()
+     fun insertChat(chat: Chat){
 
         var realmList = RealmList<String>()
         realmList.addAll(chat.usersInChat)
@@ -26,7 +26,7 @@ object ChatDao {
 
     fun getChats() : ArrayList<Chat>{
         val chatList = ArrayList<Chat>()
-        val realm = Realm.getDefaultInstance()
+
         realm.executeTransaction {
             val chats = it.where(ChatRealm::class.java).findAll()
             for(chat in chats){
