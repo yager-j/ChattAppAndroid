@@ -9,28 +9,18 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:ignore="MissingConstraints"
-        android:paddingTop="40dp"
-        android:paddingBottom="20dp">
-
-        <Button
-            android:id="@+id/button_login"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="10dp"
-            android:text="@string/login"
-            android:textSize="8sp"
-            tools:ignore="SmallSp"
-            app:layout_constraintTop_toTopOf="@id/chats_title"
-            app:layout_constraintBottom_toBottomOf="@id/chats_title"
-            app:layout_constraintStart_toStartOf="parent"/>
+        android:layout_height="0dp"
+        android:paddingBottom="20dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints">
 
         <TextView
             android:id="@+id/chats_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:gravity="center"
             android:text="Chats"
             android:textSize="30sp"
@@ -40,17 +30,18 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/img_profile_current"
-            app:shapeAppearanceOverlay="@style/roundedImageView"
-            android:scaleType="centerCrop"
-            app:strokeColor="@android:color/darker_gray"
-            app:strokeWidth="1dp"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginEnd="10dp"
+            android:scaleType="centerCrop"
             android:src="@drawable/profile_placeholder"
             app:layout_constraintBottom_toBottomOf="@id/chats_title"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/chats_title" />
+            app:layout_constraintStart_toEndOf="@+id/chats_title"
+            app:layout_constraintTop_toTopOf="@+id/chats_title"
+            app:shapeAppearanceOverlay="@style/roundedImageView"
+            app:strokeColor="@android:color/darker_gray"
+            app:strokeWidth="1dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

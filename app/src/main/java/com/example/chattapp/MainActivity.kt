@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binder.buttonLogin.setOnClickListener {
+        binder.imgProfileCurrent.setOnClickListener {
             if (UserManager.currentUser == null) {
                 val toLogin = Intent(this, LoginScreen::class.java)
                 toLogin.putExtra("loginPressed", true)
@@ -161,11 +161,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateView() {
-        if (UserManager.currentUser != null) {
-            binder.buttonLogin.text = UserManager.currentUser!!.username
-        } else {
-            binder.buttonLogin.text = resources.getString(R.string.login)
-        }
         fireStoreChatDao.firestoreListener(this)
     }
 }
