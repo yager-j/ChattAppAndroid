@@ -5,6 +5,7 @@ import com.example.chattapp.ChatActivity
 import com.example.chattapp.models.Chat
 import com.example.chattapp.MainActivity
 import com.example.chattapp.UserManager
+import com.example.chattapp.realm.ChatDao
 import com.google.firebase.firestore.FirebaseFirestore
 
 class FirestoreChatDao {
@@ -49,6 +50,7 @@ class FirestoreChatDao {
                     for (i in 0 until chat.usersInChat.size) {
                         if (UserManager.currentUser?.id == chat.usersInChat[i]){
                             chatList.add(chat)
+                            ChatDao.insertChat(chat)
                             break
                         }
                     }

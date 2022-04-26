@@ -14,15 +14,16 @@ import com.example.chattapp.firebase.FirestoreContactDao
 import com.example.chattapp.firebase.FirestoreUserDao
 import com.example.chattapp.firebase.ImageManager
 import com.example.chattapp.models.Chat
+import com.example.chattapp.realm.ChatDao
 import io.realm.Realm
 import io.realm.RealmConfiguration
 
-
-private lateinit var binder: ActivityMainBinding
-private lateinit var fireStoreContactDao: FirestoreContactDao
-private lateinit var fireStoreChatDao: FirestoreChatDao
-
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binder: ActivityMainBinding
+    private lateinit var fireStoreContactDao: FirestoreContactDao
+    private lateinit var fireStoreChatDao: FirestoreChatDao
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binder = ActivityMainBinding.inflate(layoutInflater)
@@ -36,6 +37,8 @@ class MainActivity : AppCompatActivity() {
             .schemaVersion(1)
             .build()
         Realm.setDefaultConfiguration(config)
+
+        loadList(ChatDao.getChats())
 
         fireStoreContactDao = FirestoreContactDao()
         fireStoreChatDao = FirestoreChatDao()
