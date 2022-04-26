@@ -114,6 +114,16 @@ class NewChatActivity : AppCompatActivity() {
     }
 
     fun showUsers(list: ArrayList<User>){
+        println(list.toString())
+        println(UserManager.currentUser.toString())
+        //list.remove(UserManager.currentUser)
+        var itemsToRemove = ArrayList<User>()
+        for(user in list){
+            if(user.id == UserManager.currentUser!!.id){
+                itemsToRemove.add(user)
+            }
+        }
+        list.removeAll(itemsToRemove)
 
         val adapter = NewChatAdapter(list, selectedUsersName, {position ->  onListItemClick(list[position])})
         binder.recyclerviewNewChat.adapter = adapter

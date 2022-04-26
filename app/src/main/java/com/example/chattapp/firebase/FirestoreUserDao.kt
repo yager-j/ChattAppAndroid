@@ -36,6 +36,8 @@ object FirestoreUserDao {
                         user.id = doc.getString(ID_KEY)!!
                         user.username = doc.getString(USERNAME_KEY)!!
                         user.email = doc.getString(EMAIL_KEY)!!
+                        user.first_name = doc.getString(NAME_KEY)!!
+                        user.last_name = doc.getString(LASTNAME_KEY)!!
 
                         userList.add(user)
                     }
@@ -56,6 +58,8 @@ object FirestoreUserDao {
                         user.id = doc.getString(ID_KEY)!!
                         user.username = doc.getString(USERNAME_KEY)!!
                         user.email = doc.getString(EMAIL_KEY)!!
+                        user.first_name = doc.getString(NAME_KEY)!!
+                        user.last_name = doc.getString(LASTNAME_KEY)!!
 
                         userList.add(user)
                     }

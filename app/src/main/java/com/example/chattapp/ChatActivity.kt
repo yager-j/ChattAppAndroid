@@ -28,8 +28,12 @@ class ChatActivity : AppCompatActivity() {
         if (id != null) {
             println(MessageDao.getMessages(id))
         }
+        var chatname = intent.getStringExtra("chatName")
+        if (chatname != null) {
+            chatname = formatChatname(chatname)
+        }
 
-        binder.chatName.text = intent.getStringExtra("chatName")
+        binder.chatName.text = chatname
 
         firestoreMessageDao = if(id != null) {
             FirestoreMessageDao(this, id)
@@ -61,6 +65,14 @@ class ChatActivity : AppCompatActivity() {
             }
             createMessage(newMessage, id!!)
         }
+    }
+
+    private fun formatChatname(chatname: String):String {
+        var chatname = chatname.replace(UserManager.currentUser!!.username, "")
+        chatname = chatname.removePrefix(", ")
+        chatname = chatname.removeSuffix(", ")
+        chatname = chatname.replace(", ,", ", ")
+        return chatname
     }
 
     fun loadMessages(messageList: ArrayList<Message>) {

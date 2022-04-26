@@ -37,7 +37,13 @@ class ChatAdapter(
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        holder.tvName.text = list[position].chatName
+        var chatname = list[position].chatName
+        chatname = chatname.replace(UserManager.currentUser!!.username, "")
+        chatname = chatname.removePrefix(", ")
+        chatname = chatname.removeSuffix(", ")
+        chatname = chatname.replace(", ,", ", ")
+
+        holder.tvName.text = chatname
         holder.tvLastMessage.text = list[position].lastMessage
 
         val imageRef = ImageManager.getImageURL(list[position].usersInChat[0])
