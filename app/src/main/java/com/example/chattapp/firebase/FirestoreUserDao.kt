@@ -6,7 +6,6 @@ import com.example.chattapp.UserManager
 import com.example.chattapp.models.User
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import io.realm.Realm
 
 object FirestoreUserDao {
 
@@ -147,7 +146,6 @@ object FirestoreUserDao {
     }
 
     fun getUsername(id: String): String{
-        println(userList.toString())
         for(user in userList){
             if(id == user.id)
                 return user.username
