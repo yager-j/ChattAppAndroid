@@ -1,11 +1,12 @@
-package com.example.chattapp
+package com.example.chattapp.obsolete.realm
 
 import android.app.Dialog
 import android.content.Context
 import android.view.Window
 import android.widget.Button
 import android.widget.EditText
-import com.example.chattapp.realm.UserDao
+import com.example.chattapp.ContactDao
+import com.example.chattapp.R
 
 object DialogMaker {
     /**
@@ -26,14 +27,14 @@ object DialogMaker {
 
         addBtn.setOnClickListener {
 
-            val input = textInputField.text.toString()
-
-            if (userDao.checkIfUserExists(input)){
-                contactDao.addContact(input)
-                createChatDialog.dismiss()
-            } else {
-                textInputField.error = "user does not exists"
-            }
+//            val input = textInputField.text.toString()
+//
+//            if (userDao.checkIfUserExists(input)){
+//                contactDao.addContact(input)
+//                createChatDialog.dismiss()
+//            } else {
+//                textInputField.error = "user does not exists"
+//            }
 
         }
 

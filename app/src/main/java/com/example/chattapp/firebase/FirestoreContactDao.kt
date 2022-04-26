@@ -69,16 +69,16 @@ class FirestoreContactDao {
 
                         //backup for later
                         //|| searchTerm == loadedMail
-                        if (searchTerm == loadedName) {
-
-                            user.id = loadedId!!
-                            user.userName = loadedName
-                            user.eMail = loadedMail!!
-
-                            contactDao.addContact(user.userName)
-                            saveContact(user)
-
-                        }
+//                        if (searchTerm == loadedName) {
+//
+//                            user.id = loadedId!!
+//                            user.userName = loadedName
+//                            user.eMail = loadedMail!!
+//
+//                            contactDao.addContact(user.userName)
+//                            saveContact(user)
+//
+//                        }
                     }
                 }
             }

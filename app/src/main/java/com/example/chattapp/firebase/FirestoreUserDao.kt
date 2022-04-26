@@ -123,6 +123,21 @@ object FirestoreUserDao {
         }
     }
 
+    fun changePassword(username: String, old: String, new: String, callback: (Boolean) -> Unit){
+        firebaseDB.collection(USERS_COLLECTION).whereEqualTo(USERNAME_KEY, username).get().addOnSuccessListener { documents ->
+            var isCorrect: Boolean
+            for (document in documents) {
+                isCorrect = (document.data[PASSWORD_KEY] == old)
+                if (isCorrect) {
+                    firebaseDB.collection(USERS_COLLECTION).document(document.data[ID_KEY].toString()).update(mapOf(
+                    PASSWORD_KEY to new
+                ))
+                }
+                callback(isCorrect)
+            }
+        }
+    }
+
     fun saveToManager(user: User){
         UserManager.saveLoggedInUser(user)
     }
