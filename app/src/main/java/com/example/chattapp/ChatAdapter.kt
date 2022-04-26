@@ -20,8 +20,7 @@ import kotlin.collections.ArrayList
 class ChatAdapter(
     private val list: ArrayList<Chat>,
     private val mCotext: Context,
-    private val onItemClicked: (position: Int) -> Unit,
-    private val onItemLongClicked: (position: Int) -> Unit
+    private val onItemClicked: (position: Int) -> Unit
 ) :
     RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
 
@@ -31,7 +30,7 @@ class ChatAdapter(
             .inflate(R.layout.chat_list_layout, parent, false)
 
 
-        return ViewHolder(view, onItemClicked, onItemLongClicked)
+        return ViewHolder(view, onItemClicked)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -67,8 +66,8 @@ class ChatAdapter(
         return list.size
     }
 
-    class ViewHolder(ItemView: View, private val onItemClicked: (position: Int) -> Unit, private val onItemLongClicked: (position: Int) -> Unit) :
-        RecyclerView.ViewHolder(ItemView), View.OnClickListener, View.OnLongClickListener {
+    class ViewHolder(ItemView: View, private val onItemClicked: (position: Int) -> Unit) :
+        RecyclerView.ViewHolder(ItemView), View.OnClickListener{
 
         val tvName: TextView = itemView.findViewById(R.id.name_text_view)
         val tvLastMessage: TextView = itemView.findViewById(R.id.last_message_text_view)
@@ -77,7 +76,6 @@ class ChatAdapter(
 
         init {
             ItemView.setOnClickListener(this)
-            ItemView.setOnLongClickListener(this)
         }
 
         override fun onClick(v: View?) {
@@ -85,16 +83,5 @@ class ChatAdapter(
             val position = adapterPosition
             onItemClicked(position)
         }
-
-        override fun onLongClick(v: View?): Boolean {
-
-            val position = adapterPosition
-            onItemLongClicked(position)
-            return true
-
-        }
-
-
     }
-
 }

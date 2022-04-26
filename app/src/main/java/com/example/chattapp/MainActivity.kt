@@ -2,7 +2,6 @@ package com.example.chattapp
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
@@ -10,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.chattapp.databinding.ActivityMainBinding
 import com.example.chattapp.firebase.FirestoreChatDao
-import com.example.chattapp.firebase.FirestoreContactDao
 import com.example.chattapp.firebase.FirestoreUserDao
 import com.example.chattapp.firebase.ImageManager
 import com.example.chattapp.models.Chat
@@ -21,7 +19,6 @@ import io.realm.RealmConfiguration
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binder: ActivityMainBinding
-    private lateinit var fireStoreContactDao: FirestoreContactDao
     private lateinit var fireStoreChatDao: FirestoreChatDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,20 +35,19 @@ class MainActivity : AppCompatActivity() {
             .build()
         Realm.setDefaultConfiguration(config)
 
+        //Load chats from Realm
         loadList(ChatDao.getChats())
-
-        fireStoreContactDao = FirestoreContactDao()
+        //Load chats from Firebase
         fireStoreChatDao = FirestoreChatDao()
         fireStoreChatDao.firestoreListener(this)
         FirestoreUserDao.loadUsers()
-
-        sharedPrefsSetup()
 
         binder.newChatBtn.setOnClickListener {
             val intent = Intent(this, NewChatActivity::class.java)
             startActivity(intent)
         }
 
+        //Popup Menu
         binder.imgProfileCurrent.setOnClickListener {
             if (UserManager.currentUser == null) {
                 val toLogin = Intent(this, LoginScreen::class.java)
@@ -84,6 +80,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Choose image from gallery
+     */
     private fun imageChooser() {
         val intent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(intent, 3)
@@ -92,7 +91,7 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(resultCode == RESULT_OK && data != null){
-            var selectedImage = data.data
+            val selectedImage = data.data
             binder.imgProfileCurrent.setImageURI(selectedImage)
             if (selectedImage != null) {
                 ImageManager.saveImage(selectedImage)
@@ -108,7 +107,7 @@ class MainActivity : AppCompatActivity() {
         layoutManager.reverseLayout = true
         layoutManager.stackFromEnd = true
         binder.chatsList.layoutManager = layoutManager
-        val adapter = ChatAdapter(chatList,this, { position -> onListItemClick(chatList[position])},{ position -> onListItemLongClick(position)})
+        val adapter = ChatAdapter(chatList,this) { position -> onListItemClick(chatList[position]) }
         binder.chatsList.adapter = adapter
 
     }
@@ -120,17 +119,6 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun onListItemLongClick(position: Int) {
-//        val id = contactsList[position].id
-//        contactDao.deleteContact(id)
-//        fireStoreContactDao.deleteContact(id)
-    }
-
-    private fun sharedPrefsSetup() {
-        val sp = getSharedPreferences("com.example.chattapp.MyPrefs", MODE_PRIVATE)
-        UserManager.sharedPrefsSetup(sp)
-    }
-
     override fun onResume() {
         super.onResume()
         reloadUser()
@@ -138,6 +126,9 @@ class MainActivity : AppCompatActivity() {
         loadProfilePic()
     }
 
+    /**
+     * Loads current user profile picture
+     */
     private fun loadProfilePic() {
         if(UserManager.currentUser != null){
             val imageRef = ImageManager.getImageURL(UserManager.currentUser!!.id)

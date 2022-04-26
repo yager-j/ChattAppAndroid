@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chattapp.databinding.ActivityNewChatBinding
+import com.example.chattapp.firebase.FirestoreChatDao
 import com.example.chattapp.firebase.FirestoreUserDao
 import com.example.chattapp.models.User
 
@@ -21,7 +22,7 @@ class NewChatActivity : AppCompatActivity() {
 
     private lateinit var binder: ActivityNewChatBinding
 
-    private lateinit var firestoreUserDao: FirestoreUserDao
+    private lateinit var firestoreChatDao: FirestoreChatDao
 
     private var selectedUsers = arrayListOf<User>()
     private var selectedUsersId = arrayListOf<String>()
@@ -35,6 +36,7 @@ class NewChatActivity : AppCompatActivity() {
         setContentView(binder.root)
 
         FirestoreUserDao.firestoreUserListener(this)
+        firestoreChatDao = FirestoreChatDao()
 
         //Search for user
         binder.searchUserEdittext.addTextChangedListener {
@@ -52,7 +54,6 @@ class NewChatActivity : AppCompatActivity() {
                     selectedUsersName.add(UserManager.currentUser!!.username)
                     intent.putExtra("userNameList", selectedUsersName)
                     intent.putExtra("chatName", createChatName())
-                    println(selectedUsersId.toString())
                     startActivity(intent)
                 } else {
                     Toast.makeText(this, "Select a User to create a chat", Toast.LENGTH_SHORT).show()
@@ -61,8 +62,6 @@ class NewChatActivity : AppCompatActivity() {
                 Toast.makeText(this, "Can't create new chat while offline", Toast.LENGTH_SHORT).show()
 
             }
-
-
         }
     }
 
@@ -74,24 +73,31 @@ class NewChatActivity : AppCompatActivity() {
             val capabilities =
                 connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
             if (capabilities != null) {
-                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
-                    return true
-                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
-                    return true
-                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
-                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
-                    return true
+                when {
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
+                        Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
+                        return true
+                    }
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
+                        Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+                        return true
+                    }
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> {
+                        Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
+                        return true
+                    }
                 }
             }
         }
         return false
     }
 
-    private fun searchUsers(it: Editable?): ArrayList<User> {
+    /**
+     * Returns a list with users matching query
+     */
+    private fun searchUsers(query: Editable?): ArrayList<User> {
         var searchResult = arrayListOf<User>()
-        searchTerm = it.toString()
+        searchTerm = query.toString()
         if (searchTerm.isNotEmpty()){
             for(user in FirestoreUserDao.userList){
                 if(user.username.contains(searchTerm, ignoreCase = true)){
@@ -104,6 +110,9 @@ class NewChatActivity : AppCompatActivity() {
         return searchResult
     }
 
+    /**
+     * Format chat name
+     */
     private fun createChatName(): String {
         var chatName = ""
         for(name in selectedUsersName){
@@ -113,11 +122,12 @@ class NewChatActivity : AppCompatActivity() {
         return chatName
     }
 
+    /**
+     * Load user list into recyclerview
+     */
     fun showUsers(list: ArrayList<User>){
-        println(list.toString())
-        println(UserManager.currentUser.toString())
-        //list.remove(UserManager.currentUser)
-        var itemsToRemove = ArrayList<User>()
+
+        val itemsToRemove = ArrayList<User>()
         for(user in list){
             if(user.id == UserManager.currentUser!!.id){
                 itemsToRemove.add(user)
@@ -125,7 +135,7 @@ class NewChatActivity : AppCompatActivity() {
         }
         list.removeAll(itemsToRemove)
 
-        val adapter = NewChatAdapter(list, selectedUsersName, {position ->  onListItemClick(list[position])})
+        val adapter = NewChatAdapter(list, selectedUsersName) { position -> onListItemClick(list[position]) }
         binder.recyclerviewNewChat.adapter = adapter
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binder.recyclerviewNewChat.layoutManager = layoutManager

@@ -25,21 +25,16 @@ class ChatActivity : AppCompatActivity() {
 
         var id = intent.getStringExtra("chatID")
 
-        if (id != null) {
-            println(MessageDao.getMessages(id))
-        }
-        var chatname = intent.getStringExtra("chatName")
-        if (chatname != null) {
-            chatname = formatChatname(chatname)
-        }
+        //Load messages from Realm
+        if (id != null) { loadMessages(MessageDao.getMessages(id)) }
 
+        //Format chat name
+        var chatname = intent.getStringExtra("chatName")
+        if (chatname != null) { chatname = formatChatName(chatname) }
         binder.chatName.text = chatname
 
-        firestoreMessageDao = if(id != null) {
-            FirestoreMessageDao(this, id)
-        } else {
-            FirestoreMessageDao()
-        }
+        //If chat exist add listener
+        if(id != null) { firestoreMessageDao = FirestoreMessageDao(this, id) }
 
         firestoreChatDao = FirestoreChatDao()
 
@@ -67,7 +62,10 @@ class ChatActivity : AppCompatActivity() {
         }
     }
 
-    private fun formatChatname(chatname: String):String {
+    /**
+     * Remove current username from Chat name
+     */
+    private fun formatChatName(chatname: String):String {
         var chatname = chatname.replace(UserManager.currentUser!!.username, "")
         chatname = chatname.removePrefix(", ")
         chatname = chatname.removeSuffix(", ")
@@ -75,6 +73,9 @@ class ChatActivity : AppCompatActivity() {
         return chatname
     }
 
+    /**
+     * Load message list into recyclerview
+     */
     fun loadMessages(messageList: ArrayList<Message>) {
         val layoutManager = LinearLayoutManager(this)
         layoutManager.stackFromEnd = true

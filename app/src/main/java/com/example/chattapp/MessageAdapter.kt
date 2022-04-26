@@ -44,7 +44,7 @@ class MessageAdapter(private var context: Context, messageList: ArrayList<Messag
 
     override fun getItemViewType(position: Int): Int {
 
-        val message = messages.get(position)
+        val message = messages[position]
 
         return if (message.sender == currentUser) VIEW_TYPE_USER_MESSAGE_ME
         else VIEW_TYPE_USER_MESSAGE_OTHER
@@ -56,11 +56,11 @@ class MessageAdapter(private var context: Context, messageList: ArrayList<Messag
         when (holder.itemViewType) {
             VIEW_TYPE_USER_MESSAGE_ME -> {
                 holder as CurrentUserHolder
-                holder.bindView(context, messages.get(position) as Message)
+                holder.bindView(context, messages[position])
             }
             VIEW_TYPE_USER_MESSAGE_OTHER -> {
                 holder as OtherUserHolder
-                holder.bindView(context, messages.get(position) as Message)
+                holder.bindView(context, messages[position])
             }
         }
     }
@@ -134,6 +134,7 @@ class MessageAdapter(private var context: Context, messageList: ArrayList<Messag
             val currentTimeMinusOneDay = LocalDateTime.now().minusDays(1)
             val timestamp = message.timestamp.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
 
+            //Format timestamp
             if(timestamp > currentTimeMinusOneDay){
                 timestampTextView.text = timestamp.format(DateTimeFormatter.ofPattern("HH:mm"))
             } else {
