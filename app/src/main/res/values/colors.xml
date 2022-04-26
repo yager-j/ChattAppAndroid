@@ -12,4 +12,5 @@
     <color name="textInputBGNotFilled">#FF6262</color>
     <color name="blue">#007AFF</color>
     <color name="grey">#F0F0F0</color>
+    <color name="blue_dark">#0000FA</color>
 </resources>
