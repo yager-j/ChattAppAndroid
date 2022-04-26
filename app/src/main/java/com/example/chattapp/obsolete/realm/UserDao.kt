@@ -1,10 +1,4 @@
-package com.example.chattapp.realm
-
-import com.example.chattapp.models.Contact
-import com.example.chattapp.models.User
-import android.util.Log
-import com.google.firebase.firestore.FirebaseFirestore
-import io.realm.Realm
+package com.example.chattapp.obsolete.realm
 
 
 class UserDao {

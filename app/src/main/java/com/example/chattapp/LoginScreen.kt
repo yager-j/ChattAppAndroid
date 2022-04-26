@@ -127,13 +127,13 @@ class LoginScreen : AppCompatActivity() {
                 }
 
             } else {
-                Log.d("login", "............................button pressed and is change password")
+                Log.d("login", "............................button pressed and is 'change password'")
                 if (passwordET.text.toString() == "" || passwordConfirmET.text.toString() == "" || passwordET.text.toString() != passwordConfirmET.text.toString()) {
+                    Log.d("login", "............................New passwords do not match")
                     passwordET.setBackgroundColor(resources.getColor(R.color.textInputBGNotFilled))
                     passwordConfirmET.setBackgroundColor(resources.getColor(R.color.textInputBGNotFilled))
                     passwordET.setText("")
                     passwordConfirmET.setText("")
-                    Log.d("login", "............................Password do not match")
                 } else {
                     Log.d("login", "............................password can change")
                     passwordET.setBackgroundColor(resources.getColor(R.color.textInputBG))
@@ -148,7 +148,7 @@ class LoginScreen : AppCompatActivity() {
                             Log.d("login", "............................Password did change.")
                             startActivity(Intent(this, MainActivity::class.java))
                         } else {
-                            Log.d("login", "............................wrong old password")
+                            Log.d("login", "............................Wrong old password")
                             usernameET.setBackgroundColor(resources.getColor(R.color.textInputBGNotFilled))
                             usernameET.setText("")
                         }
