@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.chattapp.firebase.ImageManager
 import com.example.chattapp.models.Chat
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -52,11 +53,13 @@ class ChatAdapter(
             println("Failed to load image")
         }
 
-        val currentTimeMinusOneDay = LocalDateTime.now().minusDays(1)
+        val currentTimeMinusOneDay = LocalDate.now().minusDays(1)
         val timestamp = list[position].timestamp.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
 
-        if(timestamp > currentTimeMinusOneDay){
+        if(timestamp.toLocalDate() > currentTimeMinusOneDay){
             holder.tvTimestamp.text = timestamp.format(DateTimeFormatter.ofPattern("HH:mm"))
+        } else if(timestamp.toLocalDate() == currentTimeMinusOneDay) {
+            holder.tvTimestamp.text = "Yesterday"
         } else {
             holder.tvTimestamp.text = timestamp.format(DateTimeFormatter.ofPattern("dd MMM"))
         }
