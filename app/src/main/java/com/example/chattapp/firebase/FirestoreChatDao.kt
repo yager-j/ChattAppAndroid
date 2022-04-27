@@ -85,11 +85,11 @@ object FirestoreChatDao {
     fun chatNotExist(selectedUsersId: ArrayList<String>): String {
         println(chatList)
         for(chat in chatList){
-            val sortedSelected = selectedUsersId.sort()
-            val sortedStored = chat.usersInChat.sort()
+            val sortedSelected = selectedUsersId.sorted()
+            val sortedStored = chat.usersInChat.sorted()
             println("selected users id:${sortedSelected}")
             println("users in chat id:${sortedStored}")
-            if(selectedUsersId.sort() == chat.usersInChat.sort()){
+            if(sortedSelected == sortedStored){
                 return chat.id
             }
         }
