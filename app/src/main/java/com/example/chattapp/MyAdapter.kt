@@ -6,9 +6,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.chattapp.models.Chat
+import com.example.chattapp.models.Contact
 
 class MyAdapter(
-    private val list: ArrayList<User>,
+    private val list: ArrayList<Chat>,
     private val onItemClicked: (position: Int) -> Unit,
     private val onItemLongClicked: (position: Int) -> Unit
 ) :
@@ -20,14 +22,12 @@ class MyAdapter(
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.chat_list_layout, parent, false)
 
-
         return ViewHolder(view, onItemClicked, onItemLongClicked)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-
-        holder.textView.text = list[position].userName
+        holder.textView.text = list[position].chatName
 
     }
 
@@ -58,8 +58,5 @@ class MyAdapter(
             return true
 
         }
-
-
     }
-
 }
