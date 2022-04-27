@@ -3,6 +3,7 @@ package com.example.chattapp.firebase
 import android.util.Log
 import com.example.chattapp.ChatActivity
 import com.example.chattapp.models.Message
+import com.example.chattapp.realm.MessageDao
 import com.google.firebase.firestore.FirebaseFirestore
 
 class FirestoreMessageDao {
@@ -18,10 +19,7 @@ class FirestoreMessageDao {
     private val MESSAGES_COLLECTION = "messages"
     private val CHATS_COLLECTION = "chats"
 
-
     private val firebaseDB = FirebaseFirestore.getInstance()
-
-    constructor()
 
     constructor(activity: ChatActivity, id: String){
         firebaseDB
@@ -40,15 +38,17 @@ class FirestoreMessageDao {
                         val loadedSender = doc.getString(SENDER_KEY)
                         val loadedText = doc.getString(TEXT_KEY)
                         val loadedTimestamp = doc.getDate(TIMESTAMP_KEY)
+                        val loadedReferenceId = doc.getString(REFERENCE_CHAT_ID)
 
                         msg.id = loadedId!!
                         msg.sender = loadedSender!!
                         msg.text = loadedText!!
                         msg.timestamp = loadedTimestamp!!
+                        msg.referenceChatId = loadedReferenceId!!
 
                         messagesList.add(msg)
+                        MessageDao.insertMessage(msg)
                     }
-                    //activity.showMessages(messagesList)
                     activity.loadMessages(messagesList)
                     Log.d("FIRESTORE", "Messages updated")
                 }
@@ -78,41 +78,5 @@ class FirestoreMessageDao {
         firebaseDB.collection(CHATS_COLLECTION).document(chatID).update(LAST_MESSAGE_KEY, message.text)
         firebaseDB.collection(CHATS_COLLECTION).document(chatID).update(TIMESTAMP_KEY, message.timestamp)
 
-    }
-
-    fun loadMessages(activity: ChatActivity, id: String) {
-        val messagesList = ArrayList<Message>()
-
-        firebaseDB
-            .collection(CHATS_COLLECTION)
-            .document(id)
-            .collection(MESSAGES_COLLECTION)
-            .orderBy(TIMESTAMP_KEY)
-            .get()
-            .addOnSuccessListener { result ->
-                for(doc in result) {
-
-                    val msg = Message()
-
-                    val loadedId = doc.getString(ID_KEY)
-                    val loadedSender = doc.getString(SENDER_KEY)
-                    val loadedText = doc.getString(TEXT_KEY)
-                    val loadedTimestamp = doc.getDate(TIMESTAMP_KEY)
-
-                    msg.id = loadedId!!
-                    msg.sender = loadedSender!!
-                    msg.text = loadedText!!
-                    msg.timestamp = loadedTimestamp!!
-
-                    messagesList.add(msg)
-                }
-                activity.loadMessages(messagesList)
-            }
-            .addOnFailureListener {
-                Log.d("FIRESTORE", "Failed to load messages")
-            }
-            .addOnCanceledListener {
-                Log.d("FIRESTORE", "Load messages canceled")
-            }
     }
 }

@@ -1,39 +1,25 @@
 package com.example.chattapp
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.chattapp.databinding.ActivityMainBinding
 import com.example.chattapp.firebase.FirestoreChatDao
-import com.example.chattapp.firebase.FirestoreContactDao
 import com.example.chattapp.firebase.FirestoreUserDao
 import com.example.chattapp.firebase.ImageManager
 import com.example.chattapp.models.Chat
-import com.example.chattapp.models.Contact
-import com.example.chattapp.realm.UserDao
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.example.chattapp.realm.ChatDao
 import io.realm.Realm
-import io.realm.RealmChangeListener
 import io.realm.RealmConfiguration
-import java.net.UnknownServiceException
-
-
-private lateinit var binder: ActivityMainBinding
-private lateinit var userDao: UserDao
-private lateinit var contactDao: ContactDao
-private lateinit var firestoreContactDao: FirestoreContactDao
-private lateinit var firestoreChatDao: FirestoreChatDao
-private lateinit var realmListener: RealmChangeListener<Realm>
-private lateinit var contactsList: ArrayList<Contact>
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binder: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binder = ActivityMainBinding.inflate(layoutInflater)
@@ -48,31 +34,20 @@ class MainActivity : AppCompatActivity() {
             .build()
         Realm.setDefaultConfiguration(config)
 
-        userDao = UserDao()
-        contactDao = ContactDao()
-        firestoreContactDao = FirestoreContactDao()
-        firestoreChatDao = FirestoreChatDao()
-        firestoreChatDao.firestoreListener(this)
+        //Load chats from Realm
+        loadList(ChatDao.getChats())
+        //Load chats from Firebase
+
+        FirestoreChatDao.firestoreListener(this)
         FirestoreUserDao.loadUsers()
-
-        sharedPrefsSetup()
-
-        //creates and add a listener to database to update everytime new items are added
-        realmListener = RealmChangeListener {
-
-            //loadList()
-        }
-        userDao.db.addChangeListener(realmListener)
-
-
-
 
         binder.newChatBtn.setOnClickListener {
             val intent = Intent(this, NewChatActivity::class.java)
             startActivity(intent)
         }
 
-        binder.buttonLogin.setOnClickListener {
+        //Popup Menu
+        binder.imgProfileCurrent.setOnClickListener {
             if (UserManager.currentUser == null) {
                 val toLogin = Intent(this, LoginScreen::class.java)
                 toLogin.putExtra("loginPressed", true)
@@ -84,14 +59,14 @@ class MainActivity : AppCompatActivity() {
                 popupMenu.setOnMenuItemClickListener { item ->
                     when (item.itemId) {
                         R.id.item_change_profile -> {
-                            Log.d("login", "............................Profile Changing.")
                             imageChooser()
                         }
                         R.id.item_change_password -> {
-                            Log.d("login", "............................Password Changing.")
+                            val toLogin = Intent(this, LoginScreen::class.java)
+                            toLogin.putExtra("changePassword", true)
+                            startActivity(toLogin)
                         }
                         R.id.item_logout -> {
-                            Log.d("login", "............................Log out now.")
                             UserManager.logOutUser(UserManager.currentUser!!.id)
                             reloadUser()
                             updateView()
@@ -104,16 +79,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Choose image from gallery
+     */
     private fun imageChooser() {
         val intent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(intent, 3)
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(resultCode == RESULT_OK && data != null){
-            var selectedImage = data.data
+            val selectedImage = data.data
             binder.imgProfileCurrent.setImageURI(selectedImage)
             if (selectedImage != null) {
                 ImageManager.saveImage(selectedImage)
@@ -125,45 +102,32 @@ class MainActivity : AppCompatActivity() {
      * loads the user list in the recycler view
      */
     fun loadList(chatList: ArrayList<Chat>) {
-
         val layoutManager = LinearLayoutManager(this)
         layoutManager.reverseLayout = true
         layoutManager.stackFromEnd = true
         binder.chatsList.layoutManager = layoutManager
-        val adapter = ChatAdapter(chatList,this, { position -> onListItemClick(chatList[position])},{ position -> onListItemLongClick(position)})
+        val adapter = ChatAdapter(chatList,this) { position -> onListItemClick(chatList[position]) }
         binder.chatsList.adapter = adapter
 
     }
 
     private fun onListItemClick(chat: Chat) {
-
         val intent = Intent(this, ChatActivity::class.java)
         intent.putExtra("chatID", chat.id)
         intent.putExtra("chatName", chat.chatName)
         startActivity(intent)
     }
 
-    private fun onListItemLongClick(position: Int) {
-//        val id = contactsList[position].id
-//        contactDao.deleteContact(id)
-//        firestoreContactDao.deleteContact(id)
-    }
-
-    private fun sharedPrefsSetup() {
-
-        val sp = getSharedPreferences("com.example.chattapp.MyPrefs", MODE_PRIVATE)
-        UserManager.sharedPrefsSetup(sp)
-    }
-
     override fun onResume() {
         super.onResume()
-        Log.d("login", "............................is this happening?")
         reloadUser()
         updateView()
         loadProfilePic()
-        //firestoreChatDao.firestoreListener(this)
     }
 
+    /**
+     * Loads current user profile picture
+     */
     private fun loadProfilePic() {
         if(UserManager.currentUser != null){
             val imageRef = ImageManager.getImageURL(UserManager.currentUser!!.id)
@@ -187,12 +151,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateView() {
-        Log.d("login", "............................Hello ${UserManager.currentUser}")
-        if (UserManager.currentUser != null) {
-            binder.buttonLogin.text = UserManager.currentUser!!.username
-        } else {
-            binder.buttonLogin.text = resources.getString(R.string.login)
-        }
-        firestoreChatDao.firestoreListener(this)
+        FirestoreChatDao.firestoreListener(this)
     }
 }

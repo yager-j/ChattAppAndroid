@@ -9,15 +9,13 @@ import com.example.chattapp.firebase.FirestoreChatDao
 import com.example.chattapp.firebase.FirestoreMessageDao
 import com.example.chattapp.models.Chat
 import com.example.chattapp.models.Message
+import com.example.chattapp.realm.MessageDao
 
 class ChatActivity : AppCompatActivity() {
 
     private lateinit var binder: ActivityChatBinding
     private lateinit var firestoreMessageDao: FirestoreMessageDao
-    private lateinit var firestoreChatDao: FirestoreChatDao
     private var currentUserId = UserManager.currentUser!!.id
-    private var currentUserName = UserManager.currentUser!!.username
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,15 +24,18 @@ class ChatActivity : AppCompatActivity() {
 
         var id = intent.getStringExtra("chatID")
 
-        binder.chatName.text = intent.getStringExtra("chatName")
+        //Load messages from Realm
+        if (id != null) { loadMessages(MessageDao.getMessages(id)) }
 
-        firestoreMessageDao = if(id != null) {
-            FirestoreMessageDao(this, id)
-        } else {
-            FirestoreMessageDao()
-        }
+        //Format chat name
+        var chatname = intent.getStringExtra("chatName")
+        if (chatname != null) { chatname = formatChatName(chatname) }
+        binder.chatName.text = chatname
 
-        firestoreChatDao = FirestoreChatDao()
+        //If chat exist add listener
+        if(id != null) { firestoreMessageDao = FirestoreMessageDao(this, id) }
+
+
 
         //Send messages
         binder.sendButton.setOnClickListener {
@@ -52,7 +53,7 @@ class ChatActivity : AppCompatActivity() {
                 val chatName = usernameList.toString()
                 chat.chatName = chatName.substring(1, chatName.length - 1)
 
-                firestoreChatDao.saveChat(chat)
+                FirestoreChatDao.saveChat(chat)
                 //create listener
                 firestoreMessageDao = FirestoreMessageDao(this, id!!)
             }
@@ -60,6 +61,20 @@ class ChatActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Remove current username from Chat name
+     */
+    private fun formatChatName(chatname: String):String {
+        var chatname = chatname.replace(UserManager.currentUser!!.username, "")
+        chatname = chatname.removePrefix(", ")
+        chatname = chatname.removeSuffix(", ")
+        chatname = chatname.replace(", ,", ", ")
+        return chatname
+    }
+
+    /**
+     * Load message list into recyclerview
+     */
     fun loadMessages(messageList: ArrayList<Message>) {
         val layoutManager = LinearLayoutManager(this)
         layoutManager.stackFromEnd = true

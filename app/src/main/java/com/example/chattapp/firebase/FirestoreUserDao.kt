@@ -6,7 +6,6 @@ import com.example.chattapp.UserManager
 import com.example.chattapp.models.User
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import io.realm.Realm
 
 object FirestoreUserDao {
 
@@ -36,6 +35,8 @@ object FirestoreUserDao {
                         user.id = doc.getString(ID_KEY)!!
                         user.username = doc.getString(USERNAME_KEY)!!
                         user.email = doc.getString(EMAIL_KEY)!!
+                        user.first_name = doc.getString(NAME_KEY)!!
+                        user.last_name = doc.getString(LASTNAME_KEY)!!
 
                         userList.add(user)
                     }
@@ -56,6 +57,8 @@ object FirestoreUserDao {
                         user.id = doc.getString(ID_KEY)!!
                         user.username = doc.getString(USERNAME_KEY)!!
                         user.email = doc.getString(EMAIL_KEY)!!
+                        user.first_name = doc.getString(NAME_KEY)!!
+                        user.last_name = doc.getString(LASTNAME_KEY)!!
 
                         userList.add(user)
                     }
@@ -123,12 +126,26 @@ object FirestoreUserDao {
         }
     }
 
+    fun changePassword(username: String, old: String, new: String, callback: (Boolean) -> Unit){
+        firebaseDB.collection(USERS_COLLECTION).whereEqualTo(USERNAME_KEY, username).get().addOnSuccessListener { documents ->
+            var isCorrect: Boolean
+            for (document in documents) {
+                isCorrect = (document.data[PASSWORD_KEY] == old)
+                if (isCorrect) {
+                    firebaseDB.collection(USERS_COLLECTION).document(document.data[ID_KEY].toString()).update(mapOf(
+                    PASSWORD_KEY to new
+                ))
+                }
+                callback(isCorrect)
+            }
+        }
+    }
+
     fun saveToManager(user: User){
         UserManager.saveLoggedInUser(user)
     }
 
     fun getUsername(id: String): String{
-        println(userList.toString())
         for(user in userList){
             if(id == user.id)
                 return user.username

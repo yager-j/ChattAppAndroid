@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.chattapp.firebase.ImageManager
 import com.example.chattapp.models.Chat
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -20,8 +21,7 @@ import kotlin.collections.ArrayList
 class ChatAdapter(
     private val list: ArrayList<Chat>,
     private val mCotext: Context,
-    private val onItemClicked: (position: Int) -> Unit,
-    private val onItemLongClicked: (position: Int) -> Unit
+    private val onItemClicked: (position: Int) -> Unit
 ) :
     RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
 
@@ -31,13 +31,19 @@ class ChatAdapter(
             .inflate(R.layout.chat_list_layout, parent, false)
 
 
-        return ViewHolder(view, onItemClicked, onItemLongClicked)
+        return ViewHolder(view, onItemClicked)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        holder.tvName.text = list[position].chatName
+        var chatname = list[position].chatName
+        chatname = chatname.replace(UserManager.currentUser!!.username, "")
+        chatname = chatname.removePrefix(", ")
+        chatname = chatname.removeSuffix(", ")
+        chatname = chatname.replace(", ,", ", ")
+
+        holder.tvName.text = chatname
         holder.tvLastMessage.text = list[position].lastMessage
 
         val imageRef = ImageManager.getImageURL(list[position].usersInChat[0])
@@ -47,11 +53,13 @@ class ChatAdapter(
             println("Failed to load image")
         }
 
-        val currentTimeMinusOneDay = LocalDateTime.now().minusDays(1)
+        val currentTimeMinusOneDay = LocalDate.now().minusDays(1)
         val timestamp = list[position].timestamp.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
 
-        if(timestamp > currentTimeMinusOneDay){
+        if(timestamp.toLocalDate() > currentTimeMinusOneDay){
             holder.tvTimestamp.text = timestamp.format(DateTimeFormatter.ofPattern("HH:mm"))
+        } else if(timestamp.toLocalDate() == currentTimeMinusOneDay) {
+            holder.tvTimestamp.text = "Yesterday"
         } else {
             holder.tvTimestamp.text = timestamp.format(DateTimeFormatter.ofPattern("dd MMM"))
         }
@@ -61,8 +69,8 @@ class ChatAdapter(
         return list.size
     }
 
-    class ViewHolder(ItemView: View, private val onItemClicked: (position: Int) -> Unit, private val onItemLongClicked: (position: Int) -> Unit) :
-        RecyclerView.ViewHolder(ItemView), View.OnClickListener, View.OnLongClickListener {
+    class ViewHolder(ItemView: View, private val onItemClicked: (position: Int) -> Unit) :
+        RecyclerView.ViewHolder(ItemView), View.OnClickListener{
 
         val tvName: TextView = itemView.findViewById(R.id.name_text_view)
         val tvLastMessage: TextView = itemView.findViewById(R.id.last_message_text_view)
@@ -71,7 +79,6 @@ class ChatAdapter(
 
         init {
             ItemView.setOnClickListener(this)
-            ItemView.setOnLongClickListener(this)
         }
 
         override fun onClick(v: View?) {
@@ -79,16 +86,5 @@ class ChatAdapter(
             val position = adapterPosition
             onItemClicked(position)
         }
-
-        override fun onLongClick(v: View?): Boolean {
-
-            val position = adapterPosition
-            onItemLongClicked(position)
-            return true
-
-        }
-
-
     }
-
 }
