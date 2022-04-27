@@ -22,8 +22,6 @@ class NewChatActivity : AppCompatActivity() {
 
     private lateinit var binder: ActivityNewChatBinding
 
-    private lateinit var firestoreChatDao: FirestoreChatDao
-
     private var selectedUsers = arrayListOf<User>()
     private var selectedUsersId = arrayListOf<String>()
     private var selectedUsersName = arrayListOf<String>()
@@ -36,7 +34,6 @@ class NewChatActivity : AppCompatActivity() {
         setContentView(binder.root)
 
         FirestoreUserDao.firestoreUserListener(this)
-        firestoreChatDao = FirestoreChatDao()
 
         //Search for user
         binder.searchUserEdittext.addTextChangedListener {
@@ -48,13 +45,21 @@ class NewChatActivity : AppCompatActivity() {
         binder.createChatButton.setOnClickListener {
             if(isOnline(this)){
                 if(selectedUsers.isNotEmpty()) {
-                    val intent = Intent(this, ChatActivity::class.java)
                     selectedUsersId.add(UserManager.currentUser!!.id)
-                    intent.putExtra("userIdList", selectedUsersId)
                     selectedUsersName.add(UserManager.currentUser!!.username)
-                    intent.putExtra("userNameList", selectedUsersName)
-                    intent.putExtra("chatName", createChatName())
-                    startActivity(intent)
+                    val chatExist = FirestoreChatDao.chatNotExist(selectedUsersId)
+                    if(chatExist == "no chat") {
+                        val intent = Intent(this, ChatActivity::class.java)
+                        intent.putExtra("userIdList", selectedUsersId)
+                        intent.putExtra("userNameList", selectedUsersName)
+                        intent.putExtra("chatName", createChatName())
+                        startActivity(intent)
+                    } else {
+                        val intent = Intent(this, ChatActivity::class.java)
+                        intent.putExtra("chatID", chatExist)
+                        intent.putExtra("chatName", createChatName())
+                        startActivity(intent)
+                    }
                 } else {
                     Toast.makeText(this, "Select a User to create a chat", Toast.LENGTH_SHORT).show()
                 }

@@ -15,7 +15,6 @@ class ChatActivity : AppCompatActivity() {
 
     private lateinit var binder: ActivityChatBinding
     private lateinit var firestoreMessageDao: FirestoreMessageDao
-    private lateinit var firestoreChatDao: FirestoreChatDao
     private var currentUserId = UserManager.currentUser!!.id
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +35,7 @@ class ChatActivity : AppCompatActivity() {
         //If chat exist add listener
         if(id != null) { firestoreMessageDao = FirestoreMessageDao(this, id) }
 
-        firestoreChatDao = FirestoreChatDao()
+
 
         //Send messages
         binder.sendButton.setOnClickListener {
@@ -54,7 +53,7 @@ class ChatActivity : AppCompatActivity() {
                 val chatName = usernameList.toString()
                 chat.chatName = chatName.substring(1, chatName.length - 1)
 
-                firestoreChatDao.saveChat(chat)
+                FirestoreChatDao.saveChat(chat)
                 //create listener
                 firestoreMessageDao = FirestoreMessageDao(this, id!!)
             }

@@ -8,7 +8,7 @@ import com.example.chattapp.UserManager
 import com.example.chattapp.realm.ChatDao
 import com.google.firebase.firestore.FirebaseFirestore
 
-class FirestoreChatDao {
+object FirestoreChatDao {
 
     private val ID_KEY = "id"
     private val USERS_IN_CHAT_KEY = "users_in_chat"
@@ -20,13 +20,15 @@ class FirestoreChatDao {
 
     private val firebaseDB = FirebaseFirestore.getInstance()
 
+    val chatList = ArrayList<Chat>()
+
     fun firestoreListener(activity: MainActivity){
         firebaseDB.collection(CHATS_COLLECTION).orderBy(TIMESTAMP_KEY).addSnapshotListener(activity) { value, error ->
             if (error != null) {
                 Log.e("FIRESTORE", "Failed to listen for chats", error)
             }
             if (value != null) {
-                val chatList = ArrayList<Chat>()
+                chatList.clear()
                 for(doc in value) {
                     val chat = Chat()
 
@@ -78,5 +80,19 @@ class FirestoreChatDao {
             .set(chatHashMap)
             .addOnSuccessListener { Log.d("FIRESTORE", "Chat saved to Firestore") }
             .addOnFailureListener { Log.d("FIRESTORE", "Failed to save chat") }
+    }
+
+    fun chatNotExist(selectedUsersId: ArrayList<String>): String {
+        println(chatList)
+        for(chat in chatList){
+            val sortedSelected = selectedUsersId.sort()
+            val sortedStored = chat.usersInChat.sort()
+            println("selected users id:${sortedSelected}")
+            println("users in chat id:${sortedStored}")
+            if(selectedUsersId.sort() == chat.usersInChat.sort()){
+                return chat.id
+            }
+        }
+        return "no chat"
     }
 }

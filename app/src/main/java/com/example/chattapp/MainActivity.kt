@@ -19,7 +19,6 @@ import io.realm.RealmConfiguration
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binder: ActivityMainBinding
-    private lateinit var fireStoreChatDao: FirestoreChatDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,8 +37,8 @@ class MainActivity : AppCompatActivity() {
         //Load chats from Realm
         loadList(ChatDao.getChats())
         //Load chats from Firebase
-        fireStoreChatDao = FirestoreChatDao()
-        fireStoreChatDao.firestoreListener(this)
+
+        FirestoreChatDao.firestoreListener(this)
         FirestoreUserDao.loadUsers()
 
         binder.newChatBtn.setOnClickListener {
@@ -152,6 +151,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateView() {
-        fireStoreChatDao.firestoreListener(this)
+        FirestoreChatDao.firestoreListener(this)
     }
 }
