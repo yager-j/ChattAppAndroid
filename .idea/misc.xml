@@ -6,7 +6,7 @@
         <entry key="..\:/Users/Oscar/AndroidStudioProjects/ChattAppAndroid/app/src/main/res/layout/activity_chat.xml" value="0.1661600810536981" />
         <entry key="..\:/Users/Oscar/AndroidStudioProjects/ChattAppAndroid/app/src/main/res/layout/activity_log_reg_select_option.xml" value="0.1661600810536981" />
         <entry key="..\:/Users/Oscar/AndroidStudioProjects/ChattAppAndroid/app/src/main/res/layout/activity_login_screen.xml" value="0.33" />
-        <entry key="..\:/Users/Oscar/AndroidStudioProjects/ChattAppAndroid/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Users/Oscar/AndroidStudioProjects/ChattAppAndroid/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/Oscar/AndroidStudioProjects/ChattAppAndroid/app/src/main/res/layout/chat_list_layout.xml" value="0.1661600810536981" />
         <entry key="..\:/Users/Oscar/AndroidStudioProjects/ChattAppAndroid/app/src/main/res/layout/reg_log_selection_activity.xml" value="0.25" />
         <entry key="..\:/Users/Oscar/AndroidStudioProjects/ChattAppAndroid/app/src/main/res/menu/menu_profile_options.xml" value="0.33" />
@@ -17,17 +17,15 @@
         <entry key="..\:/Users/metal/Desktop/Android Studio Projects/ChattAppAndroid/app/src/main/res/layout/card_view_layout.xml" value="0.1762917933130699" />
         <entry key="..\:/Users/metal/Desktop/Android Studio Projects/ChattAppAndroid/app/src/main/res/layout/chat_list_layout.xml" value="0.358695652173913" />
         <entry key="..\:/Users/metal/Desktop/Android Studio Projects/ChattAppAndroid/app/src/main/res/layout/create_chat_layout.xml" value="0.358695652173913" />
-        <entry key="app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.219" />
         <entry key="app/src/main/res/layout/activity_chat.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_login_screen.xml" value="0.18888888888888888" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_new_chat.xml" value="0.2536231884057971" />
         <entry key="app/src/main/res/layout/chat_list_layout.xml" value="0.19174265450861194" />
         <entry key="app/src/main/res/layout/item_message_current_user.xml" value="0.27395833333333336" />
         <entry key="app/src/main/res/layout/item_message_other_user.xml" value="0.27395833333333336" />
         <entry key="app/src/main/res/layout/new_chat_list_layout.xml" value="0.358695652173913" />
         <entry key="app/src/main/res/layout/recycler_chat_layout.xml" value="0.27395833333333336" />
-        <entry key="app/src/main/res/layout/reg_log_selection_activity.xml" value="0.39427083333333335" />
       </map>
     </option>
   </component>
